@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+              http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+         version="2.5"
+         xmlns="http://java.sun.com/xml/ns/javaee">
+
+  <!-- Servlets -->
+  <servlet>
+    <servlet-name>IndexServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.agervasio.servlet.IndexServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>AddNumbersServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.agervasio.servlet.AddNumbersServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>GuessingGameServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.agervasio.servlet.GuessingGameServlet</servlet-class>
+  </servlet>
+  <servlet>
+  	<servlet-name>MultiplyNumbersServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.agervasio.servlet.MultiplyNumbersServlet</servlet-class>
+  </servlet>
+
+  <!-- AJAX servlets. -->
+  <servlet>
+    <servlet-name>AddNumbersAjaxServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.agervasio.servlet.ajax.AddNumbersAjaxServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>NextGuessAjaxServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.agervasio.servlet.ajax.NextGuessAjaxServlet</servlet-class>
+  </servlet>
+
+  <!-- Servlet mappings -->
+  <servlet-mapping>
+    <servlet-name>IndexServlet</servlet-name>
+    <url-pattern>/index</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>AddNumbersServlet</servlet-name>
+    <url-pattern>/addNumbers</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>GuessingGameServlet</servlet-name>
+    <url-pattern>/guessingGame</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+  	<servlet-name>MultiplyNumbersServlet</servlet-name>
+  	<url-pattern>/multiplyNumbers</url-pattern>
+  </servlet-mapping>
+
+  <!--  AJAX servlet mappings. -->
+  <servlet-mapping>
+    <servlet-name>AddNumbersAjaxServlet</servlet-name>
+    <url-pattern>/ajax/addNumbers</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>NextGuessAjaxServlet</servlet-name>
+    <url-pattern>/ajax/nextGuess</url-pattern>
+  </servlet-mapping>
+
+  <welcome-file-list>
+    <welcome-file>index.html</welcome-file>
+  </welcome-file-list>
+</web-app>
