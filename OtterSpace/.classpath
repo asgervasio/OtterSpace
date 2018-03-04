@@ -3,6 +3,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="main"/>
+	<classpathentry kind="src" path="junit"/>
 	<classpathentry kind="lib" path="/CS320_Jetty9/lib/jetty-server-9.4.3.v20170317.jar">
 		<attributes>
 			<attribute name="javadoc_location" value="http://download.eclipse.org/jetty/stable-9/apidocs/"/>
