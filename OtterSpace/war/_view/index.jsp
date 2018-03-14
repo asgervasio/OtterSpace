@@ -8,18 +8,12 @@
 	<body>
 		This is the index view jsp	
 	
-		<form action="${pageContext.servletContext.contextPath}/multiplyNumbers" method="post">
+		<form action="${pageContext.servletContext.contextPath}/game" method="post">
 			<input type="Submit" name="MultiplySubmit" value="Multiply Numbers!">
 		</form>
 		
-		<form action="${pageContext.servletContext.contextPath}/addNumbers" method="post">
+		<form action="${pageContext.servletContext.contextPath}/gameEditor" method="post">
 			<input type="Submit" name="AddSubmit" value="Add Numbers!">
 			
-		</form>
-			<form action="${pageContext.servletContext.contextPath}/guessingGame" method="post">
-			<c:if test="${empty game}">
-				<input name="startGame" type="submit" value="Guessing Game!" />
-			</c:if>
-		</form>
 	</body>
 </html>
