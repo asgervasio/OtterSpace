@@ -67,5 +67,14 @@
 		</attributes>
 	</classpathentry>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/annotations/asm-5.1.jar"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/annotations/asm-commons-5.1.jar"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/annotations/javax.annotation-api-1.2.jar"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/apache-jsp/org.eclipse.jdt.core.compiler.ecj-4.4.2.jar"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/apache-jsp/org.eclipse.jetty.apache-jsp-9.4.3.v20170317.jar"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/apache-jsp/org.mortbay.jasper.apache-el-8.5.9.1.jar"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/apache-jsp/org.mortbay.jasper.apache-jsp-8.5.9.1.jar"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/apache-jstl/org.apache.taglibs.taglibs-standard-impl-1.2.5.jar"/>
+	<classpathentry kind="lib" path="/CS320_Jetty9/lib/apache-jstl/org.apache.taglibs.taglibs-standard-spec-1.2.5.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
