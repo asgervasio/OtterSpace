@@ -3,17 +3,15 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <html>
-<style>
+
+	<style>
 		<jsp:include page="gameScreenStyle.css"/>
 	</style>
-
 	<head>
 		<title>Game Page</title>
-		
 	</head>
 
-	<body>	
-			
+	<body>		
 			<div class="container">
 				<div class="scorebar">
 					<div class="room"></div>
@@ -23,6 +21,7 @@
 
 				<div class="screen">
 					<div class="content">
+						<% out.println(request.getParameter("cmd")); %>
 						<div class="commandline">
 						<form action="${pageContext.servletContext.contextPath}/game" method="post">
 							> <input type="text" name="cmd" autofocus/>

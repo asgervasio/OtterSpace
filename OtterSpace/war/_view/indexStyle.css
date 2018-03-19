@@ -11,13 +11,6 @@ h1 {
   font-variant: small-caps;
   text-align: center;
 }
-h2 {
-  color: #08088A;
-  font-family: "scifi_thin";
-  font-size: 500%;
-  font-variant: small-caps;
-  text-align: center;
-}
 
 body, html
 {
@@ -44,3 +37,4 @@ body, html
   margin-left: 5%;
 
 }
+

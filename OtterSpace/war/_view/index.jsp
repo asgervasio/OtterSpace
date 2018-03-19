@@ -22,8 +22,8 @@
 			</form>
   			<form action="${pageContext.servletContext.contextPath}/editor" method="post">
 				<input type="submit" name="startGame" value="Create">
-			</form>
-			  		
+
+			</form>  		
 		</div>	
 	</body>
 </html>

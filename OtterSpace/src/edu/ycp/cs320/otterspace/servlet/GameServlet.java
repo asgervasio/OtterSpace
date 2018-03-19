@@ -25,7 +25,7 @@ public class GameServlet extends HttpServlet
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		
+		String cmd;
 		System.out.println("GamePage Servlet: doPost");
 		GameModel model = new GameModel();
 		GameController controller = new GameController();
@@ -33,13 +33,11 @@ public class GameServlet extends HttpServlet
 
 		// holds the error message text, if there is any
 		String errorMessage = null;
-
-		Double result = null;
 		
 		// decode POSTed form parameters and dispatch to controller
 		try 
 		{
-			String cmd = getString(req, "cmd");		
+			cmd = getString(req, "cmd");		
 			model.setCommand(cmd);
 		} 
 		catch (NumberFormatException e) 
@@ -52,7 +50,7 @@ public class GameServlet extends HttpServlet
 		// values that were originally assigned to the request attributes, also named "first" and "second"
 		// they don't have to be named the same, but in this case, since we are passing them back
 		// and forth, it's a good idea
-		req.setAttribute("cmd", model);
+		req.setAttribute("Game", model);
 		
 		// add result objects as attributes
 		// this adds the errorMessage text and the result to the response
