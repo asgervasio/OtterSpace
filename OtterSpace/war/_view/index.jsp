@@ -9,11 +9,11 @@
 		This is the index view jsp	
 	
 		<form action="${pageContext.servletContext.contextPath}/game" method="post">
-			<input type="Submit" name="MultiplySubmit" value="Multiply Numbers!">
+			<input type="Submit" name="Game" value="Play the Game!">
 		</form>
 		
-		<form action="${pageContext.servletContext.contextPath}/gameEditor" method="post">
-			<input type="Submit" name="AddSubmit" value="Add Numbers!">
-			
+		<form action="${pageContext.servletContext.contextPath}/editor" method="post">
+			<input type="Submit" name="Editor" value="Build the Game!">
+		</form>	
 	</body>
 </html>

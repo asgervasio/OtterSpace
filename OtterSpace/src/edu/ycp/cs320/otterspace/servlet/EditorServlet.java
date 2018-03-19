@@ -1,5 +1,6 @@
 package edu.ycp.cs320.otterspace.servlet;
 
+import java.awt.Color;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -20,7 +21,7 @@ public class EditorServlet extends HttpServlet{
 		System.out.println("Editor Servlet: doGet");	
 		
 		// call JSP to generate empty form
-		req.getRequestDispatcher("/_view/editor.jsp").forward(req, resp);	
+		req.getRequestDispatcher("/_view/EditorRoomPage.jsp").forward(req, resp);	
 	}
 	
 	@Override
@@ -38,6 +39,30 @@ public class EditorServlet extends HttpServlet{
 		// holds the error message text, if there is any
 		String errorMessage = null;
 		
+		try {
+			String title = getInitParameter(req.getParameter("title"));
+			String description = getInitParameter(req.getParameter("description"));
+//			Color requirement = getInitParameter(req.getParameter("title"));
+//			Boolean connections = getInitParameter(req.getParameter("connections"));
+//			Item itemList = getInitParameter(req.getParameter("title"));
+//			int location = getInteger(req, "location");
+			
+			if(title == null || description == null){ // || connections == null || itemList == null){
+				errorMessage = "Please fill in all of the values";
+			} else {
+				model.setTitle(title);
+				model.setDescription(description);
+//				model.setConnections(connections);
+//				model.setRequirement(color);
+//				model.setLocation(x, y, z);
+//				model.setItemList(itemList);
+//				controller.createRoom();
+			}
+		
+		} catch (NumberFormatException e){
+			errorMessage = "Invalid input";
+		}
+		
 		// Add parameters as request attributes
 		// this creates attributes named "first" and "second for the response, and grabs the
 		// values that were originally assigned to the request attributes, also named "first" and "second"
@@ -49,9 +74,12 @@ public class EditorServlet extends HttpServlet{
 		req.setAttribute("connections", req.getParameter("connections"));
 		req.setAttribute("location", req.getParameter("location"));
 		req.setAttribute("itemList", req.getParameter("itemList"));
+		
+		req.setAttribute("errorMessage", errorMessage);
+
 
 		// Forward to view to render the result HTML document
-		req.getRequestDispatcher("/_view/editor.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/EditorRoomPage.jsp").forward(req, resp);
 	}
 
 
