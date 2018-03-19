@@ -1,6 +1,6 @@
 	<html>
 	<style>
-		<jsp:include page="gameScreenStyle.css"/>
+		<jsp:include page="indexStyle.css"/>
 	</style>
 	<head>
 	</head>
@@ -8,7 +8,8 @@
 	<body>			
 
 		<form action = "${pageContext.servletContext.contextPath}/login" method = "post">
-		<div> Welcome to the Otter Space!</div>
+		<h1> Welcome to the</h1> 
+		<h2>Otter Space!<h2>
 		<div id = "logon">
 		<table>
 			<tr>
