@@ -1,11 +1,15 @@
 	<html>
+	<style>
+		<jsp:include page="indexStyle.css"/>
+	</style>
 	<head>
 	</head>
 	
 	<body>			
 
-		<form action = "${pageContext.servletContext.contextPath}/Login" method = "post">
-		<div> Welcome to the Compliance Training Monitor</div>
+		<form action = "${pageContext.servletContext.contextPath}/login" method = "post">
+		<h1> Welcome to the</h1> 
+		<h2>Otter Space!<h2>
 		<div id = "logon">
 		<table>
 			<tr>
@@ -21,7 +25,7 @@
 			
 			
 				<input type="hidden" name="userName" value="user.getUsername">			
-				<input type="hidden" name="sessionid" value="sessionid.getSessionid">
+				
 			</div>
 		</form>
 	</body>

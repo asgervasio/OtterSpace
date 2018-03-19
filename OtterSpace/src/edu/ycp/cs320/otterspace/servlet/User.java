@@ -8,11 +8,11 @@ public class User {
 	
 	
 	
-	public void setUserAccountInformation(String fn, String ln, String email) {
+	public void setUserAccountInformation(String fn, String ln, String email, String pw) {
 		this.firstName = fn;
 		this.lastName = ln;
 		this.emailAddress = email;
-		this.password = password;
+		this.password = pw;
 	}
 	
 	public String getEmail() {
