@@ -12,7 +12,8 @@
 
 	<body>
 	
-  		<div class="heading">
+
+<div class="heading">
     		<h1>Otter Space</h1>
   		</div>
 
