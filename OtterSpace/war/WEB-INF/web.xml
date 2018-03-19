@@ -15,8 +15,8 @@
     <servlet-class>edu.ycp.cs320.otterspace.servlet.GameServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>GameEditorServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.otterspace.servlet.GameEditorServlet</servlet-class>
+    <servlet-name>EditorServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.otterspace.servlet.EditorServlet</servlet-class>
   </servlet>
 
   <!-- AJAX servlets.
@@ -39,8 +39,8 @@
     <url-pattern>/game</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>GameEditorServlet</servlet-name>
-    <url-pattern>/gameEditor</url-pattern>
+    <servlet-name>EditorServlet</servlet-name>
+    <url-pattern>/editor</url-pattern>
   </servlet-mapping>
 
   <!--  AJAX servlet mappings.
