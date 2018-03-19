@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 
 <html>
+	<style>
+		<jsp:include page="indexStyle.css"/>
+	</style>
+	
+	
 	<head>
-		<title>Index view</title>
+		<title>Otter Space Index</title>
 	</head>
 
 	<body>
-		This is the index view jsp	
 	
-		<form action="${pageContext.servletContext.contextPath}/game" method="post">
-			<input type="Submit" name="Game" value="Play the Game!">
-		</form>
-		
-		<form action="${pageContext.servletContext.contextPath}/editor" method="post">
-			<input type="Submit" name="Editor" value="Build the Game!">
-		</form>	
+
+<div class="heading">
+    		<h1>Otter Space</h1>
+  		</div>
+
+  		<div class="Index">
+  			<form action="${pageContext.servletContext.contextPath}/game" method="post">
+				<input type="submit" name="startGame" value="Play">
+			</form>
+  			<form action="${pageContext.servletContext.contextPath}/editor" method="post">
+				<input type="submit" name="startGame" value="Create">
+			</form>  		
+		</div>	
 	</body>
 </html>
