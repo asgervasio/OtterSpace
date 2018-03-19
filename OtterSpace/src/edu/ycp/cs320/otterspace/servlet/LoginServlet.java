@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("\nLoginServlet: doGet");
 		
 		//no need to get session info here: this is the first page 
-		req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class LoginServlet extends HttpServlet {
 						req.setAttribute("email", U.getEmail());
 
 
-						resp.sendRedirect(req.getContextPath() + "/MainPage");
+						resp.sendRedirect(req.getContextPath() + "/index");
 					}
 
 			

@@ -3,9 +3,13 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <html>
+<style>
+		<jsp:include page="gameScreenStyle.css"/>
+	</style>
+
 	<head>
 		<title>Game Page</title>
-		<link rel="stylesheet" type="text/css" href="gameScreenStyle.css" />
+		
 	</head>
 
 	<body>	
