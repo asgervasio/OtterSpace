@@ -1,6 +1,5 @@
 package edu.ycp.cs320.otterspace.servlet;
 
-import java.awt.Color;
 import java.io.IOException;
 
 import javax.servlet.ServletException;
@@ -9,10 +8,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.otterspace.controller.EditorRoomController;
+import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.EditorRoomModel;
+import edu.ycp.cs320.roomsdb.persist.FakeDatabase;
 
 public class EditorServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
+	FakeDatabase database = new FakeDatabase();
 	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -40,24 +42,28 @@ public class EditorServlet extends HttpServlet{
 		String errorMessage = null;
 		
 		try {
-			String title = getInitParameter(req.getParameter("title"));
-			String description = getInitParameter(req.getParameter("description"));
-//			Color requirement = getInitParameter(req.getParameter("title"));
-//			Boolean connections = getInitParameter(req.getParameter("connections"));
-//			Item itemList = getInitParameter(req.getParameter("title"));
-//			int location = getInteger(req, "location");
-			
-			if(title == null || description == null){ // || connections == null || itemList == null){
-				errorMessage = "Please fill in all of the values";
-			} else {
-				model.setTitle(title);
-				model.setDescription(description);
-//				model.setConnections(connections);
-//				model.setRequirement(color);
-//				model.setLocation(x, y, z);
-//				model.setItemList(itemList);
-//				controller.createRoom();
-			}
+			String title = req.getParameter("title");
+			System.out.println(title);
+			String description = req.getParameter("description");
+			String requirement = req.getParameter("requirement");
+			String connections = req.getParameter("connections");
+			String itemName = req.getParameter("itemList");
+			System.out.println(itemName);
+			String locationX = req.getParameter("locationX");
+			String locationY = req.getParameter("locationY");
+			String locationZ = req.getParameter("locationZ");
+
+			model.setTitle(title);
+			model.setDescription(description);
+			model.setConnections(connections);
+			model.setRequirement(requirement);
+			String location = locationX + "," + locationY + "," + locationZ + "!";
+			model.setLocation(location);
+			model.setItemList(itemName);
+			Room room = controller.createRoom();
+			System.out.println("Created the room, now adding to the database");
+			database.insertRoomWithItem(room);
+			System.out.println("Sent to database");
 		
 		} catch (NumberFormatException e){
 			errorMessage = "Invalid input";

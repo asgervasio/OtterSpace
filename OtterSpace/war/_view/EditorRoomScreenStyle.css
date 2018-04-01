@@ -1,6 +1,5 @@
 body {
-  background-color: black;
-  height: 100%;
+  margin: o;
 }
 div {
 	font-family: "Courier New", Courier, monospace;
@@ -11,36 +10,40 @@ div {
 }
 
 input {
-	background-color: #090909;
 	border: 0px;
-	color: #d3d3d3;
+	color: #000000;
 	font-family: "Courier New", Courier, monospace;
 	font-size: 12pt;
-	width: 600px;
 }
 
-.container{
-
+.title {
+	text-align: center;
+	padding: 20px;
 }
 
-input:focus {
-	outline:0;
+.column {
+	float: left;
+	width: 25%;
 }
 
-.commandline {
-	padding: 0 0 0 0;
+.row:after {
+	content: "";
+	display: table;
+	clear: both;
 }
 
-.content {
-	bottom: 0px;
-	position: absolute;
+.createRoom {
+	text-align: center;
+	padding: 10px;
 }
 
-.screen {
-	background-color: #090909;
-	border-radius: 0 0 10px 10px;
-	color: #d3d3d3;
-	height:600px;
-	position:relative;
-	width: 99%;
+input[type=text], select {
+	padding: 12px 20px;
+	margin: 8px 0;
+	display: inline-block;
+	border: 1px solid #ccc;
+	border-radius: 4px;
+	box-sizing: border-box;
 }
+
+

@@ -1,18 +1,12 @@
 package edu.ycp.cs320.otterspace.model;
 
-import java.awt.Color;
-
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 
 // Model class for GameModel
 // Only the controller should be allowed to call the set methods
 public class EditorRoomModel {
-	private String description, title;
-	private Color requirement;
-	private boolean[] connections;
-	private int[] location = new int[3];
-	private Item[] itemList;
+	private String description, title, requirement, connections, location, itemList;
 	
 	// Constructor for GameModel class
 	public EditorRoomModel() {
@@ -35,39 +29,35 @@ public class EditorRoomModel {
 		return description;
 	}
 	
-	public void setRequirement(Color color){
+	public void setRequirement(String color){
 		this.requirement = color;
 	}
 	
-	public Color getRequirement(){
+	public String getRequirement(){
 		return requirement;
 	}
 
-	public void setConnections(boolean[] connections){
+	public void setConnections(String connections){
 		this.connections = connections;
 	}
 
-	public boolean[] getConnections(){
+	public String getConnections(){
 		return connections;
 	}
 	
-	public void setLocation(int x, int y, int z){
-		location[0] = x;
-		location[1] = y;
-		location[2] = z;
+	public void setLocation(String location){
+		this.location = location;
 	}
 	
-	public int[] getLocation(){
+	public String getLocation(){
 		return location;
 	}
 	
-	public void setItemList(Item[] itemList){
-		for (int i = 0; i < itemList.length; i++){
-			this.itemList[i] = itemList[i];
-		}
+	public void setItemList(String itemList){
+		this.itemList = itemList;
 	}
 	
-	public Item[] getItemList(){
+	public String getItemList(){
 		return itemList;
 	}
 	

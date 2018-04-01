@@ -7,23 +7,66 @@ import java.awt.Color;
 //it will teach you nothing
 
 public class Room {
-	String title, description;
-	Color requirement;
-	boolean[] connections;
-	int[] location;
-	Item[] itemList;
+	int roomId;
+	String title, description, requirement, connections, location, itemList;
 	
-	public Room(String title, String description, Color requirement,
-			boolean[] connections, int[] location, Item[] itemList){
-		this.title = title;
-		this.description = description;
-		this.requirement = requirement;
-		this.connections = connections;
-		this.location = location;
-		this.itemList = itemList;
+	public Room(){
 	}
 	
+	public void setRoomId(int roomId){
+		this.roomId = roomId;		
+	}
 	
+	public int getRoomId(){
+		return roomId;
+	}
+
+	public void setTitle(String title){
+		this.title = title;		
+	}
 	
+	public String getTitle(){
+		return title;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;		
+	}
+	
+	public String getDescription(){
+		return description;
+	}
+	
+	public void setRequirement(String requirement){
+		this.requirement = requirement;		
+	}
+	
+	public String getRequirement(){
+		return requirement;
+	}
+	
+	public void setConnections(String connections){
+		this.connections = connections;		
+	}
+	
+	public String getConnections(){
+		return connections;
+	}
+		
+	public void setLocation(String location){
+		this.location = location;		
+	}
+	
+	public String getLocation(){
+		return location;
+	}
+	
+	public void setItems(String itemList){
+		this.itemList = itemList;		
+	}
+	
+	public String getItems(){
+		return itemList;
+	}
 
 }

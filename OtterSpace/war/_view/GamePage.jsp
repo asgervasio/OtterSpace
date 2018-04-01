@@ -23,7 +23,7 @@
 						<% out.println(request.getParameter("cmd")); %>
 						<div class="commandline">
 						<form action="${pageContext.servletContext.contextPath}/game" method="post">
-							> <input type="text" name="cmd" autofocus/>
+							<input type="text" name="cmd" autofocus/>
 						</form>
 						</div>
 					</div>

@@ -11,18 +11,10 @@ import edu.ycp.cs320.otterspace.model.EditorRoomModel;
 
 public class EditorRoomModelTest {
 	private EditorRoomModel model;
-	private Color color;
-	private boolean[] connections;
-	private int x, y, z;
 	
 	@Before
 	public void setUp(){
 		model = new EditorRoomModel();
-		
-		connections = new boolean[]{true, false, false, false};
-		x = 25;
-		y = 2;
-		z = 10;
 	}
 	
 	@Test
@@ -41,34 +33,23 @@ public class EditorRoomModelTest {
 	
 	@Test
 	public void testSetRequirement(){
-		model.setRequirement(color.red);
-		Color answer = color.red;
+		model.setRequirement("red");
+		String answer = "red";
 		assertEquals(answer, model.getRequirement());
 	}
 	
 	@Test
 	public void testConnections(){
-		model.setConnections(connections);;
-		boolean answer1 = true;
-		boolean answer2 = false;
-		boolean answer3 = false;
-		boolean answer4 = false;
-
-		assertEquals(answer1, model.getConnections()[0]);
-		assertEquals(answer2, model.getConnections()[1]);
-		assertEquals(answer3, model.getConnections()[2]);
-		assertEquals(answer4, model.getConnections()[3]);
+		model.setConnections("Kitchen,Yard,Boss Fight");
+		String answer = "Kitchen,Yard,Boss Fight";
+		assertEquals(answer, model.getConnections());
 	}
 	
 	@Test
 	public void testSetLocation(){
-		model.setLocation(x, y, z);;
-		int answerX = 25;
-		int answerY = 2;
-		int answerZ = 10;
-		assertEquals(answerX, model.getLocation()[0]);
-		assertEquals(answerY, model.getLocation()[1]);
-		assertEquals(answerZ, model.getLocation()[2]);
+		model.setLocation("25,2,10");;
+		String answer = "25,2,10";
+		assertEquals(answer, model.getLocation());
 	}
 		
 }// end of class
