@@ -9,9 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 //import ycp.cs320.teamProject.model.MileStone1_User;
-import edu.ycp.cs320.otterspace.servlet.User;
-import edu.ycp.cs320.otterspace.controller.GameController;
-import edu.ycp.cs320.otterspace.controller.UserController;
+import edu.ycp.cs320.otterspace.model.User;
+import edu.ycp.cs320.otterspace.controller.*;
+import edu.ycp.cs320.otterspace.model.*;
 
 //Priority #1
 public class LoginServlet extends HttpServlet {
@@ -54,7 +54,7 @@ public class LoginServlet extends HttpServlet {
 				User u = user.get(0);
 				System.out.println(u.getUsername());
 				//Authenticate the user
-				if(Usercontroller.authenticate(u, password) == true){
+				if(UserController.authenticate(u, password) == true){
 					//Set the session true and set their username
 					HttpSession session = req.getSession();
 					session.setAttribute("username", u.getUsername());
@@ -63,26 +63,17 @@ public class LoginServlet extends HttpServlet {
 					session.setAttribute("emailAddress", u.getEmail());
 					System.out.println("Session info");
 					System.out.println(req.getSession().getAttribute("username"));
-					System.out.println(req.getSession().getAttribute("userID"));
 					System.out.println(req.getSession().getAttribute("fristName"));
 					System.out.println(req.getSession().getAttribute("lastName"));
-					System.out.println(req.getSession().getAttribute("type"));
 					System.out.println(req.getSession().getAttribute("emailAddress"));
-					//req.getSession(true).setAttribute("username", u.getUsername());
-					//req.getSession().setAttribute("type", u.isAdmin());
-					//req.getSession().setAttribute("userID", u.getUserID());
 					model.setSessionid(req.getSession().getId());
 					//If user is an owner send them to a page of their restaurants
-					if(u.isAdmin().equals("Admin")){
-						resp.sendRedirect(req.getContextPath() + "/Index");
-					}
+					
+						
+					
 					//If user is a patron send to the homepage
-					else{
-						//req.setAttribute("userName", u.getUsername());
-
-
-						resp.sendRedirect(req.getContextPath() + "/MainPage");
-					}
+					resp.sendRedirect(req.getContextPath() + "/Index");
+					
 
 				}
 				//display error meassage for incorrect username or password
