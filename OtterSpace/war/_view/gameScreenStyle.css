@@ -36,6 +36,28 @@ input:focus {
 	position: absolute;
 }
 
+.moves {
+	display:inline-block;
+	float:right;
+}
+
+.room {
+	display:inline-block;
+}
+
+.score {
+	display:inline-block;
+	float:right;
+}
+
+.scorebar {
+	background-color: #d3d3d3;
+	border-radius: 10px 10px 0 0;
+	color: #090909;
+	height: 25px;
+	width: 99%;
+}
+
 .screen {
 	background-color: #090909;
 	border-radius: 0 0 10px 10px;

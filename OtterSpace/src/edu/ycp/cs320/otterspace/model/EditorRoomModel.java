@@ -1,6 +1,7 @@
 package edu.ycp.cs320.otterspace.model;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
@@ -10,7 +11,7 @@ import edu.ycp.cs320.otterspace.controller.game.Room;
 public class EditorRoomModel {
 	private String description, title;
 	private Color requirement;
-	private boolean[] connections;
+	private HashMap<String,Room> connections;
 	private int[] location = new int[3];
 	private Item[] itemList;
 	
@@ -43,11 +44,11 @@ public class EditorRoomModel {
 		return requirement;
 	}
 
-	public void setConnections(boolean[] connections){
-		this.connections = connections;
+	public void setConnection(String key, Room room){
+		connections.put(key, room);
 	}
 
-	public boolean[] getConnections(){
+	public HashMap<String, Room> getConnections(){
 		return connections;
 	}
 	
