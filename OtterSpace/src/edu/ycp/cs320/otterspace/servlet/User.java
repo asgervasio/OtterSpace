@@ -5,16 +5,24 @@ public class User {
 	private String password;
 	private String firstName;
 	private String lastName; 
+	private String userName; 
 	
 	
 	
-	public void setUserAccountInformation(String fn, String ln, String email, String pw) {
+	public void setUserAccountInformation(String user, String fn, String ln, String email, String pw) {
 		this.firstName = fn;
 		this.lastName = ln;
 		this.emailAddress = email;
 		this.password = pw;
+		this.userName = user;
 	}
 	
+	public String getUsername() {
+		return userName;
+	}
+	public void setUsername(String user) {
+		this.userName = user;
+	}
 	public String getEmail() {
 		return emailAddress;
 	}
