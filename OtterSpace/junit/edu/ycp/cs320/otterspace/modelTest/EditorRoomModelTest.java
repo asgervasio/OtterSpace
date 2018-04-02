@@ -3,23 +3,24 @@ package edu.ycp.cs320.otterspace.modelTest;
 import static org.junit.Assert.*;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.EditorRoomModel;
 
 public class EditorRoomModelTest {
 	private EditorRoomModel model;
 	private Color color;
-	private boolean[] connections;
+	//private HashMap<String, Room> connections;
 	private int x, y, z;
 	
 	@Before
 	public void setUp(){
 		model = new EditorRoomModel();
 		
-		connections = new boolean[]{true, false, false, false};
 		x = 25;
 		y = 2;
 		z = 10;
@@ -48,16 +49,20 @@ public class EditorRoomModelTest {
 	
 	@Test
 	public void testConnections(){
-		model.setConnections(connections);;
-		boolean answer1 = true;
-		boolean answer2 = false;
-		boolean answer3 = false;
-		boolean answer4 = false;
+		Room kitchen = new Room();
+		Room yard = new Room();
+		Room forest = new Room();
+		Room lake = new Room();
+		
+		model.setConnection("north", kitchen);
+		model.setConnection("south", yard);
+		model.setConnection("east", forest);
+		model.setConnection("west", lake);
 
-		assertEquals(answer1, model.getConnections()[0]);
-		assertEquals(answer2, model.getConnections()[1]);
-		assertEquals(answer3, model.getConnections()[2]);
-		assertEquals(answer4, model.getConnections()[3]);
+		assertEquals(model.getConnections().get("north"), kitchen);
+		assertEquals(model.getConnections().get("south"), yard);
+		assertEquals(model.getConnections().get("east"), forest);
+		assertEquals(model.getConnections().get("west"), lake);
 	}
 	
 	@Test
