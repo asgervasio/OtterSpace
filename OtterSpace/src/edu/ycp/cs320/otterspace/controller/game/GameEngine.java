@@ -47,7 +47,7 @@ public class GameEngine
 		}
 		else
 		{
-			player.setCurrentRoom(currentRoom.getConnection(direction));
+			player.setCurrentRoom(destination);
 		}
 	}
 
