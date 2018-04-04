@@ -1,6 +1,5 @@
 package edu.ycp.cs320.otterspace.controller;
 
-import java.awt.Color;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
@@ -14,8 +13,15 @@ public class EditorRoomController {
 	}
 	
 	public Room createRoom(){
-		return new Room(model.getTitle(), model.getDescription(), model.getRequirement(), model.getConnections(),
-				model.getLocation(), model.getItemList());
+		Room room = new Room();
+		room.setTitle(model.getTitle());
+		room.setDescription(model.getDescription());
+		room.setRequirement(model.getRequirement());
+		room.setConnectionTemp(model.getConnectionTemp());
+		room.setItems(model.getItemList());
+		room.setLocation(model.getLocation());
+		
+		return room;
 	}
 	
 }// end of class

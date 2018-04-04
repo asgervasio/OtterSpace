@@ -1,9 +1,7 @@
+
 package edu.ycp.cs320.otterspace.modelTest;
 
 import static org.junit.Assert.*;
-
-import java.awt.Color;
-import java.util.HashMap;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -13,17 +11,10 @@ import edu.ycp.cs320.otterspace.model.EditorRoomModel;
 
 public class EditorRoomModelTest {
 	private EditorRoomModel model;
-	private Color color;
-	//private HashMap<String, Room> connections;
-	private int x, y, z;
 	
 	@Before
 	public void setUp(){
 		model = new EditorRoomModel();
-		
-		x = 25;
-		y = 2;
-		z = 10;
 	}
 	
 	@Test
@@ -42,13 +33,27 @@ public class EditorRoomModelTest {
 	
 	@Test
 	public void testSetRequirement(){
-		model.setRequirement(color.red);
-		Color answer = color.red;
+		model.setRequirement("red");
+		String answer = "red";
 		assertEquals(answer, model.getRequirement());
 	}
 	
 	@Test
 	public void testConnections(){
+		model.setConnectionTemp("Kitchen,Yard,Boss Fight");
+		String answer = "Kitchen,Yard,Boss Fight";
+		assertEquals(answer, model.getConnectionTemp());
+	}
+	
+	@Test
+	public void testSetLocation(){
+		model.setLocation("25,2,10");;
+		String answer = "25,2,10";
+		assertEquals(answer, model.getLocation());
+	}
+		
+	@Test
+	public void testConnections2(){
 		Room kitchen = new Room();
 		Room yard = new Room();
 		Room forest = new Room();
@@ -64,16 +69,5 @@ public class EditorRoomModelTest {
 		assertEquals(model.getConnections().get("east"), forest);
 		assertEquals(model.getConnections().get("west"), lake);
 	}
-	
-	@Test
-	public void testSetLocation(){
-		model.setLocation(x, y, z);;
-		int answerX = 25;
-		int answerY = 2;
-		int answerZ = 10;
-		assertEquals(answerX, model.getLocation()[0]);
-		assertEquals(answerY, model.getLocation()[1]);
-		assertEquals(answerZ, model.getLocation()[2]);
-	}
-		
+
 }// end of class
