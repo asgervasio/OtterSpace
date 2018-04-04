@@ -55,7 +55,7 @@ public class EditorServlet extends HttpServlet{
 
 			model.setTitle(title);
 			model.setDescription(description);
-			model.setConnections(connections);
+			model.setConnectionTemp(connections);
 			model.setRequirement(requirement);
 			String location = locationX + "," + locationY + "," + locationZ + "!";
 			model.setLocation(location);

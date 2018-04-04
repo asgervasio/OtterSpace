@@ -10,7 +10,6 @@ import edu.ycp.cs320.otterspace.controller.game.Room;
 public class EditorRoomModel {
 
 	private String description, title, requirement, connectionTemp, location, itemList;
-	private String description, title;
 	private HashMap<String,Room> connections;
 	
 	// Constructor for GameModel class

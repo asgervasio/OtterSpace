@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.EditorRoomModel;
 
 public class EditorRoomModelTest {
@@ -39,9 +40,9 @@ public class EditorRoomModelTest {
 	
 	@Test
 	public void testConnections(){
-		model.setConnections("Kitchen,Yard,Boss Fight");
+		model.setConnectionTemp("Kitchen,Yard,Boss Fight");
 		String answer = "Kitchen,Yard,Boss Fight";
-		assertEquals(answer, model.getConnections());
+		assertEquals(answer, model.getConnectionTemp());
 	}
 	
 	@Test

@@ -2,6 +2,7 @@
 package edu.ycp.cs320.otterspace.controller.game;
 
 import java.awt.Color;
+import java.util.HashMap;
 
 //This is only used as a stand-in for the real room class
 //Do not try to create or learn about items from this class,
