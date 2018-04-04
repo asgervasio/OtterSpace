@@ -7,6 +7,18 @@
 	<style>
 		<jsp:include page="gameScreenStyle.css"/>
 	</style>
+	<script src="${pageContext.request.contextPath}/JavaScript/gamePage.js" type="text/javascript"></script>
+	<script src="${pageContext.request.contextPath}/JavaScript/jquery.js" type="text/javascript"></script>
+	<script>
+	function add()
+	{
+		var content = document.getElementById('content');
+		var output = $('.commandline');
+		var input = $('input');
+		var cmd = input.val();
+		output.before("> " + cmd + "<br /><br />");
+	}
+	</script>
 	<head>
 		<title>Game Page</title>
 	</head>
@@ -21,11 +33,11 @@
 
 				<div class="screen">
 					<div class="content">
-						<% out.println(request.getParameter("cmd")); %>
 						<div class="commandline">
-						<form action="${pageContext.servletContext.contextPath}/game" method="post">
-							> <input type="text" name="cmd" autofocus/>
+						<form action="${pageContext.servletContext.contextPath}/game" method="post" onsubmit="add();">
+							> <input type="text" id="cmd" name="cmd" autofocus/>
 						</form>
+						
 						</div>
 					</div>
 				</div>

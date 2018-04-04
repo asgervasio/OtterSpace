@@ -6,6 +6,7 @@ public class GameModel
 {
 	private String cmd;
 	private Room currentRoom;
+	
 	public void setCommand(String cmd)
 	{
 		this.cmd = cmd;
