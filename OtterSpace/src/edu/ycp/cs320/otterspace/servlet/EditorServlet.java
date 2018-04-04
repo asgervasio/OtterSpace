@@ -62,7 +62,7 @@ public class EditorServlet extends HttpServlet{
 			model.setItemList(itemName);
 			Room room = controller.createRoom();
 			System.out.println("Created the room, now adding to the database");
-			database.insertRoomWithItem(room);
+			database.insertRoom(room);
 			System.out.println("Sent to database");
 		
 		} catch (NumberFormatException e){
