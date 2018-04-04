@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<html>
+
+	<script src="${pageContext.request.contextPath}/JavaScript/gamePage.js" type="text/javascript"></script>
+	<script
+		src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
+		type="text/javascript">
+	</script>
+	
+	<script>
+	function add()
+	{
+		var output = $('.commandline');
+		var input = $('input');
+		var cmd = input.val();
+		output.before("> " + cmd + "<br /><br />");
+		$.ajax({
+			type: 'POST',
+			url: '/otterspace/ajax/game',
+			data: { cmd: $("#cmd").val()},
+				success:
+					function(data, textStatus, jqXHR) 
+					{
+						output.before(data + "<br /><br />");
+					},
+				error:
+					function(jqXHR, textStatus, errorThrown) 
+					{
+						output.before(textStatus + ": " + errorThrown + "<br /><br />");
+					},
+				dataType: 'text'
+			});
+			input.val('');
+	}
+	</script>
+	
+	</script>
+	<head>
+		<title>Game Page</title>
+		 <link rel="stylesheet" type="text/css" href="css/gameScreenStyle.css">
+	</head>
+
+	<body>		
+			<div class="container">
+				<div class="scorebar">
+					<div class="room"></div>
+					<div class="moves">Moves: 0</div>
+					<div class="score">Score: 0</div>
+				</div>
+
+				<div class="screen">
+					<div class="content" id="content">
+						<div class="commandline">
+							> <input type="text" id="cmd" name="cmd"  onKeyDown="if(event.keyCode==13) add();" autofocus/>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div>
+				<span id="errorElt" class="error"></span>
+			</div>
+			
+	</body>
+</html>
