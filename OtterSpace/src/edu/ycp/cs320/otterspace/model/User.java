@@ -1,4 +1,4 @@
-package edu.ycp.cs320.otterspace.servlet;
+package edu.ycp.cs320.otterspace.model;
 
 public class User {
 	private String emailAddress;
@@ -61,6 +61,16 @@ public class User {
 		//call to db interface
 		//
 		return false;
+	}
+
+	public void setSessionid(String id) {
+		// session info ready 
+		
+	}
+
+	public Object getSessionid() {
+	//Session info ready
+		return null;
 	}
 
 }

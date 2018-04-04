@@ -34,7 +34,7 @@ public class EditorRoomModelTest {
 	
 	@Test
 	public void testSetDescription(){
-		model.setDescription("A game about an otter thats in space");;
+		model.setDescription("A game about an otter thats in space");
 		String answer = "A game about an otter thats in space";
 		assertEquals(answer, model.getDescription());
 	}
@@ -48,7 +48,7 @@ public class EditorRoomModelTest {
 	
 	@Test
 	public void testConnections(){
-		model.setConnections(connections);;
+		model.setConnections(connections);
 		boolean answer1 = true;
 		boolean answer2 = false;
 		boolean answer3 = false;
