@@ -32,8 +32,11 @@
     <servlet-name>NextGuessAjaxServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.agervasio.servlet.ajax.NextGuessAjaxServlet</servlet-class>
   </servlet>
-	-->
-  <!-- Servlet mappings -->
+	--><servlet>
+  	<servlet-name>GameAjaxServlet</servlet-name>
+  	<servlet-class>edu.ycp.cs320.otterspace.servlet.ajax.GameAjaxServlet</servlet-class>
+</servlet>
+	<!-- Servlet mappings -->
   <servlet-mapping>
     <servlet-name>IndexServlet</servlet-name>
     <url-pattern>/index</url-pattern>
@@ -60,9 +63,12 @@
     <servlet-name>NextGuessAjaxServlet</servlet-name>
     <url-pattern>/ajax/nextGuess</url-pattern>
   </servlet-mapping>
-	-->
+	--><servlet-mapping>
+  	<servlet-name>GameAjaxServlet</servlet-name>
+  	<url-pattern>/ajax/game</url-pattern>
+</servlet-mapping>
 
-  <welcome-file-list>
+	<welcome-file-list>
     <welcome-file>index.html</welcome-file>
   </welcome-file-list>
 </web-app>

@@ -12,7 +12,8 @@
 
 	<body>
 	
-  		<div class="heading">
+
+<div class="heading">
     		<h1>Otter Space</h1>
   		</div>
 
@@ -20,7 +21,7 @@
   			<form action="${pageContext.servletContext.contextPath}/game" method="post">
 				<input type="submit" name="startGame" value="Play">
 			</form>
-  			<form action="${pageContext.servletContext.contextPath}/editor" method="post">
+  			<form action="${pageContext.servletContext.contextPath}/editor" method="get">
 				<input type="submit" name="startGame" value="Create">
 
 			</form>  		
