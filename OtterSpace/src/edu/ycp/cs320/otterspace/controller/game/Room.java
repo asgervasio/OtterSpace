@@ -1,3 +1,4 @@
+
 package edu.ycp.cs320.otterspace.controller.game;
 
 import java.awt.Color;
@@ -8,7 +9,8 @@ import java.awt.Color;
 
 public class Room {
 	int roomId;
-	String title, description, requirement, connections, location, itemList;
+	String title, description, requirement, connectionTemp, location, itemList;
+	HashMap<String,Room> connections = new HashMap<String,Room>();
 	
 	public Room(){
 	}
@@ -45,12 +47,12 @@ public class Room {
 		return requirement;
 	}
 	
-	public void setConnections(String connections){
-		this.connections = connections;		
+	public void setConnectionTemp(String connections){
+		this.connectionTemp = connections;		
 	}
 	
-	public String getConnections(){
-		return connections;
+	public String getConnectionTemp(){
+		return connectionTemp;
 	}
 		
 	public void setLocation(String location){
@@ -68,5 +70,15 @@ public class Room {
 	public String getItems(){
 		return itemList;
 	}
-
+	
+	public Room getConnection(String key)
+	{
+		return connections.get(key);
+	}
+	
+	public void setConnection(String key, Room room)
+	{
+		connections.put(key, room);
+	}
+	
 }

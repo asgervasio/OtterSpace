@@ -23,7 +23,7 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("\nLoginServlet: doGet");
 		
 		//no need to get session info here: this is the first page 
-		req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("\nLoginServlet: doPost");
 
 		String errorMessage = null;
-		String username = null;
+		String email = null;
 		String password = null;
 
 		
@@ -40,19 +40,19 @@ public class LoginServlet extends HttpServlet {
 		//get user and PW
 		
 		
-		username = req.getParameter("username");
+		email = req.getParameter("username");
 		password = req.getParameter("password");
 
-		System.out.println("   Name: <" + username + "> PW: <" + password + ">");			
+		System.out.println("   Name: <" + email + "> PW: <" + password + ">");			
 
-		if (username == null || password == null || username.equals("") || password.equals("")) {
+		if (email == null || password == null || email.equals("") || password.equals("")) {
 			errorMessage = "Please specify both user name and password";
 		} 
 					
 						req.setAttribute("email", U.getEmail());
 
 
-						resp.sendRedirect(req.getContextPath() + "/MainPage");
+						resp.sendRedirect(req.getContextPath() + "/index");
 					}
 
 			

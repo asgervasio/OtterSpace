@@ -23,6 +23,7 @@
 			</form>
   			<form action="${pageContext.servletContext.contextPath}/editor" method="get">
 				<input type="submit" name="startGame" value="Create">
+
 			</form>  		
 		</div>	
 	</body>

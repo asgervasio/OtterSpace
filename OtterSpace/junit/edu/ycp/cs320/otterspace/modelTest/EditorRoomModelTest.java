@@ -1,3 +1,4 @@
+
 package edu.ycp.cs320.otterspace.modelTest;
 
 import static org.junit.Assert.*;
@@ -50,4 +51,22 @@ public class EditorRoomModelTest {
 		assertEquals(answer, model.getLocation());
 	}
 		
+	@Test
+	public void testConnections2(){
+		Room kitchen = new Room();
+		Room yard = new Room();
+		Room forest = new Room();
+		Room lake = new Room();
+		
+		model.setConnection("north", kitchen);
+		model.setConnection("south", yard);
+		model.setConnection("east", forest);
+		model.setConnection("west", lake);
+
+		assertEquals(model.getConnections().get("north"), kitchen);
+		assertEquals(model.getConnections().get("south"), yard);
+		assertEquals(model.getConnections().get("east"), forest);
+		assertEquals(model.getConnections().get("west"), lake);
+	}
+
 }// end of class
