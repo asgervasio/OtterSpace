@@ -1,20 +1,28 @@
-package edu.ycp.cs320.otterspace.servlet;
+package edu.ycp.cs320.otterspace.model;
 
 public class User {
 	private String emailAddress;
 	private String password;
 	private String firstName;
 	private String lastName; 
+	private String userName; 
 	
 	
 	
-	public void setUserAccountInformation(String fn, String ln, String email, String pw) {
+	public void setUserAccountInformation(String user, String fn, String ln, String email, String pw) {
 		this.firstName = fn;
 		this.lastName = ln;
 		this.emailAddress = email;
 		this.password = pw;
+		this.userName = user;
 	}
 	
+	public String getUsername() {
+		return userName;
+	}
+	public void setUsername(String user) {
+		this.userName = user;
+	}
 	public String getEmail() {
 		return emailAddress;
 	}
@@ -53,6 +61,16 @@ public class User {
 		//call to db interface
 		//
 		return false;
+	}
+
+	public void setSessionid(String id) {
+		// session info ready 
+		
+	}
+
+	public Object getSessionid() {
+	//Session info ready
+		return null;
 	}
 
 }

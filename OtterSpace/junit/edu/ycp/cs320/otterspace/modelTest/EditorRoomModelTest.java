@@ -1,4 +1,3 @@
-
 package edu.ycp.cs320.otterspace.modelTest;
 
 import static org.junit.Assert.*;
