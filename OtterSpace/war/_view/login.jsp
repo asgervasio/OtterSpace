@@ -31,19 +31,18 @@ session_start();
 		<form action = "${pageContext.servletContext.contextPath}/Login" method = "post">
 		<div id = "PageName"> Welcome to the OtterSpace Odyssey</div>
 		<div id = "logon">
-
-		
-			
-					Username:<br>
-					<input type="text" name="username" size="12" value="${username}" /><br>
-			
-					Password:<br>
-					<input type="password" name="password" size="12" value="${password}" /><br>
-			
-		
-			<input type = "Submit" name = "submit" value = "Login" /> <br>
-			<input type="Submit" name="Register" value="Register"> <br>
-
+		<table>
+			<tr>
+					<td class = "label"> Username: </td>
+					<td><input type="text" name="username" size="12" value="${username}" /></td>
+			</tr>
+			<tr>
+					<td class = "label"> Password: </td>
+					<td><input type="password" name="password" size="12" value="${password}" /></td>
+			</tr>
+			</table>
+			<td><input type = "Submit" name = "submit" value = "Login" /> </td>
+			<td><input type = "Register" name = "Register" value = "Register" /> </td>
 				<input type="hidden" name="userName" value="user.getUsername">			
 				<input type="hidden" name="sessionid" value="sessionid.getSessionid">
 			</div>

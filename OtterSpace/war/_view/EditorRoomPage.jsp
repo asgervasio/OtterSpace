@@ -4,7 +4,7 @@
 
 <html>
 	<style>
-		<link rel="stylesheet" type="text/css" href="css/EditorRoomScreenStyle.css">
+		<jsp:include page="EditorRoomScreenStyle.css"/>
 	</style>
 	<head>
 		<title>Room Creation</title>

@@ -37,41 +37,7 @@ public class InitialData {
 		}
 	}
 
-
-	public static List<User> getUsers() throws IOException {
-		List<User> userList = new ArrayList<User>();
-		ReadCSV readUsers = new ReadCSV("Users.csv");
-		try {
-			
-			while (true) {
-				List<String> tuple = readUsers.next();
-				if (tuple == null) {
-					break;
-				}
-				Iterator<String> i = tuple.iterator();
-
-				User user = new User();
-				user.setEmail(i.next());
-				
-				user.setFirstName(i.next());
-				
-				user.setLastName(i.next());
-			
-				user.setPassword(i.next());
-				user.setUsername(i.next());
-				userList.add(user);
-				
-			}
-			System.out.print(userList.size()+" users");
-			return userList;
-		} finally {
-			readUsers.close();
-		}
-	}
-	
-
-  public static List<Item> getItems() throws IOException {
-
+	public static List<Item> getItems() throws IOException {
 		List<Item> itemList = new ArrayList<Item>();
 		ReadCSV readRooms = new ReadCSV("items.csv");
 		try {
