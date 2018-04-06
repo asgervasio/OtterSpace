@@ -1,4 +1,4 @@
-package ecu.ycp.cs320.roomsdb;
+package edu.ycp.cs320.roomsdb;
 
 import java.util.Scanner;
 

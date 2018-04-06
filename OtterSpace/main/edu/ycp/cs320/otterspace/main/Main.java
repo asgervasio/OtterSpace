@@ -4,8 +4,8 @@ import java.io.File;
 
 import org.eclipse.jetty.server.Server;
 
-import ecu.ycp.cs320.roomsdb.InitDatabase;
 import edu.ycp.cs320.otterspace.controller.game.Player;
+import edu.ycp.cs320.roomsdb.InitDatabase;
 import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
 import edu.ycp.cs320.roomsdb.persist.IDatabase;
 

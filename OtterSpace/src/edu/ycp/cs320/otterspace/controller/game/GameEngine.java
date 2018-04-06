@@ -5,9 +5,9 @@ import java.util.Scanner;
 
 import javax.servlet.http.HttpServletResponse;
 
+import edu.ycp.cs320.roomsdb.InitDatabase;
 import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
 import edu.ycp.cs320.roomsdb.persist.IDatabase;
-import ecu.ycp.cs320.roomsdb.InitDatabase;
 import edu.ycp.cs320.roomsdb.persist.FakeDatabase;
 import edu.ycp.cs320.otterspace.model.GameModel;
 
