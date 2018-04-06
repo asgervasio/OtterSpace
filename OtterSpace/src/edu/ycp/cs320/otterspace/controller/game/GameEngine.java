@@ -81,9 +81,15 @@ public class GameEngine
 			//player.setCurrentRoom(db.findRoomUsingTitle(direction));
 			//result = player.getCurrentRoom().getTitle();
 			//result = direction[1];
+		if(direction.length > 2)
+		{
+			result = "Unknown Movement";
+		}
+		else
+		{
 			testRoom = db.findRoomUsingTitle(direction[1]);
 			result = testRoom.getTitle() + "<br /><br />" + testRoom.getDescription() + "<br /><br /> You see the following items on the ground: <br />" + testRoom.getItems();
-
+		}
 		//}
 		return result;
 	}
