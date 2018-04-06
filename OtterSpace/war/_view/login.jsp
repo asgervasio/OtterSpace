@@ -17,31 +17,25 @@ session_start();
 	</head>
 	
 	<body>			
-	</php
-	$_SESSION["username"];
-	$_SESSION["firstName"];
-	$_SESSION["lastName"];
-	$_SESSION["sessionid"];
-	$_SESSION["emailAddress"];
-	?>
+	
 	
 		<c:if test="${! empty errorMessage }">
 			<div class = "error"> ${errorMessage}</div>
 		</c:if>
-		<form action = "${pageContext.servletContext.contextPath}/Login" method = "post">
+		<form action = "${pageContext.servletContext.contextPath}/login" method = "post">
 		<div id = "PageName"> Welcome to the OtterSpace Odyssey</div>
 		<div id = "logon">
 
 		
 			
-					Username:<br>
+					<h1>Username:</h1><br>
 					<input type="text" name="username" size="12" value="${username}" /><br>
 			
-					Password:<br>
+					<h1>Password:</h1><br>
 					<input type="password" name="password" size="12" value="${password}" /><br>
 			
 		
-			<input type = "Submit" name = "submit" value = "Login" /> <br>
+			<input type = "Submit" name = "submit" value = "login" /> <br>
 			<input type="Submit" name="Register" value="Register"> <br>
 
 				<input type="hidden" name="userName" value="user.getUsername">			

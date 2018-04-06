@@ -11,7 +11,7 @@ import edu.ycp.cs320.otterspace.model.User;
 public class FakeDatabase implements IDatabase {
 	private List<Item> itemList;
 	private List<Room> roomList;
-	
+	private List<User> userList;
 	public FakeDatabase() {
 		roomList = new ArrayList<Room>();
 		itemList = new ArrayList<Item>();
@@ -121,9 +121,15 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> getAccountInfo(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> getAccountInfo(String Username) {
+		
+			List<User> result = new ArrayList<User>();
+			for(User user: userList) {
+				if(user.getUsername().equals(Username)){
+					result.add(user);
+				}
+			}
+			return result;
 	}
 
 	@Override
@@ -161,8 +167,7 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public List<User> findAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		return userList;
 	}
 
 	@Override
@@ -170,5 +175,5 @@ public class FakeDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 }// end of class
