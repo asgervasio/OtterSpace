@@ -12,7 +12,7 @@ import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.EditorRoomModel;
 import edu.ycp.cs320.roomsdb.persist.FakeDatabase;
 
-public class EditorServlet extends HttpServlet{
+public class EditorRoomServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	FakeDatabase database = new FakeDatabase();
 	
@@ -33,9 +33,7 @@ public class EditorServlet extends HttpServlet{
 		System.out.println("Editor Servlet: doPost");
 		
 		EditorRoomModel model = new EditorRoomModel();
-		
 		EditorRoomController controller = new EditorRoomController();
-
 		controller.setModel(model);
 
 		// holds the error message text, if there is any
@@ -70,10 +68,6 @@ public class EditorServlet extends HttpServlet{
 		}
 		
 		// Add parameters as request attributes
-		// this creates attributes named "first" and "second for the response, and grabs the
-		// values that were originally assigned to the request attributes, also named "first" and "second"
-		// they don't have to be named the same, but in this case, since we are passing them back
-		// and forth, it's a good idea
 		req.setAttribute("title", req.getParameter("title"));
 		req.setAttribute("description", req.getParameter("description"));
 		req.setAttribute("requirement", req.getParameter("requirement"));

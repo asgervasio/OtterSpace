@@ -25,7 +25,7 @@ public class EditorRoomModelTest {
 	
 	@Test
 	public void testSetDescription(){
-		model.setDescription("A game about an otter thats in space");;
+		model.setDescription("A game about an otter thats in space");
 		String answer = "A game about an otter thats in space";
 		assertEquals(answer, model.getDescription());
 	}
