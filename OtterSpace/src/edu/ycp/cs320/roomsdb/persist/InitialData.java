@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.*;
 
@@ -14,7 +15,7 @@ public class InitialData {
 		List<Room> roomList = new ArrayList<Room>();
 		ReadCSV readRooms = new ReadCSV("rooms.csv");
 		try {
-			// auto-generated primary key for authors table
+			// auto-generated primary key for Rooms table
 			Integer roomId = 1;
 			while (true) {
 				List<String> tuple = readRooms.next();
@@ -24,7 +25,7 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 				Room room = new Room();
 				room.setRoomId(roomId++);				
-				room.setTitle(i.next());
+				room.setTitle(i.next().toLowerCase());
 				room.setDescription(i.next());
 				room.setItems(i.next());
 				room.setConnectionTemp(i.next());
@@ -37,6 +38,7 @@ public class InitialData {
 			readRooms.close();
 		}
 	}
+
 	
 	public static List<User> getUsers() throws IOException {
 		List<User> userList = new ArrayList<User>();
@@ -45,10 +47,13 @@ public class InitialData {
 			
 			while (true) {
 				List<String> tuple = readUsers.next();
+
+
 				if (tuple == null) {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
+
 				User user = new User();
 				user.setEmail(i.next());		
 				user.setFirstName(i.next());
@@ -63,4 +68,34 @@ public class InitialData {
 		}
 	}
 	
+
+  public static List<Item> getItems() throws IOException {
+		List<Item> itemList = new ArrayList<Item>();
+		ReadCSV readRooms = new ReadCSV("items.csv");
+		try {
+			// auto-generated primary key for Items table
+			Integer itemId = 1;
+			while (true) {
+				List<String> tuple = readRooms.next();
+
+				if (tuple == null) {
+					break;
+				}
+				Iterator<String> i = tuple.iterator();
+				Item item = new Item();
+				item.setItemId(itemId++);				
+				item.setTitle(i.next());
+				item.setDescription(i.next());
+				item.setRoomLocat(i.next());
+				item.setStatAffected(i.next());
+				item.setStatChangeVal(i.next());
+				itemList.add(item);
+			}
+			return itemList;
+		} finally {
+			readRooms.close();
+		}
+	}
+
+
 }

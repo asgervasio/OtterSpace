@@ -11,7 +11,7 @@
 	</head>
 
 	<body>		
-		<form action="${pageContext.servletContext.contextPath}/editor" method="post">
+		<form action="${pageContext.servletContext.contextPath}/editorRoom" method="post">
 			<c:if test="${! empty errorMessage}">
 				<div class="error">${errorMessage}</div>
 			</c:if>

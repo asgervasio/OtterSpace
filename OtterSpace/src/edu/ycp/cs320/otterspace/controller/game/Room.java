@@ -52,7 +52,8 @@ public class Room {
 		this.connectionTemp = connections;		
 	}
 	
-	public String getConnectionTemp(){
+	public String getConnectionTemp()
+	{
 		return connectionTemp;
 	}
 		
@@ -68,7 +69,8 @@ public class Room {
 		this.itemList = itemList;		
 	}
 	
-	public String getItems(){
+	public String getItems()
+	{
 		return itemList;
 	}
 	
