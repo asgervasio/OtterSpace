@@ -9,8 +9,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import edu.ycp.cs320.otterspace.controller.EditorRoomController;
+import edu.ycp.cs320.otterspace.controller.UserController;
 import edu.ycp.cs320.otterspace.controller.game.Room;
-import edu.ycp.cs320.otterspace.model.EditorRoomModel;
+import edu.ycp.cs320.otterspace.model.*;
 import edu.ycp.cs320.roomsdb.persist.FakeDatabase;
 
 public class FakeDatabaseTest {
@@ -19,6 +20,11 @@ public class FakeDatabaseTest {
 	private EditorRoomModel model;
 	private EditorRoomController controller;
 	private Room room1, room2, room3, room4;
+	
+	private List<User> userList;
+	private User u;
+	private UserController usercontroller;
+	private User User1, User2;
 	
 	@Before
 	public void setUp(){
@@ -48,6 +54,12 @@ public class FakeDatabaseTest {
 		
 		model.setItemList(itemNameNone);
 		room2 = controller.createRoom();
+		
+		User1.setUserAccountInformation("Ashling", "Ashley", "Ainsley", "Ash@gmail.com", "AAaassh");
+		User2.setUserAccountInformation("BBBaited", "Bailey", "Butch", "Bait@gmail.com", "BBBBait");
+		userList.add(User1);
+		userList.add(User2);
+		
 	}
 	
 	// Tests to see if you can add a room that has an item but no Actor into the fake database
@@ -78,4 +90,5 @@ public class FakeDatabaseTest {
 		assertEquals(room2.getItems(), roomList.get(roomList.size()-1).getItems());
 	}
 		
+	
 }// end of class

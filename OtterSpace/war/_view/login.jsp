@@ -11,38 +11,30 @@ session_start();
 	<title> Login </title>
 
 	<style>
-		<jsp:include page="indexStyle.css"/>
+		<link rel="stylesheet" type="text/css" href="css/loginStyle.css">
 	</style>
 
 	</head>
 	
 	<body>			
-	</php
-	$_SESSION["username"];
-	$_SESSION["firstName"];
-	$_SESSION["lastName"];
-	$_SESSION["sessionid"];
-	$_SESSION["emailAddress"];
-	?>
 	
 		<c:if test="${! empty errorMessage }">
 			<div class = "error"> ${errorMessage}</div>
 		</c:if>
-		<form action = "${pageContext.servletContext.contextPath}/Login" method = "post">
+		<form action = "${pageContext.servletContext.contextPath}/login" method = "post">
 		<div id = "PageName"> Welcome to the OtterSpace Odyssey</div>
 		<div id = "logon">
-		<table>
-			<tr>
-					<td class = "label"> Username: </td>
-					<td><input type="text" name="username" size="12" value="${username}" /></td>
-			</tr>
-			<tr>
-					<td class = "label"> Password: </td>
-					<td><input type="password" name="password" size="12" value="${password}" /></td>
-			</tr>
-			</table>
+		<form>
+			
+					Username:
+					<input type="text" name="username" size="12" value="${username}" />
+			
+					Password:
+					<input type="password" name="password" size="12" value="${password}" />
+			
+		</form>
 			<td><input type = "Submit" name = "submit" value = "Login" /> </td>
-			<td><input type = "Register" name = "Register" value = "Register" /> </td>
+			<td><input type="Submit" name="Register" value="Register"> </td>
 				<input type="hidden" name="userName" value="user.getUsername">			
 				<input type="hidden" name="sessionid" value="sessionid.getSessionid">
 			</div>

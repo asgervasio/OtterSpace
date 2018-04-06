@@ -445,11 +445,6 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
-	public List<User> matchUsernameWithPassword(String name) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
@@ -476,7 +471,14 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> findUserByLastName(String lastname) {
+	public List<User> changePassByNameAndEmailAndUsername(String Firstname, String lastname, String email,
+			String usernm, String pass) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> matchUsernameWithPassword(String Username, String Password) {
 		// TODO Auto-generated method stub
 		return null;
 	}
