@@ -170,10 +170,4 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
-	public List<User> matchUsernameWithPassword(String Username) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }// end of class

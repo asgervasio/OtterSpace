@@ -50,7 +50,7 @@ public class LoginServlet extends HttpServlet {
 			
 			ArrayList<User> user = new ArrayList<User>();
 			
-			user = g.matchUserNameWithPassword(username);
+			user = g.matchUserNameWithPassword(username, password);
 			if(user != null && user.size()>0) {
 				User u = user.get(0);
 				System.out.println(u.getUsername());

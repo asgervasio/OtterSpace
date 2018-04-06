@@ -34,7 +34,7 @@ public class UserController
 		return real;
 	}
 	
-	public ArrayList<User> getAccountInformation(String username){
+	public void getAccountInformation(String username){
 		List<User> userList = db.getAccountInfo(username);
 		
 	}
@@ -57,7 +57,9 @@ public class UserController
 	
 	
 	public ArrayList<User> matchUserNameWithPassword(String username, String pass) {
-		
-db.matchUsernameWithPassword(username, pass);
+		ArrayList<User> u = new ArrayList<User>();
+		db.matchUsernameWithPassword(username, pass);
+		u.addAll(db.matchUsernameWithPassword(username, pass));
+		return u;
 	}
 }
