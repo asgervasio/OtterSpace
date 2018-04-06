@@ -121,9 +121,15 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> getAccountInfo(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> getAccountInfo(String Username) {
+		
+			List<User> result = new ArrayList<User>();
+			for(User user: userList) {
+				if(user.getUsername().equals(Username)){
+					result.add(user);
+				}
+			}
+			return result;
 	}
 
 	@Override

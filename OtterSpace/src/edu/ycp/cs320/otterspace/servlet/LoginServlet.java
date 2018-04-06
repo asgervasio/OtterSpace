@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 
 //import ycp.cs320.teamProject.model.MileStone1_User;
 import edu.ycp.cs320.otterspace.model.User;
+import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
+import edu.ycp.cs320.roomsdb.persist.IDatabase;
 import edu.ycp.cs320.otterspace.controller.*;
 import edu.ycp.cs320.otterspace.model.*;
 
@@ -17,6 +19,7 @@ import edu.ycp.cs320.otterspace.model.*;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserController g;
+	IDatabase db = DatabaseProvider.getInstance();
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -39,6 +42,8 @@ public class LoginServlet extends HttpServlet {
 		
 		User model = new User();
 		//get user and PW
+		UserController g = new UserController();
+		g.setModel(model);
 		username = req.getParameter("username");
 		password = req.getParameter("password");
 

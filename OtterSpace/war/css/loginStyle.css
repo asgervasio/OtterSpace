@@ -24,9 +24,16 @@ body, html
   background-color: black;
   font-family: "scifi_thin";
 }
+
+label{
+	color: white;
+	font-size: 200%;
+	font-family: "scifi_thin";
+	  justify-content: center;
+}
 .Button
 {
-  background-color: black;
+  background-color: white;
   font-family: "scifi_thin";
   border: 0;
   color: #08088A;
