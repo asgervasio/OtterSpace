@@ -11,10 +11,12 @@ import org.junit.Test;
 
 import edu.ycp.cs320.otterspace.controller.EditorItemController;
 import edu.ycp.cs320.otterspace.controller.EditorRoomController;
+import edu.ycp.cs320.otterspace.controller.UserController;
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.EditorItemModel;
 import edu.ycp.cs320.otterspace.model.EditorRoomModel;
+import edu.ycp.cs320.otterspace.model.User;
 import edu.ycp.cs320.roomsdb.persist.FakeDatabase;
 
 public class FakeDatabaseTest {

@@ -55,12 +55,16 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 
 				User user = new User();
-				user.setEmail(i.next());		
+				user.setEmail(i.next());
+				System.out.print(user.getEmail());
 				user.setFirstName(i.next());
+				System.out.print(user.getFirstName());
 				user.setLastName(i.next());
+				System.out.print(user.getLastName());
 				user.setPassword(i.next());
 				user.setUsername(i.next());
 				userList.add(user);
+				
 			}
 			return userList;
 		} finally {

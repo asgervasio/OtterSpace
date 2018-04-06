@@ -16,7 +16,7 @@ public class FakeDatabase implements IDatabase {
 	public FakeDatabase() {
 		roomList = new ArrayList<Room>();
 		itemList = new ArrayList<Item>();
-		
+		userList = new ArrayList<User>();
 		// Add initial data
 		readInitialData();
 		
@@ -132,15 +132,12 @@ public class FakeDatabase implements IDatabase {
 	                
 	@Override
 	public List<User> matchUsernameWithPassword(String Username, String pass) {
-		System.out.println("in matchUsernameWithPassword");
 		List<User> result = new ArrayList<User>();
 		for(User user: userList) {
-			System.out.println("in for loop user:" + user);
 			
 			if (user.getPassword().equals(pass)){
 				if (user.getPassword().equals(Username)){
 				result.add(user);
-				System.out.println("result.add(user) in matchUsernameWithPassword");
 			}
 		}}
 		return result;

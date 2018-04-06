@@ -16,7 +16,7 @@ import edu.ycp.cs320.otterspace.model.*;
 //Priority #1
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private UserController g;
+	private UserController g = new UserController();
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -49,8 +49,10 @@ public class LoginServlet extends HttpServlet {
 		} else {
 			
 			ArrayList<User> user = new ArrayList<User>();
-			
-			user = g.matchUserNameWithPassword(username, password);
+			System.out.println("breakpoint!");
+			user.addAll(g.matchUserNameWithPassword(username, password));
+			System.out.println("Empty?: "+user.isEmpty());
+			System.out.println(user.iterator().next());
 			if(user != null && user.size()>0) {
 				User u = user.get(0);
 				System.out.println(u.getUsername());
@@ -89,7 +91,7 @@ public class LoginServlet extends HttpServlet {
 				errorMessage = "Incorrect Username or Password";
 				req.setAttribute("errorMessage", errorMessage);
 				req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
-				System.out.println("   Invalid login - returning to /Login");
+				System.out.println("Invalid login - returning to /Login");
 			}
 
 			req.setAttribute("sessionid", model.getSessionid());
