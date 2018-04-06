@@ -11,19 +11,27 @@ session_start();
 	<title> Login </title>
 
 	<style>
-		<link rel="stylesheet" type="text/css" href="css/loginStyle.css">
+		<jsp:include page="indexStyle.css"/>
 	</style>
 
 	</head>
 	
 	<body>			
+	</php
+	$_SESSION["username"];
+	$_SESSION["firstName"];
+	$_SESSION["lastName"];
+	$_SESSION["sessionid"];
+	$_SESSION["emailAddress"];
+	?>
 	
 		<c:if test="${! empty errorMessage }">
 			<div class = "error"> ${errorMessage}</div>
 		</c:if>
-		<form action = "${pageContext.servletContext.contextPath}/login" method = "post">
+		<form action = "${pageContext.servletContext.contextPath}/Login" method = "post">
 		<div id = "PageName"> Welcome to the OtterSpace Odyssey</div>
 		<div id = "logon">
+
 		
 			
 					Username:<br>
@@ -35,6 +43,7 @@ session_start();
 		
 			<input type = "Submit" name = "submit" value = "Login" /> <br>
 			<input type="Submit" name="Register" value="Register"> <br>
+
 				<input type="hidden" name="userName" value="user.getUsername">			
 				<input type="hidden" name="sessionid" value="sessionid.getSessionid">
 			</div>

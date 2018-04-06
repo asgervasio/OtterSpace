@@ -1,4 +1,5 @@
 
+
 package edu.ycp.cs320.otterspace.fakeDatabase;
 
 import static org.junit.Assert.*;
@@ -123,4 +124,3 @@ public class FakeDatabaseTest {
 	
 		
 }// end of class
-

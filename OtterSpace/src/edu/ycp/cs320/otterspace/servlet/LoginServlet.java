@@ -18,8 +18,10 @@ import edu.ycp.cs320.otterspace.model.*;
 //Priority #1
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	private UserController g = new UserController();
 	IDatabase db = DatabaseProvider.getInstance();
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -39,7 +41,7 @@ public class LoginServlet extends HttpServlet {
 		String username = null;
 		String password = null;
 
-		
+		UserController p = new UserController();
 		User model = new User();
 		//get user and PW
 		username = req.getParameter("username");
@@ -50,6 +52,7 @@ public class LoginServlet extends HttpServlet {
 		if (username == null || password == null || username.equals("") || password.equals("")) {
 			errorMessage = "Please specify both user name and password";
 		} else {
+
 			g.setModel(model);
 			ArrayList<User> user = new ArrayList<User>();
 			
@@ -57,29 +60,30 @@ public class LoginServlet extends HttpServlet {
 			System.out.println("ArrayList of Size:"+ user.size());
 			user.addAll(db.matchUsernameWithPassword(username, password));
 			System.out.println("ArrayList of Size:"+ user.size());
+
 			if(user != null && user.size()>0) {
 				User u = user.get(0);
 				System.out.println(u.getUsername());
 				//Authenticate the user
 				if(UserController.authenticate(u, password) == true){
-					
-					//HttpSession session = req.getSession();
-					//session.setAttribute("username", u.getUsername());
-					//session.setAttribute("firstName", u.getFirstName());
-					//session.setAttribute("lastName", u.getLastName());
-					//session.setAttribute("emailAddress", u.getEmail());
+					//Set the session true and set their username
+					HttpSession session = req.getSession();
+					session.setAttribute("username", u.getUsername());
+					session.setAttribute("firstName", u.getFirstName());
+					session.setAttribute("lastName", u.getLastName());
+					session.setAttribute("emailAddress", u.getEmail());
 					System.out.println("Session info");
 					System.out.println(req.getSession().getAttribute("username"));
 					System.out.println(req.getSession().getAttribute("fristName"));
 					System.out.println(req.getSession().getAttribute("lastName"));
 					System.out.println(req.getSession().getAttribute("emailAddress"));
-					model.setSessionid(req.getSession().toString());
+					model.setSessionid(req.getSession().getId());
 					//If user is an owner send them to a page of their restaurants
 					
 						
 					
 					//If user is a patron send to the homepage
-					resp.sendRedirect(req.getContextPath() + "/index");
+					resp.sendRedirect(req.getContextPath() + "/Index");
 					
 
 				}
@@ -87,20 +91,22 @@ public class LoginServlet extends HttpServlet {
 				else{
 					errorMessage = "Incorrect Username or Password";
 					req.setAttribute("errorMessage", errorMessage);
-					req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+					req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 				}
 			}
 			//otherwise, print an error message
 			else{
 				errorMessage = "Incorrect Username or Password";
 				req.setAttribute("errorMessage", errorMessage);
+
 				req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 				System.out.println("Invalid login - returning to /Login");
 				req.setAttribute(username, username);
+
 			}
 
 			req.setAttribute("sessionid", model.getSessionid());
-			req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+			req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
 		}
 	}
 
