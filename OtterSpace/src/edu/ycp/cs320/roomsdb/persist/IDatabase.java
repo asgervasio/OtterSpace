@@ -8,7 +8,7 @@ import edu.ycp.cs320.otterspace.controller.game.Room;
 
 public interface IDatabase {
 	public void insertRoom(Room room);
-	public List<Room> findRoomUsingTitle(String title);
+	public Room findRoomUsingTitle(String title);
 	public List<Room> findRoomUsingLocation(String location);
-	public List<Room> findRoomUsingRoomId(int roomId);
+	public Room findRoomUsingRoomId(int roomId);
 }

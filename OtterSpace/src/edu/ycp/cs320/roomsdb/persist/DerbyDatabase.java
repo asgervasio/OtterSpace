@@ -419,7 +419,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Room> findRoomUsingTitle(String title) {
+	public Room findRoomUsingTitle(String title) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -433,7 +433,7 @@ public class DerbyDatabase implements IDatabase {
 
 
 	@Override
-	public List<Room> findRoomUsingRoomId(int roomId) {
+	public Room findRoomUsingRoomId(int roomId) {
 		// TODO Auto-generated method stub
 		return null;
 	}

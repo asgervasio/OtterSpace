@@ -22,7 +22,7 @@ public class InitialData {
 				Iterator<String> i = tuple.iterator();
 				Room room = new Room();
 				room.setRoomId(roomId++);				
-				room.setTitle(i.next());
+				room.setTitle(i.next().toLowerCase());
 				room.setDescription(i.next());
 				room.setItems(i.next());
 				room.setConnectionTemp(i.next());

@@ -4,11 +4,19 @@ import java.io.File;
 
 import org.eclipse.jetty.server.Server;
 
+import ecu.ycp.cs320.roomsdb.InitDatabase;
+import edu.ycp.cs320.otterspace.controller.game.Player;
+import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
+import edu.ycp.cs320.roomsdb.persist.IDatabase;
+
 public class Main {
 	public static void main(String[] args) throws Exception {
 		String webappCodeBase = "./war";
 		File warFile = new File(webappCodeBase);
 		Launcher launcher = new Launcher();
+		InitDatabase.init();
+		Player player = new Player();
+		IDatabase db = DatabaseProvider.getInstance();
 		
 		// get a server for port 8081
 		System.out.println("CREATING: web server on port 8081");
@@ -28,5 +36,6 @@ public class Main {
         // wait until the server is done executing.
         // See http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#join()
 		server.join();
+		player.setCurrentRoom(db.findRoomUsingRoomId(1));
 	}
 }

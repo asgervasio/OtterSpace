@@ -18,7 +18,7 @@
   		</div>
 
   		<div class="Index">
-  			<form action="${pageContext.servletContext.contextPath}/game" method="post">
+  			<form action="${pageContext.servletContext.contextPath}/gameAjax.html" method="post">
 				<input type="submit" name="startGame" value="Play">
 			</form>
   			<form action="${pageContext.servletContext.contextPath}/editor" method="get">

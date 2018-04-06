@@ -47,11 +47,11 @@ public class FakeDatabase implements IDatabase {
 	}	
 
 	@Override
-	public List<Room> findRoomUsingTitle(String title) {
-		List<Room> result = new ArrayList<Room>();
+	public Room findRoomUsingTitle(String title) {
+		Room result = new Room();
 		for(Room room: roomList) {
 			if (room.getTitle().equals(title)){
-				result.add(room);
+				result = room;
 			}
 		}
 		return result;
@@ -64,11 +64,11 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<Room> findRoomUsingRoomId(int roomId) {
-		List<Room> result = new ArrayList<Room>();		
+	public Room findRoomUsingRoomId(int roomId) {
+		Room result = new Room();		
 		for (Room room : roomList){
 			if(room.getRoomId() == roomId){
-				result.add(room);
+				result = room;
 			}
 		}
 		return result;
