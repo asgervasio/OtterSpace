@@ -56,7 +56,8 @@ public class UserController {
 	
 public ArrayList<User> matchUserNameWithPassword(String Username, String Password) {
 		
-	List<User> u = db.matchUsernameWithPassword(Username, Password);
+	List<User> u = new ArrayList<User>();
+	u.addAll(db.matchUsernameWithPassword(Username, Password));
 		
 		ArrayList<User> users = new ArrayList<User>();
 		

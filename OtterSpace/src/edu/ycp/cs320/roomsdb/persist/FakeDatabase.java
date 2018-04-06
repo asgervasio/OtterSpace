@@ -21,6 +21,7 @@ public class FakeDatabase implements IDatabase {
 		readInitialData();
 		
 		System.out.println(roomList.size() + " rooms");
+		System.out.println(userList.size() + " users");
 	}
 
 	// Getting the author and book tables to access in the fake database
@@ -28,6 +29,7 @@ public class FakeDatabase implements IDatabase {
 		try {
 			roomList.addAll(InitialData.getRooms());
 			itemList.addAll(InitialData.getItems());
+			userList.addAll(InitialData.getUsers());
 		} catch (IOException e) {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
@@ -136,7 +138,7 @@ public class FakeDatabase implements IDatabase {
 		for(User user: userList) {
 			
 			if (user.getPassword().equals(pass)){
-				if (user.getPassword().equals(Username)){
+				if (user.getUsername().equals(Username)){
 				result.add(user);
 			}
 		}}

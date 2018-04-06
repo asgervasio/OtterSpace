@@ -2,7 +2,7 @@
 
 <html>
 	<style>
-		<jsp:include page="indexStyle.css"/>
+		<link rel="stylesheet" type="text/css" href="css/indexStyle.css">
 	</style>
 	
 	

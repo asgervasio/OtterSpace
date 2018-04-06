@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 
 //import ycp.cs320.teamProject.model.MileStone1_User;
 import edu.ycp.cs320.otterspace.model.User;
+import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
+import edu.ycp.cs320.roomsdb.persist.IDatabase;
 import edu.ycp.cs320.otterspace.controller.*;
 import edu.ycp.cs320.otterspace.model.*;
 
@@ -17,6 +19,7 @@ import edu.ycp.cs320.otterspace.model.*;
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private UserController g = new UserController();
+	IDatabase db = DatabaseProvider.getInstance();
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -47,12 +50,13 @@ public class LoginServlet extends HttpServlet {
 		if (username == null || password == null || username.equals("") || password.equals("")) {
 			errorMessage = "Please specify both user name and password";
 		} else {
-			
+			g.setModel(model);
 			ArrayList<User> user = new ArrayList<User>();
-			System.out.println("breakpoint!");
+			
 			user.addAll(g.matchUserNameWithPassword(username, password));
-			System.out.println("Empty?: "+user.isEmpty());
-			System.out.println(user.iterator().next());
+			System.out.println("ArrayList of Size:"+ user.size());
+			user.addAll(db.matchUsernameWithPassword(username, password));
+			System.out.println("ArrayList of Size:"+ user.size());
 			if(user != null && user.size()>0) {
 				User u = user.get(0);
 				System.out.println(u.getUsername());
@@ -92,6 +96,7 @@ public class LoginServlet extends HttpServlet {
 				req.setAttribute("errorMessage", errorMessage);
 				req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 				System.out.println("Invalid login - returning to /Login");
+				req.setAttribute(username, username);
 			}
 
 			req.setAttribute("sessionid", model.getSessionid());

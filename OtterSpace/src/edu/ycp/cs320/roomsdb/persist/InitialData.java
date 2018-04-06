@@ -47,8 +47,6 @@ public class InitialData {
 			
 			while (true) {
 				List<String> tuple = readUsers.next();
-
-
 				if (tuple == null) {
 					break;
 				}
@@ -56,16 +54,17 @@ public class InitialData {
 
 				User user = new User();
 				user.setEmail(i.next());
-				System.out.print(user.getEmail());
+				
 				user.setFirstName(i.next());
-				System.out.print(user.getFirstName());
+				
 				user.setLastName(i.next());
-				System.out.print(user.getLastName());
+			
 				user.setPassword(i.next());
 				user.setUsername(i.next());
 				userList.add(user);
 				
 			}
+			System.out.print(userList.size()+" users");
 			return userList;
 		} finally {
 			readUsers.close();
