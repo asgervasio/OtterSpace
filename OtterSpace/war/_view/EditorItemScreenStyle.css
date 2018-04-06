@@ -32,7 +32,7 @@ input {
 	clear: both;
 }
 
-.createRoom {
+.createItem {
 	text-align: center;
 	padding: 10px;
 }
@@ -45,5 +45,3 @@ input[type=text], select {
 	border-radius: 4px;
 	box-sizing: border-box;
 }
-
-

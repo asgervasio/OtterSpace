@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
+import edu.ycp.cs320.otterspace.model.User;
 
 public class FakeDatabase implements IDatabase {
 	private List<Item> itemList;
@@ -13,6 +14,7 @@ public class FakeDatabase implements IDatabase {
 	
 	public FakeDatabase() {
 		roomList = new ArrayList<Room>();
+		itemList = new ArrayList<Item>();
 		
 		// Add initial data
 		readInitialData();
@@ -24,6 +26,7 @@ public class FakeDatabase implements IDatabase {
 	public void readInitialData() {
 		try {
 			roomList.addAll(InitialData.getRooms());
+			itemList.addAll(InitialData.getItems());
 		} catch (IOException e) {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
@@ -48,30 +51,113 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public Room findRoomUsingTitle(String title) {
-		Room result = new Room();
 		for(Room room: roomList) {
 			if (room.getTitle().equals(title)){
-				result = room;
+				return room;
 			}
 		}
-		return result;
+		return null;
 	}
 
 	@Override
-	public List<Room> findRoomUsingLocation(String location) {
-		List<Room> result = new ArrayList<Room>();	
+	public Room findRoomUsingLocation(String location) {
 		return null;
 	}
 
 	@Override
 	public Room findRoomUsingRoomId(int roomId) {
-		Room result = new Room();		
 		for (Room room : roomList){
 			if(room.getRoomId() == roomId){
-				result = room;
+				return room;
 			}
 		}
-		return result;
+		return null;
+	}
+
+	@Override
+	public void insertItem(Item item) {
+		int itemId = roomList.size();
+		Item newItem = new Item();
+		newItem.setItemId(itemId);
+		newItem.setTitle(item.getTitle());
+		newItem.setDescription(item.getDescription());
+		newItem.setRoomLocat(item.getRoomLocat());
+		newItem.setStatAffected(item.getStatAffected());
+		newItem.setStatChangeVal(item.getStatChangeVal());
+		itemList.add(newItem);
+		System.out.println("Stored new item!!");				
+	}
+
+	@Override
+	public Item findItemUsingTitle(String title) {
+		for (Item item : itemList){
+			if(item.getTitle() == title){
+				return item;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Item findItemUsingItemId(int itemId) {
+		for (Item item : itemList){
+			if(item.getItemId() == itemId){
+				return item;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Item findItemUsingLocation(String location) {
+		for (Item item : itemList){
+			if(item.getRoomLocat() == location){
+				return item;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<User> getAccountInfo(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> matchUsernameWithPassword(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> DeleteUserFromDatabase(String name, String pswd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> changePassword(String name, String pswd, String newPassword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> findAllUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> findUserByLastName(String lastname) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }// end of class

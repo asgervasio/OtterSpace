@@ -1,16 +1,14 @@
-package edu.ycp.cs320.otterspace.controller.game;
+package edu.ycp.cs320.otterspace.model;
 
-// This is only used as a stand-in for the real item class
-// Do not try to create or learn about items from this class,
-// it will teach you nothing
-
-public class Item {
+public class EditorItemModel {
 	String statAffected, title, description, roomLocat, statChangeVal;
 	int itemId;
 	
-	public Item(){
+	// Constructor for EditorItemModel
+	public EditorItemModel(){
 	}
 
+	// All of the getters and setters
 	public void setStatAffected(String statAffected) {
 		this.statAffected = statAffected;
 	}
@@ -25,14 +23,6 @@ public class Item {
 	
 	public String getStatChangeVal() {
 		return statChangeVal;
-	}
-
-	public void setItemId(int itemId) {
-		this.itemId = itemId;
-	}
-	
-	public int getItemId() {
-		return itemId;
 	}
 
 	public void setTitle(String title) {

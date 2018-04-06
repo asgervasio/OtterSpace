@@ -9,7 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
+import edu.ycp.cs320.otterspace.model.User;
 import edu.ycp.cs320.roomsdb.model.Pair;
 import edu.ycp.cs320.sqldemo.DBUtil;
 
@@ -426,7 +428,7 @@ public class DerbyDatabase implements IDatabase {
 
 
 	@Override
-	public List<Room> findRoomUsingLocation(String location) {
+	public Room findRoomUsingLocation(String location) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -434,6 +436,71 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public Room findRoomUsingRoomId(int roomId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void insertItem(Item item) {
+
+	}
+
+	@Override
+	public Item findItemUsingTitle(String title) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Item findItemUsingItemId(int itemId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Item findItemUsingLocation(String location) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> getAccountInfo(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> matchUsernameWithPassword(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> DeleteUserFromDatabase(String name, String pswd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> changePassword(String name, String pswd, String newPassword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> findAllUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> findUserByLastName(String lastname) {
 		// TODO Auto-generated method stub
 		return null;
 	}

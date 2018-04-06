@@ -21,8 +21,12 @@
   			<form action="${pageContext.servletContext.contextPath}/gameAjax.html" method="post">
 				<input type="submit" name="startGame" value="Play">
 			</form>
-  			<form action="${pageContext.servletContext.contextPath}/editor" method="get">
-				<input type="submit" name="startGame" value="Create">
+  			<form action="${pageContext.servletContext.contextPath}/editorRoom" method="get">
+				<input type="submit" name="startGame" value="Create Room">
+
+			</form>  		
+  			<form action="${pageContext.servletContext.contextPath}/editorItem" method="get">
+				<input type="submit" name="startGame" value="Create Item">
 
 			</form>  		
 		</div>	
