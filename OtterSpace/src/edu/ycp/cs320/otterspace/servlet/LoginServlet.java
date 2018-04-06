@@ -10,13 +10,18 @@ import javax.servlet.http.HttpSession;
 
 //import ycp.cs320.teamProject.model.MileStone1_User;
 import edu.ycp.cs320.otterspace.model.User;
+import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
+import edu.ycp.cs320.roomsdb.persist.IDatabase;
 import edu.ycp.cs320.otterspace.controller.*;
 import edu.ycp.cs320.otterspace.model.*;
 
 //Priority #1
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
-	private GameController g;
+
+	private UserController g = new UserController();
+	IDatabase db = DatabaseProvider.getInstance();
+
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
@@ -48,8 +53,14 @@ public class LoginServlet extends HttpServlet {
 			errorMessage = "Please specify both user name and password";
 		} else {
 
-			ArrayList<User> user = null;
-			user = p.matchUserNameWithPassword(username);
+			g.setModel(model);
+			ArrayList<User> user = new ArrayList<User>();
+			
+			user.addAll(g.matchUserNameWithPassword(username, password));
+			System.out.println("ArrayList of Size:"+ user.size());
+			user.addAll(db.matchUsernameWithPassword(username, password));
+			System.out.println("ArrayList of Size:"+ user.size());
+
 			if(user != null && user.size()>0) {
 				User u = user.get(0);
 				System.out.println(u.getUsername());
@@ -87,8 +98,11 @@ public class LoginServlet extends HttpServlet {
 			else{
 				errorMessage = "Incorrect Username or Password";
 				req.setAttribute("errorMessage", errorMessage);
-				req.getRequestDispatcher("/_view/Login.jsp").forward(req, resp);
-				System.out.println("   Invalid login - returning to /Login");
+
+				req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+				System.out.println("Invalid login - returning to /Login");
+				req.setAttribute(username, username);
+
 			}
 
 			req.setAttribute("sessionid", model.getSessionid());

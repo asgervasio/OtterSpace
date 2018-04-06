@@ -3,13 +3,21 @@ package edu.ycp.cs320.otterspace.controller;
 
 import java.util.ArrayList;
 import java.util.List;
+
+
+import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
+import edu.ycp.cs320.roomsdb.persist.FakeDatabase;
+import edu.ycp.cs320.roomsdb.persist.IDatabase;
 import edu.ycp.cs320.roomsdb.*;
+
 import edu.ycp.cs320.otterspace.model.User;
 
 public class UserController 
 {
 	private User model;
-	//private IDatabase db;
+
+	IDatabase db = DatabaseProvider.getInstance();
+	
 	public void setModel(User model)
 	{
 		this.model = model;
@@ -62,8 +70,10 @@ public class UserController
 	
 public ArrayList<User> matchUserNameWithPassword(String username) {
 		
-	throw new UnsupportedOperationException();
-	/*List<User> userList = db.matchUsernameWithPassword(username);
+
+	List<User> u = new ArrayList<User>();
+	u.addAll(db.matchUsernameWithPassword(Username, Password));
+
 		
 		ArrayList<User> users = new ArrayList<User>();
 		

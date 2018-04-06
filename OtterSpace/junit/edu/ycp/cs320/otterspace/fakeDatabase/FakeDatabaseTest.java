@@ -1,3 +1,5 @@
+
+
 package edu.ycp.cs320.otterspace.fakeDatabase;
 
 import static org.junit.Assert.*;
@@ -10,10 +12,12 @@ import org.junit.Test;
 
 import edu.ycp.cs320.otterspace.controller.EditorItemController;
 import edu.ycp.cs320.otterspace.controller.EditorRoomController;
+import edu.ycp.cs320.otterspace.controller.UserController;
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.EditorItemModel;
 import edu.ycp.cs320.otterspace.model.EditorRoomModel;
+import edu.ycp.cs320.otterspace.model.User;
 import edu.ycp.cs320.roomsdb.persist.FakeDatabase;
 
 public class FakeDatabaseTest {
@@ -24,6 +28,10 @@ public class FakeDatabaseTest {
 	private EditorItemController itemController;
 	private Room room1, room2, room3, room4, roomBlank;
 	private Item item, itemBlank;
+  private List<User> userList;
+	private User u;
+	private UserController usercontroller;
+	private User User1, User2;
 	
 	@Before
 	public void setUp(){
@@ -70,6 +78,12 @@ public class FakeDatabaseTest {
 		itemModel.setRoomLocat(roomLocat);
 		
 		item = itemController.createItem();
+    
+    
+    User1.setUserAccountInformation("Ashling", "Ashley", "Ainsley", "Ash@gmail.com", "AAaassh");
+		User2.setUserAccountInformation("BBBaited", "Bailey", "Butch", "Bait@gmail.com", "BBBBait");
+		userList.add(User1);
+		userList.add(User2);
 	}
 	
 	// Tests to see if you can add a room that has an item but no Actor into the fake database

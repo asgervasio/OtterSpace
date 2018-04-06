@@ -15,11 +15,12 @@ public class FakeDatabase implements IDatabase {
 	public FakeDatabase() {
 		roomList = new ArrayList<Room>();
 		itemList = new ArrayList<Item>();
-		
+		userList = new ArrayList<User>();
 		// Add initial data
 		readInitialData();
 		
 		System.out.println(roomList.size() + " rooms");
+		System.out.println(userList.size() + " users");
 	}
 
 	// Getting the author and book tables to access in the fake database
@@ -27,6 +28,7 @@ public class FakeDatabase implements IDatabase {
 		try {
 			roomList.addAll(InitialData.getRooms());
 			itemList.addAll(InitialData.getItems());
+			userList.addAll(InitialData.getUsers());
 		} catch (IOException e) {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
@@ -125,9 +127,18 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> matchUsernameWithPassword(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> matchUsernameWithPassword(String Username, String pass) {
+		List<User> result = new ArrayList<User>();
+		for(User user: userList) {
+			
+			if (user.getPassword().equals(pass)){
+				if (user.getUsername().equals(Username)){
+				result.add(user);
+			}
+		}}
+		return result;
+		
+
 	}
 
 	@Override
