@@ -35,53 +35,29 @@ public class UserController
 	}
 	
 	public ArrayList<User> getAccountInformation(String username){
-		//List<User> userList = db.getAccountInfo(username);
+		List<User> userList = db.getAccountInfo(username);
 		
-		ArrayList<User> users = new ArrayList<User>();
-		/*
-		for(User user : userList) {
-			users.add(user);
-		}
-		*/
-		return users;
 	}
 	
 	public void changeUserPassword(String Username, String oldpassword, String newpassword)  {
-		 throw new UnsupportedOperationException();//useless exception is useless
-		 //db.changePassword(Username, oldpassword, newpassword);
-	}
-	//Allowing a user to change their username 
-	public void changeUsername(String Username, String newUsername, String password)  {
-		 throw new UnsupportedOperationException();//useless exception is useless
+		 db.changePassword(Username, oldpassword, newpassword);
 	}
 	
 	//adding a user to the database 
 	public void addUserToDatabase(String userName, String passWord, String email, String type, String firstName, String lastname) {
-		throw new UnsupportedOperationException();
-		//db.addUserToDatabase(userName, passWord, email, type, firstName, lastname);
+		
+		db.addUserToDatabase(userName, passWord, email, type, firstName);
 	}
 	
 	//need to work out how to change this to archive user, not delete 
 	public void DeleteUserFromDatabase(String userName, String password){
-		throw new UnsupportedOperationException();
-		//db.DeleteUserFromDatabase(userName, password);
+		
+		db.DeleteUserFromDatabase(userName, password);
 	}
 	
 	
-public ArrayList<User> matchUserNameWithPassword(String username) {
+	public ArrayList<User> matchUserNameWithPassword(String username, String pass) {
 		
-
-	List<User> u = new ArrayList<User>();
-	u.addAll(db.matchUsernameWithPassword(Username, Password));
-
-		
-		ArrayList<User> users = new ArrayList<User>();
-		
-		for(User user : userList) {
-			users.add(user);
-		}
-		
-		return users;
-	*/
+db.matchUsernameWithPassword(username, pass);
 	}
 }
