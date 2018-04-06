@@ -26,5 +26,6 @@ public interface IDatabase {
 	List<User> changePassword(String name, String pswd, String newPassword);
 	List<User> findAllUsers();
 	List<User> findUserByLastName(String lastname);
+	List<User> matchUsernameWithPassword(String Username, String pass);
 	
 }

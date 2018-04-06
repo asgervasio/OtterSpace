@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
+import edu.ycp.cs320.otterspace.model.User;
 
 public class InitialData {
 	public static List<Room> getRooms() throws IOException {
