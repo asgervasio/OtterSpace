@@ -6,6 +6,7 @@ import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
+import edu.ycp.cs320.otterspace.model.User;
 
 public class FakeDatabase implements IDatabase {
 	private List<Item> itemList;
@@ -72,6 +73,48 @@ public class FakeDatabase implements IDatabase {
 			}
 		}
 		return result;
+	}
+
+	@Override
+	public List<User> getAccountInfo(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> matchUsernameWithPassword(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> DeleteUserFromDatabase(String name, String pswd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> changePassword(String name, String pswd, String newPassword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> findAllUsers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> findUserByLastName(String lastname) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }// end of class
