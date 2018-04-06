@@ -9,6 +9,7 @@ import edu.ycp.cs320.otterspace.model.*;
 public interface IDatabase {
 	public void insertRoom(Room room);
 	public Room findRoomUsingTitle(String title);
+
 	public Room findRoomUsingLocation(String location);
 	public Room findRoomUsingRoomId(int roomId);
 	
@@ -26,5 +27,4 @@ public interface IDatabase {
 	List<User> findAllUsers();
 	List<User> findUserByLastName(String lastname);
 	
-
 }

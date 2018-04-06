@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import edu.ycp.cs320.otterspace.controller.GameController;
+import edu.ycp.cs320.otterspace.controller.game.GameEngine;
+import edu.ycp.cs320.otterspace.controller.game.Player;
 import edu.ycp.cs320.otterspace.model.GameModel;
 
 public class GameAjaxServlet extends HttpServlet
@@ -36,22 +38,26 @@ public class GameAjaxServlet extends HttpServlet
 		// Use a controller to process the request
 		GameController controller = new GameController();
 		GameModel model = new GameModel();
+		GameEngine game = new GameEngine();
+		Player player = new Player();
+		String result = "";
+		
 		controller.setModel(model);
 		String errorMessage = null;
 
 		try 
 		{
-			cmd = getString(req, "cmd");		
+			cmd = getString(req, "cmd");
 			model.setCommand(cmd);
+			result = game.parse(model.getCommand());
 		} 
 		catch (NumberFormatException e) 
 		{
 			errorMessage = "Invalid String";
 		}
-		// Send back a response
-		String result = "success";
 		resp.setContentType("text/plain");
-		resp.getWriter().println(result.toString());
+		resp.getWriter().println(result);
+
 	}
 	
 	private String getString(HttpServletRequest req, String name) {
