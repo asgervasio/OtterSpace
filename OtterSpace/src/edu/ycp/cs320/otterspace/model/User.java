@@ -5,24 +5,18 @@ public class User {
 	private String password;
 	private String firstName;
 	private String lastName; 
-	private String userName; 
+	private String Username; 
+	private boolean loginStatus = false;
+	private String sessionid;
 	
-	
-	
-	public void setUserAccountInformation(String user, String fn, String ln, String email, String pw) {
+	public void setUserAccountInformation(String usernm, String fn, String ln, String email, String pw) {
 		this.firstName = fn;
 		this.lastName = ln;
 		this.emailAddress = email;
 		this.password = pw;
-		this.userName = user;
+		this.Username = usernm;
 	}
 	
-	public String getUsername() {
-		return userName;
-	}
-	public void setUsername(String user) {
-		this.userName = user;
-	}
 	public String getEmail() {
 		return emailAddress;
 	}
@@ -46,6 +40,22 @@ public class User {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
+	
+	public String getSessionid() {
+		return sessionid;
+	}
+
+	public void setSessionid(String sessionid) {
+		this.sessionid = sessionid;
+	}
+	
+	public String getUsername() {
+		return Username;
+	}
+
+	public void setUsername(String usernm) {
+		this.Username = usernm;
+	}
 
 	public String getLastName() {
 		return lastName;
@@ -55,22 +65,16 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public boolean ValidateCredetials(String Username, String  password) {
+	public boolean logIn(String Username, String password){
+		//working with authenticate in the controller 
+		if(loginStatus != true) {
+			loginStatus = true; 
+			
+			//probably set this up in a controller 
+			//electronicSignatureFlag = true;
+		}
 		
-		//
-		//call to db interface
-		//
-		return false;
-	}
-
-	public void setSessionid(String id) {
-		// session info ready 
-		
-	}
-
-	public Object getSessionid() {
-	//Session info ready
-		return null;
+		return loginStatus;
 	}
 
 }
