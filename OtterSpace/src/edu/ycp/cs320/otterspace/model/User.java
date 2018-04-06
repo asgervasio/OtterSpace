@@ -6,6 +6,7 @@ public class User {
 	private String firstName;
 	private String lastName; 
 	private String Username; 
+	private boolean loginStatus = false;
 	private String sessionid;
 	
 	public void setUserAccountInformation(String usernm, String fn, String ln, String email, String pw) {
@@ -64,5 +65,16 @@ public class User {
 		this.lastName = lastName;
 	}
 
+	public boolean logIn(String Username, String password){
+		//working with authenticate in the controller 
+		if(loginStatus != true) {
+			loginStatus = true; 
+			
+			//probably set this up in a controller 
+			//electronicSignatureFlag = true;
+		}
+		
+		return loginStatus;
+	}
 
 }
