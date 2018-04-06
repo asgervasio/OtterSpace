@@ -8,11 +8,15 @@ import edu.ycp.cs320.otterspace.model.*;
 
 public interface IDatabase {
 	public void insertRoom(Room room);
-	public List<Room> findRoomUsingTitle(String title);
-	public List<Room> findRoomUsingLocation(String location);
-	public List<Room> findRoomUsingRoomId(int roomId);
-
-
+	public Room findRoomUsingTitle(String title);
+	public Room findRoomUsingLocation(String location);
+	public Room findRoomUsingRoomId(int roomId);
+	
+	public void insertItem(Item item);
+	public Item findItemUsingTitle(String title);
+	public Item findItemUsingItemId(int itemId);
+	public Item findItemUsingLocation(String location);
+  
 	//User-based methods
 	List<User> getAccountInfo(String Username);
 	List<User> matchUsernameWithPassword(String Username);	
@@ -22,4 +26,5 @@ public interface IDatabase {
 	List<User> findAllUsers();
 	List<User> findUserByLastName(String lastname);
 	
+
 }

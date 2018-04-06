@@ -12,11 +12,11 @@ public class EditorRoomModel {
 	private String description, title, requirement, connectionTemp, location, itemList;
 	private HashMap<String,Room> connections;
 	
-	// Constructor for GameModel class
+	// Constructor for EditorRoomModel 
 	public EditorRoomModel() {
 	}
 	
-	// All of the getters and setters for the creation of a 
+	// All of the getters and setters for the creation of a room
 	public void setTitle(String title){
 		this.title = title;
 	}

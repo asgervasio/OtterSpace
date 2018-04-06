@@ -14,6 +14,7 @@ public class FakeDatabase implements IDatabase {
 	
 	public FakeDatabase() {
 		roomList = new ArrayList<Room>();
+		itemList = new ArrayList<Item>();
 		
 		// Add initial data
 		readInitialData();
@@ -25,6 +26,7 @@ public class FakeDatabase implements IDatabase {
 	public void readInitialData() {
 		try {
 			roomList.addAll(InitialData.getRooms());
+			itemList.addAll(InitialData.getItems());
 		} catch (IOException e) {
 			throw new IllegalStateException("Couldn't read initial data", e);
 		}
@@ -48,31 +50,72 @@ public class FakeDatabase implements IDatabase {
 	}	
 
 	@Override
-	public List<Room> findRoomUsingTitle(String title) {
-		List<Room> result = new ArrayList<Room>();
+	public Room findRoomUsingTitle(String title) {
 		for(Room room: roomList) {
 			if (room.getTitle().equals(title)){
-				result.add(room);
+				return room;
 			}
 		}
-		return result;
-	}
-
-	@Override
-	public List<Room> findRoomUsingLocation(String location) {
-		List<Room> result = new ArrayList<Room>();	
 		return null;
 	}
 
 	@Override
-	public List<Room> findRoomUsingRoomId(int roomId) {
-		List<Room> result = new ArrayList<Room>();		
+	public Room findRoomUsingLocation(String location) {
+		return null;
+	}
+
+	@Override
+	public Room findRoomUsingRoomId(int roomId) {
 		for (Room room : roomList){
 			if(room.getRoomId() == roomId){
-				result.add(room);
+				return room;
 			}
 		}
-		return result;
+		return null;
+	}
+
+	@Override
+	public void insertItem(Item item) {
+		int itemId = roomList.size();
+		Item newItem = new Item();
+		newItem.setItemId(itemId);
+		newItem.setTitle(item.getTitle());
+		newItem.setDescription(item.getDescription());
+		newItem.setRoomLocat(item.getRoomLocat());
+		newItem.setStatAffected(item.getStatAffected());
+		newItem.setStatChangeVal(item.getStatChangeVal());
+		itemList.add(newItem);
+		System.out.println("Stored new item!!");				
+	}
+
+	@Override
+	public Item findItemUsingTitle(String title) {
+		for (Item item : itemList){
+			if(item.getTitle() == title){
+				return item;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Item findItemUsingItemId(int itemId) {
+		for (Item item : itemList){
+			if(item.getItemId() == itemId){
+				return item;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public Item findItemUsingLocation(String location) {
+		for (Item item : itemList){
+			if(item.getRoomLocat() == location){
+				return item;
+			}
+		}
+		return null;
 	}
 
 	@Override
