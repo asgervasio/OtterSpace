@@ -11,7 +11,6 @@ import edu.ycp.cs320.otterspace.model.User;
 public class FakeDatabase implements IDatabase {
 	private List<Item> itemList;
 	private List<Room> roomList;
-	private List<User> userList;
 	
 	public FakeDatabase() {
 		roomList = new ArrayList<Room>();
@@ -121,87 +120,44 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public List<User> getAccountInfo(String name) {
-		List<User> result = new ArrayList<User>();
-		for(User user: userList) {
-			if (user.getUsername().equals(name)){
-				result.add(user);
-			}
-		}
-		return result;
-	}
-	                
-	@Override
-	public List<User> matchUsernameWithPassword(String Username, String pass) {
-		System.out.println("in matchUsernameWithPassword");
-		List<User> result = new ArrayList<User>();
-		for(User user: userList) {
-			System.out.println("in for loop user:" + user);
-			
-			if (user.getPassword().equals(pass)){
-				if (user.getPassword().equals(Username)){
-				result.add(user);
-				System.out.println("result.add(user) in matchUsernameWithPassword");
-			}
-		}}
-		return result;
-		
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public List<User> addUserToDatabase(String name, String pass, String email, String fn, String ln) {
-		User u = new User();
-		u.setUserAccountInformation(name, fn, ln, email, pass);
-		userList.add(u);
-		return userList;
+	public List<User> matchUsernameWithPassword(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public List<User> DeleteUserFromDatabase(String name, String pswd) {
-		
-		for(User user: userList) {
-			if (user.getUsername().equals(name)){
-				if(user.getPassword().equals(pswd)){
-					userList.remove(user);
-				}
-			}
-		}
-		return userList;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public List<User> changePassword(String name, String pswd, String newPassword) {
-		for(User user: userList) {
-			if (user.getUsername().equals(name)){
-				if(user.getPassword().equals(pswd)){
-					user.setPassword(newPassword);
-				}
-			}
-		}
-		return userList;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
 	public List<User> findAllUsers() {
-		return userList;
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	@Override
-	public List<User> changePassByNameAndEmailAndUsername(String fn, String ln, String email, String usernm, String newPassword) {
-		for(User user: userList) {
-			if (user.getUsername().equals(usernm)){
-				if(user.getFirstName().equals(fn)){
-					if(user.getLastName().equals(ln)){
-						if(user.getEmail().equals(email)){
-					}
-					user.setPassword(newPassword);
-						}
-					}	
-				}	
-			}
-		
-		return userList;
+	public List<User> findUserByLastName(String lastname) {
+		// TODO Auto-generated method stub
+		return null;
 	}
-
-
 	
 }// end of class

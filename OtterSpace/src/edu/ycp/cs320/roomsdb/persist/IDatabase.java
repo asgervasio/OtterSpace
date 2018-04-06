@@ -20,11 +20,11 @@ public interface IDatabase {
   
 	//User-based methods
 	List<User> getAccountInfo(String Username);
-	List<User> matchUsernameWithPassword(String Username, String Password);	
+	List<User> matchUsernameWithPassword(String Username);	
 	List<User> addUserToDatabase(String Username, String pass, String email, String first, String last);
 	List<User> DeleteUserFromDatabase(String name, String pswd);
 	List<User> changePassword(String name, String pswd, String newPassword);
 	List<User> findAllUsers();
-	List<User> changePassByNameAndEmailAndUsername(String Firstname, String lastname, String email,String usernm, String pass);
+	List<User> findUserByLastName(String lastname);
 	
 }
