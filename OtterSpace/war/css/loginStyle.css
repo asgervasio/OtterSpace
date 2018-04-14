@@ -1,0 +1,47 @@
+@font-face
+{
+  font-family: "scifi_thin";
+  src: url('scifiThin.ttf');
+}
+
+h1 {
+  color: #08088A;
+  font-family: "scifi_thin";
+  font-size: 500%;
+  font-variant: small-caps;
+  text-align: center;
+}
+
+body, html
+{
+  background-color: black;
+  height: 100%;
+}
+.Index{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: black;
+  font-family: "scifi_thin";
+}
+
+label{
+	color: white;
+	font-size: 200%;
+	font-family: "scifi_thin";
+	  justify-content: center;
+}
+.Button
+{
+  background-color: white;
+  font-family: "scifi_thin";
+  border: 0;
+  color: #08088A;
+  font-size: 200%;
+  margin-top: 50%;
+  margin-bottom: 50%;
+  margin-right: 5%;
+  margin-left: 5%;
+
+}
+
