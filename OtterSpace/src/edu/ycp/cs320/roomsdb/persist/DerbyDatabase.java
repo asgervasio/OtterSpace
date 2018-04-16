@@ -14,6 +14,7 @@ import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.User;
 import edu.ycp.cs320.roomsdb.model.Pair;
 import edu.ycp.cs320.sqldemo.DBUtil;
+import edu.ycp.cs320.otterspace.model.*;
 
 public class DerbyDatabase implements IDatabase {
 	static {
@@ -245,6 +246,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	*/
 	
 	public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
 		try {
@@ -299,19 +301,19 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
-	private void loadAuthor(Author author, ResultSet resultSet, int index) throws SQLException {
-		author.setAuthorId(resultSet.getInt(index++));
-		author.setLastname(resultSet.getString(index++));
-		author.setFirstname(resultSet.getString(index++));
-	}
-	
-	private void loadBook(Book book, ResultSet resultSet, int index) throws SQLException {
-		book.setBookId(resultSet.getInt(index++));
-		book.setAuthorId(resultSet.getInt(index++));
-		book.setTitle(resultSet.getString(index++));
-		book.setIsbn(resultSet.getString(index++));
-		book.setPublished(resultSet.getInt(index++));		
-	}
+	//private void loadAuthor(Author author, ResultSet resultSet, int index) throws SQLException {
+	//	author.setAuthorId(resultSet.getInt(index++));
+	//	author.setLastname(resultSet.getString(index++));
+	//	author.setFirstname(resultSet.getString(index++));
+	//}
+//	
+	//private void loadBook(Book book, ResultSet resultSet, int index) throws SQLException {
+	//	book.setBookId(resultSet.getInt(index++));
+	//	book.setAuthorId(resultSet.getInt(index++));
+	//	book.setTitle(resultSet.getString(index++));
+	//	book.setIsbn(resultSet.getString(index++));
+	//	book.setPublished(resultSet.getInt(index++));		
+	//}
 	
 	public void createTables() {
 		executeTransaction(new Transaction<Boolean>() {
@@ -352,18 +354,18 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	public void loadInitialData() {
-		executeTransaction(new Transaction<Boolean>() {
-			@Override
+	/*public void loadInitialData() {
+	executeTransaction(new Transaction<Boolean>() {
+		@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				List<Author> authorList;
 				List<Book> bookList;
 				
-				try {
+			try {
 					authorList = InitialData.getAuthors();
-					bookList = InitialData.getBooks();
-				} catch (IOException e) {
-					throw new SQLException("Couldn't read initial data", e);
+				bookList = InitialData.getBooks();
+			} catch (IOException e) {
+				throw new SQLException("Couldn't read initial data", e);
 				}
 
 				PreparedStatement insertAuthor = null;
@@ -400,7 +402,7 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
-	}
+	}*/
 	
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
@@ -413,7 +415,12 @@ public class DerbyDatabase implements IDatabase {
 		
 		System.out.println("Success!");
 	}
-*/
+
+
+	private void loadInitialData() {
+		// TODO Auto-generated method stub
+		
+	}
 
 	@Override
 	public void insertRoom(Room room) {
@@ -463,6 +470,15 @@ public class DerbyDatabase implements IDatabase {
 		return null;
 	}
 
+	
+	private void loadUser(User u, ResultSet resultSet, int index) throws SQLException {
+			u.setEmail(resultSet.getString(index++));
+			u.setFirstName(resultSet.getString(index++));
+			u.setLastName(resultSet.getString(index++));
+			u.setPassword(resultSet.getString(index++));
+			u.setUsername(resultSet.getString(index++));
+		}
+	
 	@Override
 	public List<User> getAccountInfo(String name) {
 		// TODO Auto-generated method stub
@@ -490,9 +506,58 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<User> findAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
+		return executeTransaction(new Transaction<List<User>>() {
+				@Override
+				public List<User> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					
+					try {
+						// retreive all attributes from User
+						stmt = conn.prepareStatement(
+								"select User.* from Users"
+						);
+						
+						
+						
+						List<User> result = new ArrayList<User>();
+						
+						resultSet = stmt.executeQuery();
+						
+						// for testing that a result was returned
+						Boolean found = false;
+						
+						while (resultSet.next()) {
+							found = true;
+							
+							// create new User object
+							// retrieve attributes from resultSet starting with index 1
+							User author = new User();
+							loadUser(author, resultSet, 1);
+							
+							// create new Book object
+							// retrieve attributes from resultSet starting at index 4
+							Book book = new Book();
+							loadBook(book, resultSet, 4);
+							
+							result.add(new Pair<Author, Book>(author, book));
+						}
+						
+						// check if the title was found
+						if (!found) {
+							System.out.println("<" + lastname + "> was not found in the books table");
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
+		}
+
+	
 
 	@Override
 	public List<User> findUserByLastName(String lastname) {
