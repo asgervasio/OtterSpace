@@ -44,9 +44,6 @@ public class FakeDatabase implements IDatabase {
 		newRoom.setRoomId(roomId);
 		newRoom.setTitle(room.getTitle());
 		newRoom.setDescription(room.getDescription());
-		newRoom.setItems(room.getItems());
-		newRoom.setConnectionTemp(room.getConnectionTemp());
-		newRoom.setLocation(room.getLocation());
 		newRoom.setRequirement(room.getRequirement());
 		roomList.add(newRoom);
 		System.out.println("Stored new room!!");	
