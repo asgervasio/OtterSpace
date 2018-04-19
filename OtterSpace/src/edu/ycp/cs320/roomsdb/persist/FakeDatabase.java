@@ -146,7 +146,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
+	public Boolean addUserToDatabase(String name, String pass, String email, String first, String last) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -158,7 +158,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> changePassword(String name, String pswd, String newPassword) {
+	public String changePassword(String name, String pswd, String newPassword) {
 		// TODO Auto-generated method stub
 		return null;
 	}

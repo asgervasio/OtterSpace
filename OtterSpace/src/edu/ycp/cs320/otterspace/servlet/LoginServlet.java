@@ -50,18 +50,23 @@ public class LoginServlet extends HttpServlet {
 		System.out.println("   Name: <" + username + "> PW: <" + password + ">");			
 
 		if (username == null || password == null || username.equals("") || password.equals("")) {
-			errorMessage = "Please specify both user name and password";
+			errorMessage = "Please specify both Username and password";
+			req.setAttribute("errorMessage", errorMessage);
+			req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
+			System.out.println("Please specify both Username and password");
 		} else {
 			
 			ArrayList<User> user = new ArrayList<User>();
 			
 			user = g.matchUserNameWithPassword(username, password);
+			
 			if(user != null && user.size()>0) {
+				System.out.println("if(user != null && user.size()>0) { = true");
 				User u = user.get(0);
 				System.out.println(u.getUsername());
 				//Authenticate the user
 				if(UserController.authenticate(u, password) == true){
-					
+					System.out.println("UserController.authenticate(u, password) == true = true");
 					//HttpSession session = req.getSession();
 					//session.setAttribute("username", u.getUsername());
 					//session.setAttribute("firstName", u.getFirstName());
@@ -84,6 +89,7 @@ public class LoginServlet extends HttpServlet {
 				}
 				//display error meassage for incorrect username or password
 				else{
+					System.out.println("UserController.authenticate(u, password) == true = false");
 					errorMessage = "Incorrect Username or Password";
 					req.setAttribute("errorMessage", errorMessage);
 					req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
@@ -91,10 +97,11 @@ public class LoginServlet extends HttpServlet {
 			}
 			//otherwise, print an error message
 			else{
+				System.out.println("if(user != null && user.size()>0) { = False");
 				errorMessage = "Incorrect Username or Password";
 				req.setAttribute("errorMessage", errorMessage);
 				req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
-				System.out.println("   Invalid login - returning to /Login");
+				System.out.println("User is doesn");
 			}
 
 			req.setAttribute("sessionid", model.getSessionid());

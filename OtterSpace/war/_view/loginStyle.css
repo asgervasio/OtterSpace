@@ -12,18 +12,23 @@ body
 background-color:black;
 background-image:
 radial-gradient(white, rgba(255,255,255,.2) 2px, transparent 40px),
+radial-gradient(white, rgba(255,255,255,.075) 1px, transparent 30px),
 radial-gradient(white, rgba(255,255,255,.15) 1px, transparent 30px),
 radial-gradient(white, rgba(255,255,255,.1) 2px, transparent 40px),
 radial-gradient(rgba(255,255,255,.4), rgba(255,255,255,.1) 2px, transparent 30px);
-background-size: 550px 550px, 350px 350px, 250px 250px, 150px 150px; 
-background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
+background-size: 605px 605px, 152px 152px, 259px 259px, 164px 164px; 
+background-position: 30px 60px, 89px 42px, 17px 17px, 112px 105px;
 }
 
+
+.error {
+			color: red;
+		}
 
 .label{
 	color: white;
   font-family: "scifi_thin";
-  font-size: 200%;
+  font-size: 210%;
   font-variant: small-caps;
   text-align: left;
 }
