@@ -10,7 +10,8 @@ import java.util.HashMap;
 
 public class Room {
 	int roomId;
-	String title, description, requirement, connectionTemp, location, itemList;
+	String title, description, connectionTemp, location, itemList;
+	boolean requirement;
 	HashMap<String,Room> connections = new HashMap<String,Room>();
 	
 	public Room(){
@@ -40,11 +41,11 @@ public class Room {
 		return description;
 	}
 	
-	public void setRequirement(String requirement){
+	public void setRequirement(boolean requirement){
 		this.requirement = requirement;		
 	}
 	
-	public String getRequirement(){
+	public Boolean getRequirement(){
 		return requirement;
 	}
 	
