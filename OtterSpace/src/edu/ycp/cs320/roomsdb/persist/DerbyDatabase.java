@@ -417,12 +417,88 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public void insertRoom(Room room) {
-		// TODO Auto-generated method stub
-	}
+		return executeTransaction(new Transaction<Room>() {
+			@Override
+			public Room execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+					// inserting the author_id, title, ISBN, published into database
+				try {
+					stmt = conn.prepareStatement(
+							"insert into rooms (title, description, locked) "
+							+ "values (?, ?, ?)"
+							);
+					// substitute the title entered by the user for the placeholder in the query
+					stmt.setString(1, room.getTitle());
+					stmt.setString(2, room.getDescription());
+					stmt.setBoolean(3, room.getRequirement());
+					
+
+					// execute the query
+					stmt.executeUpdate();
+					
+					System.out.println("Stored new book!!");
+					
+					return null;
+				} finally {
+;					
+					DBUtil.closeQuietly(stmt);
+					
+					DBUtil.closeQuietly(conn);
+
+				}
+			}
+		});	
+		}
 
 	@Override
-	public Room findRoomUsingTitle(String title) {
-		// TODO Auto-generated method stub
+	public Room findRoomUsingTitle(String title) 
+	{
+		return executeTransaction(new Transaction<Room>() {
+			@Override
+			public Room execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from both Books and Authors tables
+					stmt = conn.prepareStatement(
+							"select rooms.* " +
+							"  from rooms " +
+							" where  rooms.title = ?"
+					);
+					stmt.setString(1, title);
+					
+					Room result = new Room();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						Room room = new Room();
+						loadRoom(room, resultSet, 1);
+						
+						
+						result = room;
+					}
+					
+					// check if the title was found
+					if (!found) {
+						System.out.println("<" + title + "> was not found in the Room table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 		return null;
 	}
 
@@ -435,25 +511,194 @@ public class DerbyDatabase implements IDatabase {
 
 
 	@Override
-	public Room findRoomUsingRoomId(int roomId) {
-		// TODO Auto-generated method stub
+	public Room findRoomUsingRoomId(int roomId) 
+	{
+		return executeTransaction(new Transaction<Room>() {
+			@Override
+			public Room execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from both Books and Authors tables
+					stmt = conn.prepareStatement(
+							"select rooms.* " +
+							"  from rooms " +
+							" where  rooms.id = ?"
+					);
+					stmt.setInt(1, roomId);
+					
+					Room result = new Room();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						Room room = new Room();
+						loadRoom(room, resultSet, 1);
+						
+						
+						result = room;
+					}
+					
+					// check if the title was found
+					if (!found) {
+						System.out.println("<" + roomId + "> was not found in the Room table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 		return null;
 	}
 
 	@Override
-	public void insertItem(Item item) {
+	public void insertItem(Item item) 
+	{
+		return executeTransaction(new Transaction<Item>() {
+			@Override
+			public Item execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+					// inserting the author_id, title, ISBN, published into database
+				try {
+					stmt = conn.prepareStatement(
+							"insert into items(title, description, locked) "
+							+ "values (?, ?, ?)"
+							);
+					// substitute the title entered by the user for the placeholder in the query
+					stmt.setString(1, room.getTitle());
+					stmt.setString(2, room.getDescription());
+					stmt.setBoolean(3, room.getRequirement());
+					
 
+					// execute the query
+					stmt.executeUpdate();
+					
+					System.out.println("Stored new book!!");
+					
+					return null;
+				} finally {
+;					
+					DBUtil.closeQuietly(stmt);
+					
+					DBUtil.closeQuietly(conn);
+
+				}
+			}
+		});	
 	}
 
 	@Override
-	public Item findItemUsingTitle(String title) {
-		// TODO Auto-generated method stub
+	public Item findItemUsingTitle(String title) 
+	{
+		return executeTransaction(new Transaction<Item>() {
+			@Override
+			public Item execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from both Books and Authors tables
+					stmt = conn.prepareStatement(
+							"select items.* " +
+							"  from items " +
+							" where  items.title = ?"
+					);
+					stmt.setString(1, title);
+					
+					Item result = new Item();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						Item item = new Item();
+						loadItem(room, resultSet, 1);
+						
+						
+						result = item;
+					}
+					
+					// check if the title was found
+					if (!found) {
+						System.out.println("<" + title + "> was not found in the Item table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 		return null;
 	}
 
 	@Override
-	public Item findItemUsingItemId(int itemId) {
-		// TODO Auto-generated method stub
+	public Item findItemUsingItemId(int itemId) 
+	{
+		return executeTransaction(new Transaction<Item>() {
+			@Override
+			public Item execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from both Books and Authors tables
+					stmt = conn.prepareStatement(
+							"select items.* " +
+							"  from items " +
+							" where  items.id = ?"
+					);
+					stmt.setInt(1, itemId);
+					
+					Item result = new Item();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						Item item = new Item();
+						loadItem(item, resultSet, 1);
+						
+						
+						result = item;
+					}
+					
+					// check if the title was found
+					if (!found) {
+						System.out.println("<" + itemId + "> was not found in the item table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 		return null;
 	}
 

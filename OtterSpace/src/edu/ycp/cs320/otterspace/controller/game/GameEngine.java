@@ -16,8 +16,7 @@ public class GameEngine
 	GameModel model = new GameModel();
 	Player player = new Player();
 	//HttpServletResponse resp;
-	IDatabase db = DatabaseProvider.getInstance();
-	
+	IDatabase db = DatabaseProvider.getInstance();	
 	
 	public String parse(String cmd)
 	{
@@ -30,7 +29,17 @@ public class GameEngine
 		
 			case "move":
 			case "m":
+			case "walk":
+			case "head":
 				result = move(commandSplit);
+			case "look":
+			case "inspect":
+				result = inspect(commandSplit);
+			case "take":
+			case "pick":
+				result = take(commandSplit);
+			default:
+				result = invalid();
 			/*case "south":
 			case "s":
 				result = move("south");
@@ -56,6 +65,43 @@ public class GameEngine
 		return result;
 			
 			
+	}
+	
+	public String take(String[] item)
+	{
+		String result = "";
+		Item inspectedItem;
+		
+		if(item.length > 2)
+		{
+			result = "Unknown Movement";
+		}
+		else
+		{
+			inspectedItem = db.findItemUsingTitle(item[1]);
+			player.addItem(inspectedItem);
+			result = inspectedItem.getTitle() + " picked up";
+		}
+		
+		return result;
+	}
+	
+	public String inspect(String[] item)
+	{
+		String result = "";
+		Item inspectedItem;
+		
+		if(item.length > 2)
+		{
+			result = "Unknown Movement";
+		}
+		else
+		{
+			inspectedItem = db.findItemUsingTitle(item[1]);
+			result = inspectedItem.getDescription();
+		}
+		
+		return result;
 	}
 	
 	public String move(String[] direction)
@@ -92,6 +138,13 @@ public class GameEngine
 		}
 		//}
 		return result;
+	}
+	public String invalid()
+	{
+		String result = "";
+		result = "Invalid Command";
+		return result;
+
 	}
 
 }
