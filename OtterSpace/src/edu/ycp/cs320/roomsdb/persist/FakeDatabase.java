@@ -38,7 +38,7 @@ public class FakeDatabase implements IDatabase {
 
 	// Creates a new room that contains item(s) and inserts that room into the database
 	@Override
-	public void insertRoom(Room room) {
+	public Room insertRoom(Room room) {
 		int roomId = roomList.size();
 		Room newRoom = new Room();
 		newRoom.setRoomId(roomId);
@@ -49,7 +49,8 @@ public class FakeDatabase implements IDatabase {
 		newRoom.setLocation(room.getLocation());
 		newRoom.setRequirement(room.getRequirement());
 		roomList.add(newRoom);
-		System.out.println("Stored new room!!");		
+		System.out.println("Stored new room!!");	
+		return null;
 	}	
 
 	@Override
@@ -59,11 +60,6 @@ public class FakeDatabase implements IDatabase {
 				return room;
 			}
 		}
-		return null;
-	}
-
-	@Override
-	public Room findRoomUsingLocation(String location) {
 		return null;
 	}
 
@@ -78,7 +74,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public void insertItem(Item item) {
+	public Item insertItem(Item item) {
 		int itemId = roomList.size();
 		Item newItem = new Item();
 		newItem.setItemId(itemId);
@@ -88,7 +84,8 @@ public class FakeDatabase implements IDatabase {
 		newItem.setStatAffected(item.getStatAffected());
 		newItem.setStatChangeVal(item.getStatChangeVal());
 		itemList.add(newItem);
-		System.out.println("Stored new item!!");				
+		System.out.println("Stored new item!!");		
+		return null;
 	}
 
 	@Override

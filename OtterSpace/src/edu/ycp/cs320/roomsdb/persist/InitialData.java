@@ -28,7 +28,7 @@ public class InitialData {
 				room.setDescription(i.next());
 				room.setItems(i.next());
 				room.setConnectionTemp(i.next());
-				room.setRequirement(i.next());
+				room.setRequirement(stringToBoolean(i.next()));
 				room.setLocation(i.next());
 				roomList.add(room);
 			}
@@ -98,5 +98,12 @@ public class InitialData {
 			readRooms.close();
 		}
 	}
+  
+  private static boolean stringToBoolean(String x){
+	  if(x.equals("true"))
+		  return true;
+	  else
+		  return false;
+  }
 
 }

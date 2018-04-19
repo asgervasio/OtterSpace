@@ -23,10 +23,7 @@ public class EditorRoomControllerTest {
 		
 		model.setTitle("title");
 		model.setDescription("description");
-		model.setRequirement("requirement");
-		model.setConnectionTemp("connectionn");
-		model.setItemList("items");
-		model.setLocation("location");
+		model.setRequirement(true);
 	}
 	
 	@Test
@@ -34,7 +31,6 @@ public class EditorRoomControllerTest {
 		roomBlank = controller.createRoom();
 		assertEquals(roomBlank.getTitle(), model.getTitle());
 		assertEquals(roomBlank.getRequirement(), model.getRequirement());
-		assertEquals(roomBlank.getLocation(), model.getLocation());
 	}
 	
 }// end of class

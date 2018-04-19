@@ -6,13 +6,11 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.User;
-import edu.ycp.cs320.roomsdb.model.Pair;
 import edu.ycp.cs320.sqldemo.DBUtil;
 
 public class DerbyDatabase implements IDatabase {
@@ -29,223 +27,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	private static final int MAX_ATTEMPTS = 10;
-/*
-	@Override
-	public List<Pair<Author, Book>> insertBookWithAuthor(String lastname, String firstname, String title, String ISBN, int year, String YorN) {
-		return executeTransaction(new Transaction<List<Pair<Author,Book>>>() {
-			@Override
-			public List<Pair<Author, Book>> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				PreparedStatement Insertstmt = null;
-				PreparedStatement IDstmt = null;
-				ResultSet IDresultSet = null;
-				String author_id = null;
-				
-				try {
-					// searches for existing author 
-					if(YorN.equals("n")){
-						// finding the author ID based on the lastname and firstname
-						IDstmt = conn.prepareStatement(
-								"select author_id "
-								+ "from authors "
-								+ "where authors.lastname = ? and authors.firstname = ?"
-								);
-						// substitute the title entered by the user for the placeholder in the query
-						IDstmt.setString(1, lastname);
-						IDstmt.setString(2, firstname);
-			
-						// execute the query
-						IDresultSet = IDstmt.executeQuery();
-			
-						if(IDresultSet.next()){
-							author_id = IDresultSet.getString(1);
-							System.out.println("Got the authorId!!");
-						} else {
-							System.out.println("Data not recieved!!");
-						}
-						
-					// inserts new author into database and collects its author_ID
-					}else if (YorN.equals("y")){
-						Insertstmt = conn.prepareStatement(
-								"insert into authors (lastname, firstname) "
-								+ "values (?, ?)"
-								);
-						
-						Insertstmt.setString(1, lastname);
-						Insertstmt.setString(2, firstname);
 
-						Insertstmt.executeUpdate();
-						System.out.println("Added in the new Author");
-						
-						// finding the author ID based on the lastname and firstname
-						IDstmt = conn.prepareStatement(
-								"select author_id "
-								+ "from authors "
-								+ "where authors.lastname = ? and authors.firstname = ?"
-								);
-						// substitute the title entered by the user for the placeholder in the query
-						IDstmt.setString(1, lastname);
-						IDstmt.setString(2, firstname);
-			
-						// execute the query
-						IDresultSet = IDstmt.executeQuery();
-			
-						if(IDresultSet.next()){
-							author_id = IDresultSet.getString(1);
-							System.out.println("Got authorId for new author!!");
-						} else {
-							System.out.println("Data not recieved!!");
-						}
-					}else{
-						System.out.println("Please enter in a proper answer next time");
-					}// end of new or old author check
-					
-					
-					// inserting the author_id, title, ISBN, published into database
-					stmt = conn.prepareStatement(
-							"insert into books (author_id, title, ISBN, published) "
-							+ "values (?, ?, ?, ?)"
-							);
-					// substitute the title entered by the user for the placeholder in the query
-					stmt.setString(1, author_id);
-					stmt.setString(2, title);
-					stmt.setString(3, ISBN);
-					stmt.setInt(4,  year);
-					
-
-					// execute the query
-					stmt.executeUpdate();
-					
-					System.out.println("Stored new book!!");
-					
-					return null;
-				} finally {
-					DBUtil.closeQuietly(IDresultSet);
-
-					DBUtil.closeQuietly(IDstmt);					
-					DBUtil.closeQuietly(stmt);
-					DBUtil.closeQuietly(Insertstmt);
-					
-					DBUtil.closeQuietly(conn);
-
-				}
-			}
-		});
-	}
-
-	
-	@Override
-	public List<Pair<Author, Book>> findAuthorAndBookByAuthorLastName(String lastname) throws UnsupportedOperationException{
-		return executeTransaction(new Transaction<List<Pair<Author,Book>>>() {
-			@Override
-			public List<Pair<Author, Book>> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					// retreive all attributes from both Books and Authors tables
-					stmt = conn.prepareStatement(
-							"select authors.*, books.* "
-									+ "  from authors, books "
-									+ "  where authors.author_id = books.author_id "
-									+ "        and authors.lastname = ?"
-									+ "  order by books.title ASC"
-					);
-					
-					stmt.setString(1, lastname);
-					
-					List<Pair<Author, Book>> result = new ArrayList<Pair<Author,Book>>();
-					
-					resultSet = stmt.executeQuery();
-					
-					// for testing that a result was returned
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						// create new Author object
-						// retrieve attributes from resultSet starting with index 1
-						Author author = new Author();
-						loadAuthor(author, resultSet, 1);
-						
-						// create new Book object
-						// retrieve attributes from resultSet starting at index 4
-						Book book = new Book();
-						loadBook(book, resultSet, 4);
-						
-						result.add(new Pair<Author, Book>(author, book));
-					}
-					
-					// check if the title was found
-					if (!found) {
-						System.out.println("<" + lastname + "> was not found in the books table");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-
-	@Override
-	public List<Pair<Author, Book>> findAuthorAndBookByTitle(final String title) {
-		return executeTransaction(new Transaction<List<Pair<Author,Book>>>() {
-			@Override
-			public List<Pair<Author, Book>> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					// retreive all attributes from both Books and Authors tables
-					stmt = conn.prepareStatement(
-							"select authors.*, books.* " +
-							"  from authors, books " +
-							" where authors.author_id = books.author_id " +
-							"   and books.title = ?"
-					);
-					stmt.setString(1, title);
-					
-					List<Pair<Author, Book>> result = new ArrayList<Pair<Author,Book>>();
-					
-					resultSet = stmt.executeQuery();
-					
-					// for testing that a result was returned
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						// create new Author object
-						// retrieve attributes from resultSet starting with index 1
-						Author author = new Author();
-						loadAuthor(author, resultSet, 1);
-						
-						// create new Book object
-						// retrieve attributes from resultSet starting at index 4
-						Book book = new Book();
-						loadBook(book, resultSet, 4);
-						
-						result.add(new Pair<Author, Book>(author, book));
-					}
-					
-					// check if the title was found
-					if (!found) {
-						System.out.println("<" + title + "> was not found in the books table");
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-	}
-*/	
 	public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
 		try {
 			return doExecuteTransaction(txn);
@@ -303,7 +85,7 @@ public class DerbyDatabase implements IDatabase {
 		room.setRoomId(resultSet.getInt(index++));
 		room.setTitle(resultSet.getString(index++));
 		room.setDescription(resultSet.getString(index++));
-		room.setRequirement(resultSet.getString(index++));
+		room.setRequirement(resultSet.getBoolean(index++));
 	}
 	
 	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException {
@@ -408,7 +190,7 @@ public class DerbyDatabase implements IDatabase {
 //						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
 						insertRoom.setString(1, room.getTitle());
 						insertRoom.setString(2, room.getDescription());
-						insertRoom.setString(3, room.getRequirement());
+						insertRoom.setString(3, room.getRequirement().toString());
 						insertRoom.addBatch();
 					}
 					insertRoom.executeBatch();
@@ -462,7 +244,7 @@ public class DerbyDatabase implements IDatabase {
 
 
 	@Override
-	public void insertRoom(Room room) {
+	public Room insertRoom(Room room) {
 		return executeTransaction(new Transaction<Room>() {
 			@Override
 			public Room execute(Connection conn) throws SQLException {
@@ -545,15 +327,6 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
-		return null;
-	}
-
-
-	@Override
-	//TODO: Delete this method
-	public Room findRoomUsingLocation(String location) {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 
@@ -567,7 +340,7 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet = null;
 				
 				try {
-					// retreive all attributes from both Books and Authors tables
+					// retreive all attributes from rooms table
 					stmt = conn.prepareStatement(
 							"select rooms.* " +
 							"  from rooms " +
@@ -594,7 +367,7 @@ public class DerbyDatabase implements IDatabase {
 						result = room;
 					}
 					
-					// check if the title was found
+					// check if the id was found
 					if (!found) {
 						System.out.println("<" + roomId + "> was not found in the Room table");
 					}
@@ -606,32 +379,32 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
-		return null;
 	}
 
 	@Override
-	public void insertItem(Item item) 
+	public Item insertItem(Item item) 
 	{
 		return executeTransaction(new Transaction<Item>() {
 			@Override
 			public Item execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
-					// inserting the author_id, title, ISBN, published into database
+					// inserting the title, description, statAffected, statChangeVal, and roomLocat into database
 				try {
 					stmt = conn.prepareStatement(
-							"insert into items(title, description, locked) "
-							+ "values (?, ?, ?)"
+							"insert into items(title, description, statAffected, statChangeVal, roomLocat) "
+							+ "values (?, ?, ?, ?, ?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
-					stmt.setString(1, room.getTitle());
-					stmt.setString(2, room.getDescription());
-					stmt.setBoolean(3, room.getRequirement());
+					stmt.setString(1, item.getTitle());
+					stmt.setString(2, item.getDescription());
+					stmt.setString(3, item.getStatAffected());
+					stmt.setInt(4, item.getStatChangeVal());
+					stmt.setInt(5, item.getRoomLocat());
 					
-
 					// execute the query
 					stmt.executeUpdate();
 					
-					System.out.println("Stored new book!!");
+					System.out.println("Stored new item!!");
 					
 					return null;
 				} finally {
@@ -655,7 +428,7 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet = null;
 				
 				try {
-					// retreive all attributes from both Books and Authors tables
+					// retreive all attributes from items table
 					stmt = conn.prepareStatement(
 							"select items.* " +
 							"  from items " +
@@ -673,10 +446,10 @@ public class DerbyDatabase implements IDatabase {
 					while (resultSet.next()) {
 						found = true;
 						
-						// create new Room object
+						// create new item object
 						// retrieve attributes from resultSet starting with index 1
 						Item item = new Item();
-						loadItem(room, resultSet, 1);
+						loadItem(item, resultSet, 1);
 						
 						
 						result = item;
@@ -694,7 +467,6 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
-		return null;
 	}
 
 	@Override
@@ -707,7 +479,7 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet = null;
 				
 				try {
-					// retreive all attributes from both Books and Authors tables
+					// retreive all attributes from items tables
 					stmt = conn.prepareStatement(
 							"select items.* " +
 							"  from items " +
@@ -725,7 +497,7 @@ public class DerbyDatabase implements IDatabase {
 					while (resultSet.next()) {
 						found = true;
 						
-						// create new Room object
+						// create new item object
 						// retrieve attributes from resultSet starting with index 1
 						Item item = new Item();
 						loadItem(item, resultSet, 1);
@@ -734,7 +506,7 @@ public class DerbyDatabase implements IDatabase {
 						result = item;
 					}
 					
-					// check if the title was found
+					// check if the id was found
 					if (!found) {
 						System.out.println("<" + itemId + "> was not found in the item table");
 					}
@@ -746,7 +518,6 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
-		return null;
 	}
 
 	@Override

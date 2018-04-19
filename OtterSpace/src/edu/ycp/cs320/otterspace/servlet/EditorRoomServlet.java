@@ -43,21 +43,11 @@ public class EditorRoomServlet extends HttpServlet{
 			String title = req.getParameter("title");
 			System.out.println(title);
 			String description = req.getParameter("description");
-			String requirement = req.getParameter("requirement");
-			String connections = req.getParameter("connections");
-			String itemName = req.getParameter("itemList");
-			System.out.println(itemName);
-			String locationX = req.getParameter("locationX");
-			String locationY = req.getParameter("locationY");
-			String locationZ = req.getParameter("locationZ");
+			boolean requirement = stringToBoolean(req.getParameter("requirement"));
 
 			model.setTitle(title);
 			model.setDescription(description);
-			model.setConnectionTemp(connections);
 			model.setRequirement(requirement);
-			String location = locationX + "," + locationY + "," + locationZ + "!";
-			model.setLocation(location);
-			model.setItemList(itemName);
 			Room room = controller.createRoom();
 			System.out.println("Created the room, now adding to the database");
 			database.insertRoom(room);
@@ -71,9 +61,6 @@ public class EditorRoomServlet extends HttpServlet{
 		req.setAttribute("title", req.getParameter("title"));
 		req.setAttribute("description", req.getParameter("description"));
 		req.setAttribute("requirement", req.getParameter("requirement"));
-		req.setAttribute("connections", req.getParameter("connections"));
-		req.setAttribute("location", req.getParameter("location"));
-		req.setAttribute("itemList", req.getParameter("itemList"));
 		
 		req.setAttribute("errorMessage", errorMessage);
 
@@ -82,5 +69,11 @@ public class EditorRoomServlet extends HttpServlet{
 		req.getRequestDispatcher("/_view/EditorRoomPage.jsp").forward(req, resp);
 	}
 
+	private static boolean stringToBoolean(String x){
+		if (x.equals("true"))
+			return true;
+		else
+			return false;
+	}
 
 }

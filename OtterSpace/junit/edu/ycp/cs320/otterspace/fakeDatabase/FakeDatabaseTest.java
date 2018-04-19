@@ -26,7 +26,7 @@ public class FakeDatabaseTest {
 	private EditorRoomController controller;
 	private EditorItemModel itemModel;
 	private EditorItemController itemController;
-	private Room room1, room2, room3, room4, roomBlank;
+	private Room room1, roomBlank;
 	private Item item, itemBlank;
   private List<User> userList;
 	private User u;
@@ -45,26 +45,14 @@ public class FakeDatabaseTest {
 		itemController.setModel(itemModel);
 		String roomTitle = "title";
 		String roomDescription = "description";
-		String requirement = "requirement";
-		String connections = "connections";
-		String itemName = "itemName";
-		String itemNameNone = null;
-		String location = "location";
-		String actor = "actor";
-		String actorNone = null;
+		boolean requirement = true;
 		
 		model.setTitle(roomTitle);
 		model.setDescription(roomDescription);
 		model.setRequirement(requirement);
-		model.setConnectionTemp(connections);
-		model.setItemList(itemName);
-		model.setLocation(location);
 		
 		room1 = controller.createRoom();
-		
-		model.setItemList(itemNameNone);
-		room2 = controller.createRoom();
-		
+				
 		String itemTitle = "titlePerItem";
 		String itemDescription = "descriptionPerItem";
 		String statAffected = "affected";
@@ -80,38 +68,19 @@ public class FakeDatabaseTest {
 		item = itemController.createItem();
     
     
-    User1.setUserAccountInformation("Ashling", "Ashley", "Ainsley", "Ash@gmail.com", "AAaassh");
-		User2.setUserAccountInformation("BBBaited", "Bailey", "Butch", "Bait@gmail.com", "BBBBait");
-		userList.add(User1);
-		userList.add(User2);
-	}
-	
-	// Tests to see if you can add a room that has an item but no Actor into the fake database
-	@Test
-	public void testInsertRoomWithItem(){
-		database.insertRoom(room1);
-		roomBlank = database.findRoomUsingTitle("title");
-		assertEquals(room1.getTitle(), roomBlank.getTitle());
-		assertEquals(room1.getItems(), roomBlank.getItems());
-	}
-	
-	// Tests to see if you can add a room that has an Actor but no item into the fake database
-	public void testInsertRoomWithActor(){
-		
-	}
-	
-	// Tests to see if you can add a room that has both an Actor and an item into the fake database
-	public void testInsertRoomWithItemAndActor(){
-		
+//		User1.setUserAccountInformation("Ashling", "Ashley", "Ainsley", "Ash@gmail.com", "AAaassh");
+//		User2.setUserAccountInformation("BBBaited", "Bailey", "Butch", "Bait@gmail.com", "BBBBait");
+//		userList.add(User1);
+//		userList.add(User2);
 	}
 	
 	// Tests to see if you can add a room that has neither an Actor nor an item into the fake database
 	@Test
-	public void testInsertRoomWithNeither(){
-		database.insertRoom(room2);
+	public void testInsertRoom(){
+		database.insertRoom(room1);
 		roomBlank = database.findRoomUsingTitle("title");
-		assertEquals(room2.getTitle(), roomBlank.getTitle());
-		assertEquals(room2.getItems(), roomBlank.getItems());
+		assertEquals(room1.getTitle(), roomBlank.getTitle());
+		assertEquals(room1.getItems(), roomBlank.getItems());
 	}
 	
 	@Test
@@ -121,6 +90,5 @@ public class FakeDatabaseTest {
 		assertEquals(item.getTitle(), itemBlank.getTitle());
 		assertEquals(item.getStatAffected(), itemBlank.getStatAffected());
 	}
-	
 		
 }// end of class
