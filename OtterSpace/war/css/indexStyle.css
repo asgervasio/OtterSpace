@@ -6,7 +6,7 @@
 
 h1 {
   color: #08088A;
-  font-family: "scifi_thin";
+  font-family: "Courier New", Courier, monospace;
   font-size: 500%;
   font-variant: small-caps;
   text-align: center;
@@ -22,12 +22,12 @@ body, html
   align-items: center;
   justify-content: center;
   background-color: black;
-  font-family: "scifi_thin";
+  font-family: "Courier New", Courier, monospace;
 }
 .Button
 {
   background-color: black;
-  font-family: "scifi_thin";
+  font-family: "Courier New", Courier, monospace;
   border: 0;
   color: #08088A;
   font-size: 200%;
@@ -37,4 +37,3 @@ body, html
   margin-left: 5%;
 
 }
-
