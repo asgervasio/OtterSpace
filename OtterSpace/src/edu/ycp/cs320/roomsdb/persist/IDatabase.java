@@ -19,7 +19,6 @@ public interface IDatabase {
   
 	//User-based methods
 	List<User> getAccountInfo(String Username);
-	
 	List<User> addUserToDatabase(String Username, String pass, String email, String first, String last);
 	List<User> DeleteUserFromDatabase(String name, String pswd);
 	List<User> changePassword(String name, String pswd, String newPassword);

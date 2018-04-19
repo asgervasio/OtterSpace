@@ -23,24 +23,24 @@ session_start();
 			<div class = "error"> ${errorMessage}</div>
 		</c:if>
 		<form action = "${pageContext.servletContext.contextPath}/login" method = "post">
-		<div id = "PageName"> Welcome to the OtterSpace Odyssey</div>
-		<div id = "logon">
+		<h1> Welcome to the OtterSpace Odyssey</h1>
+		
 
 		
 			
-					<h1>Username:</h1><br>
-					<input type="text" name="username" size="12" value="${username}" /><br>
+					<div class="label">Username:</div><br>
+					<input class="field" type="text" name="username" size="12" value="${username}" /><br>
 			
-					<h1>Password:</h1><br>
-					<input type="password" name="password" size="12" value="${password}" /><br>
+					<div class="label">Password:</div><br>
+					<input class="field" type="password" name="password" size="12" value="${password}" /><br>
 			
 		
-			<input type = "Submit" name = "submit" value = "login" /> <br>
+			<input type = "Submit" name = "submit" value = "Login" /> <br>
 			<input type="Submit" name="Register" value="Register"> <br>
 
 				<input type="hidden" name="userName" value="user.getUsername">			
 				<input type="hidden" name="sessionid" value="sessionid.getSessionid">
-			</div>
+			
 		</form>
 	</body>
 </html>		

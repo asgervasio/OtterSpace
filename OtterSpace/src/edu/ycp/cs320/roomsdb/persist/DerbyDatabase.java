@@ -6,6 +6,7 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
@@ -527,17 +528,94 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> getAccountInfo(String name) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> getAccountInfo(String username) {
+		return executeTransaction(new Transaction< List<User>>() {
+			@Override
+			public  List<User> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from rooms table
+					stmt = conn.prepareStatement(
+							"select * " +
+							"  from users " +
+							" where  username = ?"
+					);
+					stmt.setString(1, username);
+					
+					 List<User> result = new ArrayList<User>();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						User u = new User();
+						loadUser(u, resultSet, 1);
+						
+						
+						result.add(u);
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("<" + username + "> was not found in the user table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 
 	@Override
-	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<User> addUserToDatabase(String username, String pass, String email, String first, String last) {
+		{
+			return executeTransaction(new Transaction<List<User>>() {
+				@Override
+				public List<User> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+						// user into data base
+					try {
+						stmt = conn.prepareStatement(
+								"insert into user(emailAddress, password, firstname, lastname, Username) "
+								+ "values (?, ?, ?, ?, ?)"
+								);
+						// substitute the title entered by the user for the placeholder in the query
+						
+						stmt.setString(1, username);
+						stmt.setString(2, pass);
+						stmt.setString(3, email);
+						stmt.setString(4, first);
+						stmt.setString(5, last);
+						
+						// execute the query
+						stmt.executeUpdate();
+						
+						System.out.println("New user <"+username+">!");
+						
+						return null;
+					} finally {
+						
+						DBUtil.closeQuietly(stmt);
+						
+						DBUtil.closeQuietly(conn);
+
+					}
+				}
+			});	
 	}
+}
 
 	@Override
 	public List<User> DeleteUserFromDatabase(String name, String pswd) {
@@ -553,15 +631,101 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<User> findAllUsers() {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction< List<User>>() {
+			@Override
+			public  List<User> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from rooms table
+					stmt = conn.prepareStatement(
+							"select * " +
+							"  from users "
+					);
+					
+					 List<User> result = new ArrayList<User>();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						User u = new User();
+						loadUser(u, resultSet, 1);
+						
+						
+						result.add(u);
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("No users were found in the user table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
 	public List<User> findUserByLastName(String lastname) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+			return executeTransaction(new Transaction< List<User>>() {
+				@Override
+				public  List<User> execute(Connection conn) throws SQLException {
+					PreparedStatement stmt = null;
+					ResultSet resultSet = null;
+					
+					try {
+						// retreive all attributes from rooms table
+						stmt = conn.prepareStatement(
+								"select * " +
+								"  from users " +
+								" where  lastname = ?"
+						);
+						stmt.setString(1, lastname);
+						
+						 List<User> result = new ArrayList<User>();
+						
+						resultSet = stmt.executeQuery();
+						
+						// for testing that a result was returned
+						Boolean found = false;
+						
+						while (resultSet.next()) {
+							found = true;
+							
+							// create new Room object
+							// retrieve attributes from resultSet starting with index 1
+							User u = new User();
+							loadUser(u, resultSet, 1);
+							
+							
+							result.add(u);
+						}
+						
+						// check if the id was found
+						if (!found) {
+							System.out.println("<" + lastname + "> was not found in the user table");
+						}
+						
+						return result;
+					} finally {
+						DBUtil.closeQuietly(resultSet);
+						DBUtil.closeQuietly(stmt);
+					}
+				}
+			});
+		}
 
 	@Override
 	public List<User> matchUsernameWithPassword(String Username, String pass) {
