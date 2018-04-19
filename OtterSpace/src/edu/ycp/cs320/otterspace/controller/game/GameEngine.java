@@ -39,29 +39,8 @@ public class GameEngine
 			case "pick":
 				result = take(commandSplit);
 			default:
-				result = invalid();
-			/*case "south":
-			case "s":
-				result = move("south");
-			case "east":
-			case "e":
-				result = move("east");
-			case "west":
-			case "w":
-				result = move("west");
-			case "up":
-			case "u":
-				result = move("up");
-			case "down":
-			case "d":
-				result = move("down");
-			case "move":
-			case "walk":
-				//result = move(commandSplit[1]);
-				 * */
-				 
-		}
-		
+				result = invalid(); 
+		}	
 		return result;
 			
 			
@@ -74,13 +53,20 @@ public class GameEngine
 		
 		if(item.length > 2)
 		{
-			result = "Unknown Movement";
+			result = "Too many arguments";
 		}
 		else
 		{
 			inspectedItem = db.findItemUsingTitle(item[1]);
-			player.addItem(inspectedItem);
-			result = inspectedItem.getTitle() + " picked up";
+			if(inspectedItem == null)
+			{
+				result = "Could not find that item";
+			}
+			else
+			{
+				player.addItem(inspectedItem);
+				result = inspectedItem.getTitle() + " picked up";
+			}
 		}
 		
 		return result;
@@ -89,15 +75,14 @@ public class GameEngine
 	public String inspect(String[] item)
 	{
 		String result = "";
-		Item inspectedItem;
+		Item inspectedItem = db.findItemUsingTitle(item[1]);
 		
 		if(item.length > 2)
 		{
-			result = "Unknown Movement";
+			result = "Too many arguments";
 		}
 		else
 		{
-			inspectedItem = db.findItemUsingTitle(item[1]);
 			result = inspectedItem.getDescription();
 		}
 		
@@ -107,27 +92,25 @@ public class GameEngine
 	public String move(String[] direction)
 	{
 		
-		//Room currentRoom = player.getCurrentRoom();
-		//String destination = currentRoom.getConnection(direction).getTitle();
+		Room currentRoom = player.getCurrentRoom();
+		String destination = currentRoom.getConnection(direction[1]).getTitle();
 		String result = "";
 		Room testRoom;
-		//if (direction == null)
-		//{
+		if (destination == null)
+		{
+			result = "Could not find that room";
+		}
+		else
+		{
+			player.setCurrentRoom(db.findRoomUsingTitle(destination));
+			currentRoom = player.getCurrentRoom();
+			String room = currentRoom.getTitle();
+			String description = currentRoom.getDescription();
+			String items = currentRoom.getItems();
+			result = room + "\n" + description + "\n" + items;
+						
 			
-		//}
-		//else
-		//{
-			//player.setCurrentRoom(db.findRoomUsingTitle(destination));
-			//currentRoom = player.getCurrentRoom();
-			//String room = currentRoom.getTitle();
-			//String description = currentRoom.getDescription();
-			//String items = currentRoom.getItems();
-			//result = room + "\n" + description + "\n" + items;
-			
-			//player.setCurrentRoom(db.findRoomUsingTitle(direction));
-			//result = player.getCurrentRoom().getTitle();
-			//result = direction[1];
-		if(direction.length > 2)
+	/*	if(direction.length > 2)
 		{
 			result = "Unknown Movement";
 		}
@@ -136,7 +119,8 @@ public class GameEngine
 			testRoom = db.findRoomUsingTitle(direction[1]);
 			result = testRoom.getTitle() + "<br /><br />" + testRoom.getDescription() + "<br /><br /> You see the following items on the ground: <br />" + testRoom.getItems();
 		}
-		//}
+		*/
+		}
 		return result;
 	}
 	public String invalid()

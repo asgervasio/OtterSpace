@@ -1,7 +1,8 @@
 body {
-  background-color: black;
+  background-color: rgb(120,120, 120);
   height: 100%;
 }
+
 div {
 	font-family: "Courier New", Courier, monospace;
 	padding-left: 10px;
@@ -11,7 +12,7 @@ div {
 }
 
 input {
-	background-color: #090909;
+  background-color: rgba(10, 10, 10, 0.01);
 	border: 0px;
 	color: #d3d3d3;
 	font-family: "Courier New", Courier, monospace;
@@ -61,7 +62,7 @@ input:focus {
 }
 
 .screen {
-	background-color: #090909;
+	background-color: rgba(10, 10, 10, 0.7);
 	border-radius: 0 0 10px 10px;
 	color: #d3d3d3;
 	height:600px;

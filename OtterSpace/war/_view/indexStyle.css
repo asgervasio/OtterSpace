@@ -5,7 +5,7 @@
 }
 
 h1 {
-  color: #08088A;
+  color: rgb(0, 96, 128);
   font-family: "scifi_thin";
   font-size: 500%;
   font-variant: small-caps;
@@ -14,19 +14,19 @@ h1 {
 
 body, html
 {
-  background-color: black;
+  background-color: rgb(120,120, 120);
   height: 100%;
 }
 .Index{
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: black;
+  background-color: rgba(50,50,50,0.1);
   font-family: "scifi_thin";
 }
 .Button
 {
-  background-color: black;
+  background-color: rgba(50,50,50,0.7);
   font-family: "scifi_thin";
   border: 0;
   color: #08088A;
@@ -37,4 +37,3 @@ body, html
   margin-left: 5%;
 
 }
-
