@@ -111,7 +111,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Item findItemUsingLocation(String location) {
+	public Item findItemUsingLocation(int location) {
 		for (Item item : itemList){
 			if(item.getRoomLocat() == location){
 				return item;

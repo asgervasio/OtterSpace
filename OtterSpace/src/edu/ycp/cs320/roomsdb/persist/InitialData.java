@@ -88,9 +88,9 @@ public class InitialData {
 				item.setItemId(itemId++);				
 				item.setTitle(i.next());
 				item.setDescription(i.next());
-				item.setRoomLocat(i.next());
+				item.setRoomLocat(i.next().codePointAt(0));
 				item.setStatAffected(i.next());
-				item.setStatChangeVal(i.next());
+				item.setStatChangeVal(i.next().codePointAt(0));
 				itemList.add(item);
 			}
 			return itemList;

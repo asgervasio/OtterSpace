@@ -5,8 +5,8 @@ package edu.ycp.cs320.otterspace.controller.game;
 // it will teach you nothing
 
 public class Item {
-	String statAffected, title, description, roomLocat, statChangeVal;
-	int itemId;
+	String statAffected, title, description;
+	int itemId, roomLocat, statChangeVal;
 	
 	public Item(){
 	}
@@ -19,11 +19,11 @@ public class Item {
 		return statAffected;
 	}
 
-	public void setStatChangeVal(String statChangeVal) {
+	public void setStatChangeVal(int statChangeVal) {
 		this.statChangeVal = statChangeVal;
 	}
 	
-	public String getStatChangeVal() {
+	public int getStatChangeVal() {
 		return statChangeVal;
 	}
 
@@ -51,11 +51,11 @@ public class Item {
 		return description;
 	}
 	
-	public void setRoomLocat(String roomLocat) {
+	public void setRoomLocat(int roomLocat) {
 		this.roomLocat = roomLocat;
 	}
 	
-	public String getRoomLocat() {
+	public int getRoomLocat() {
 		return roomLocat;
 	}
 	
