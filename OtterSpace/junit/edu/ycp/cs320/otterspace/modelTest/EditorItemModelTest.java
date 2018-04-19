@@ -38,15 +38,15 @@ public class EditorItemModelTest {
 
 	@Test
 	public void testSetStatChangeVal(){
-		model.setStatChangeVal("25");
-		String answer = "25";
+		model.setStatChangeVal(25);
+		int answer = 25;
 		assertEquals(answer, model.getStatChangeVal());
 	}
 
 	@Test
 	public void testSetRoomLocat(){
-		model.setRoomLocat("A room");
-		String answer = "A room";
+		model.setRoomLocat(4);
+		int answer = 4;
 		assertEquals(answer, model.getRoomLocat());
 	}
 

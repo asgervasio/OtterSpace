@@ -68,8 +68,8 @@ public class FakeDatabaseTest {
 		String itemTitle = "titlePerItem";
 		String itemDescription = "descriptionPerItem";
 		String statAffected = "affected";
-		String statChangeVal = "ChangeVal";
-		String roomLocat = "The Room where nothing breaks (imagination)";
+		int statChangeVal = 12;
+		int roomLocat = 4;
 		
 		itemModel.setTitle(itemTitle);
 		itemModel.setDescription(itemDescription);

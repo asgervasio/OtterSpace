@@ -245,7 +245,7 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	
+*/	
 	public<ResultType> ResultType executeTransaction(Transaction<ResultType> txn) {
 		try {
 			return doExecuteTransaction(txn);
@@ -299,104 +299,150 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
-	private void loadAuthor(Author author, ResultSet resultSet, int index) throws SQLException {
-		author.setAuthorId(resultSet.getInt(index++));
-		author.setLastname(resultSet.getString(index++));
-		author.setFirstname(resultSet.getString(index++));
+	private void loadRoom(Room room, ResultSet resultSet, int index) throws SQLException {
+		room.setRoomId(resultSet.getInt(index++));
+		room.setTitle(resultSet.getString(index++));
+		room.setDescription(resultSet.getString(index++));
+		room.setRequirement(resultSet.getString(index++));
 	}
 	
-	private void loadBook(Book book, ResultSet resultSet, int index) throws SQLException {
-		book.setBookId(resultSet.getInt(index++));
-		book.setAuthorId(resultSet.getInt(index++));
-		book.setTitle(resultSet.getString(index++));
-		book.setIsbn(resultSet.getString(index++));
-		book.setPublished(resultSet.getInt(index++));		
+	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException {
+		item.setItemId(resultSet.getInt(index++));
+		item.setTitle(resultSet.getString(index++));
+		item.setDescription(resultSet.getString(index++));
+		item.setRoomLocat(resultSet.getInt(index++));
+		item.setStatAffected(resultSet.getString(index++));
+		item.setStatChangeVal(resultSet.getInt(index++));
 	}
 	
+	private void loadUser(User user, ResultSet resultSet, int index) throws SQLException {
+		index++;
+		user.setEmail(resultSet.getString(index++));
+		user.setPassword(resultSet.getString(index++));
+		user.setFirstName(resultSet.getString(index++));
+		user.setLastName(resultSet.getString(index++));
+		user.setUsername(resultSet.getString(index++));
+	}
+
 	public void createTables() {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
 				
 				try {
 					stmt1 = conn.prepareStatement(
-						"create table authors (" +
-						"	author_id integer primary key " +
+						"create table rooms (" +
+						"	room_id integer primary key " +
 						"		generated always as identity (start with 1, increment by 1), " +									
-						"	lastname varchar(40)," +
-						"	firstname varchar(40)" +
+						"	title varchar(40)," +
+						"	description varchar(100)" +
+						"	requirement varchar(10)" +
 						")"
 					);	
 					stmt1.executeUpdate();
 					
 					stmt2 = conn.prepareStatement(
-							"create table books (" +
-							"	book_id integer primary key " +
+							"create table items (" +
+							"	item_id integer primary key " +
 							"		generated always as identity (start with 1, increment by 1), " +
-							"	author_id integer constraint author_id references authors, " +
-							"	title varchar(70)," +
-							"	isbn varchar(15)," +
-							"   published integer " +
+							"	roomLocat integer constraint roomLocat references room, " +
+							"	title varchar(40)," +
+							"	description varchar(100)," +
+							"   roomLocat integer " +
+							"	statAff varchar(20)," +
+							"	statChangeVal integer," +
 							")"
 					);
 					stmt2.executeUpdate();
+					
+					stmt3 = conn.prepareStatement(
+							"create table users (" +
+							"   user_id integer primary key " +
+							"       generated always as identity (start with 1, increment by 1), " +							
+							"	emailAddress varchar(40)," +
+							"	password varchar(40)," +
+							"	firstname varchar(40)," +
+							"	lastname varchar(40)," +
+							"	Username varchar(40)," +
+							")"
+							);
+					stmt3.executeUpdate();
 					
 					return true;
 				} finally {
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(stmt3);
 				}
 			}
 		});
 	}
-	
+
 	public void loadInitialData() {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
-				List<Author> authorList;
-				List<Book> bookList;
+				List<Room> roomList;
+				List<Item> itemList;
+				List<User> userList;
 				
 				try {
-					authorList = InitialData.getAuthors();
-					bookList = InitialData.getBooks();
+					roomList = InitialData.getRooms();
+					itemList = InitialData.getItems();
+					userList = InitialData.getUsers();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
 
-				PreparedStatement insertAuthor = null;
-				PreparedStatement insertBook   = null;
+				PreparedStatement insertRoom = null;
+				PreparedStatement insertItem = null;
+				PreparedStatement insertUser = null;
 
 				try {
 					// populate authors table (do authors first, since author_id is foreign key in books table)
-					insertAuthor = conn.prepareStatement("insert into authors (lastname, firstname) values (?, ?)");
-					for (Author author : authorList) {
+					insertRoom = conn.prepareStatement("insert into room (title, description, locked) values (?, ?, ?)");
+					for (Room room : roomList) {
 //						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
-						insertAuthor.setString(1, author.getLastname());
-						insertAuthor.setString(2, author.getFirstname());
-						insertAuthor.addBatch();
+						insertRoom.setString(1, room.getTitle());
+						insertRoom.setString(2, room.getDescription());
+						insertRoom.setString(3, room.getRequirement());
+						insertRoom.addBatch();
 					}
-					insertAuthor.executeBatch();
+					insertRoom.executeBatch();
 					
 					// populate books table (do this after authors table,
 					// since author_id must exist in authors table before inserting book)
-					insertBook = conn.prepareStatement("insert into books (author_id, title, isbn, published) values (?, ?, ?, ?)");
-					for (Book book : bookList) {
+					insertItem = conn.prepareStatement("insert into item (title, description, roomLocat, statAff, statChange) values (?, ?, ?, ?, ?)");
+					for (Item item : itemList) {
 //						insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
-						insertBook.setInt(1, book.getAuthorId());
-						insertBook.setString(2, book.getTitle());
-						insertBook.setString(3, book.getIsbn());
-						insertBook.setInt(4,  book.getPublished());
-						insertBook.addBatch();
+						insertItem.setString(1, item.getTitle());
+						insertItem.setString(2, item.getDescription());
+						insertItem.setInt(3, item.getRoomLocat());
+						insertItem.setString(4,  item.getStatAffected());
+						insertItem.setInt(5, item.getStatChangeVal());
+						insertItem.addBatch();
 					}
-					insertBook.executeBatch();
+					insertItem.executeBatch();
+					
+					insertUser = conn.prepareStatement("insert into user (emailAddress, password, firstname, lastname, Username) values (?, ?, ?, ?, ?)");
+					for (User user : userList) {
+						insertUser.setString(1, user.getEmail());
+						insertUser.setString(2, user.getPassword());
+						insertUser.setString(3, user.getFirstName());
+						insertUser.setString(4, user.getLastName());
+						insertUser.setString(5, user.getUsername());
+						insertUser.addBatch();
+					}
+					insertUser.executeBatch();
 					
 					return true;
 				} finally {
-					DBUtil.closeQuietly(insertBook);
-					DBUtil.closeQuietly(insertAuthor);
+					DBUtil.closeQuietly(insertItem);
+					DBUtil.closeQuietly(insertRoom);
+					DBUtil.closeQuietly(insertUser);
 				}
 			}
 		});
@@ -413,7 +459,7 @@ public class DerbyDatabase implements IDatabase {
 		
 		System.out.println("Success!");
 	}
-*/
+
 
 	@Override
 	public void insertRoom(Room room) {
@@ -428,6 +474,7 @@ public class DerbyDatabase implements IDatabase {
 
 
 	@Override
+	//TODO: Delete this method
 	public Room findRoomUsingLocation(String location) {
 		// TODO Auto-generated method stub
 		return null;
@@ -458,7 +505,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public Item findItemUsingLocation(String location) {
+	public Item findItemUsingLocation(int location) {
 		// TODO Auto-generated method stub
 		return null;
 	}

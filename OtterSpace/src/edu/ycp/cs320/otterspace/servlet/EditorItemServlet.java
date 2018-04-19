@@ -41,8 +41,8 @@ public class EditorItemServlet extends HttpServlet{
 			String title = req.getParameter("title");
 			String description = req.getParameter("description");
 			String statAffected = req.getParameter("statAffected");
-			String statChangeVal = req.getParameter("statChangeVal");
-			String roomLocat = req.getParameter("roomLocat");
+			int statChangeVal = req.getIntHeader("statChangeVal");
+			int roomLocat = req.getIntHeader("roomLocat");
 			
 			model.setTitle(title);
 			model.setDescription(description);

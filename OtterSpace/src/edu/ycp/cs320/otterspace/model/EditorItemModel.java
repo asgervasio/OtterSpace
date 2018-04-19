@@ -1,8 +1,8 @@
 package edu.ycp.cs320.otterspace.model;
 
 public class EditorItemModel {
-	String statAffected, title, description, roomLocat, statChangeVal;
-	int itemId;
+	String statAffected, title, description;
+	int itemId, roomLocat, statChangeVal;
 	
 	// Constructor for EditorItemModel
 	public EditorItemModel(){
@@ -17,11 +17,11 @@ public class EditorItemModel {
 		return statAffected;
 	}
 
-	public void setStatChangeVal(String statChangeVal) {
+	public void setStatChangeVal(int statChangeVal) {
 		this.statChangeVal = statChangeVal;
 	}
 	
-	public String getStatChangeVal() {
+	public int getStatChangeVal() {
 		return statChangeVal;
 	}
 
@@ -41,11 +41,11 @@ public class EditorItemModel {
 		return description;
 	}
 	
-	public void setRoomLocat(String roomLocat) {
+	public void setRoomLocat(int roomLocat) {
 		this.roomLocat = roomLocat;
 	}
 	
-	public String getRoomLocat() {
+	public int getRoomLocat() {
 		return roomLocat;
 	}
 	

@@ -23,8 +23,8 @@ public class EditorItemControllerTest {
 		model.setTitle("title");
 		model.setDescription("description");
 		model.setStatAffected("statAffected");
-		model.setStatChangeVal("statChange");
-		model.setRoomLocat("roomLocal");
+		model.setStatChangeVal(12);
+		model.setRoomLocat(4);
 	}
 
 	// Testing
