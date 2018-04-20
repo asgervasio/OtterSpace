@@ -558,8 +558,7 @@ public class DerbyDatabase implements IDatabase {
 						// retrieve attributes from resultSet starting with index 1
 						User u = new User();
 						loadUser(u, resultSet, 1);
-						
-						
+					
 						result.add(u);
 					}
 					
@@ -648,10 +647,12 @@ public class DerbyDatabase implements IDatabase {
 						// retrieve attributes from resultSet starting with index 1
 					
 						loadUser(u, resultSet, 1);
-						
-		
-		
-					
+						System.out.println("User pulled in db.changeInfo() ");
+						System.out.println(u.getEmail());
+						System.out.println(u.getFirstName());
+						System.out.println(u.getLastName());
+						System.out.println(u.getPassword());
+						System.out.println(u.getUsername());
 					
 					stmt2 = conn.prepareStatement(
 							"update user"

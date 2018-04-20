@@ -51,7 +51,7 @@ public class UserController
 	*/
 	
 	public void changeUserInfo(String Email, String username, String pswd, String newPassword)  {
-		 db.changeInfo( Email,  username,  pswd,  newPassword);
+		 db.changeInfo(Email,  username,  pswd,  newPassword);
 	}
 	
 	//adding a user to the database 

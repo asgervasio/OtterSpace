@@ -51,9 +51,16 @@ public class AccountServlet extends HttpServlet{
 		
 		UserController controller = new UserController();
 		controller.setModel(model);
-		model.setSessionid(req.getSession().toString());
+		model.setSessionid(session.getId());
+		System.out.println("Session info:");
+		System.out.println(req.getSession().getAttribute("username"));
+		System.out.println(req.getSession().getAttribute("firstName"));
+		System.out.println(req.getSession().getAttribute("lastName"));
+		System.out.println(req.getSession().getAttribute("emailAddress"));
+		System.out.println(session.getId());
 		
-		model.setUserAccountInformation(session.getAttribute("username").toString(), session.getAttribute("FirstName").toString(), session.getAttribute("LastName").toString(), session.getAttribute("emailAddress").toString(), session.getAttribute("password").toString());
+
+		model.setUserAccountInformation(req.getSession().getAttribute("username").toString(), req.getSession().getAttribute("firstName").toString(), req.getSession().getAttribute("lastName").toString(), req.getSession().getAttribute("emailAddress").toString(), session.getAttribute("password").toString());
 		String oldpass = session.getAttribute("password").toString();
 		
 		req.setAttribute("username", session.getAttribute("username"));
