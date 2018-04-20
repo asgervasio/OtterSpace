@@ -60,6 +60,7 @@ public class LoginServlet extends HttpServlet {
 			
 			user = g.matchUserNameWithPassword(username, password);
 			
+			
 			if(user != null && user.size()>0) {
 				System.out.println("if(user != null && user.size()>0) { = true");
 				User u = user.get(0);
@@ -67,16 +68,17 @@ public class LoginServlet extends HttpServlet {
 				//Authenticate the user
 				if(UserController.authenticate(u, password) == true){
 					System.out.println("UserController.authenticate(u, password) == true = true");
-					//HttpSession session = req.getSession();
-					//session.setAttribute("username", u.getUsername());
-					//session.setAttribute("firstName", u.getFirstName());
-					//session.setAttribute("lastName", u.getLastName());
-					//session.setAttribute("emailAddress", u.getEmail());
-					System.out.println("Session info");
+					HttpSession session = req.getSession();
+					session.setAttribute("username", u.getUsername());
+					session.setAttribute("firstName", u.getFirstName());
+					session.setAttribute("lastName", u.getLastName());
+					session.setAttribute("emailAddress", u.getEmail());
+					System.out.println("Session info:");
 					System.out.println(req.getSession().getAttribute("username"));
 					System.out.println(req.getSession().getAttribute("fristName"));
 					System.out.println(req.getSession().getAttribute("lastName"));
 					System.out.println(req.getSession().getAttribute("emailAddress"));
+					System.out.println(req.getSession().getAttribute("sessionid"));
 					model.setSessionid(req.getSession().toString());
 					//If user is an owner send them to a page of their restaurants
 					

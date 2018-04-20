@@ -3,6 +3,10 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
+<?php
+session_start();
+?>
+
 <html>
 	<head>
 	<title> Login </title>
@@ -13,8 +17,15 @@
 
 	</head>
 	
-	<body>			
-	
+	<body>	
+			
+	</php
+	$_SESSION["username"];
+	$_SESSION["firstName"];
+	$_SESSION["lastName"];
+	$_SESSION["sessionid"];
+	$_SESSION["emailAddress"];
+	?>
 	
 		<c:if test="${! empty errorMessage }">
 			<div class = "error"> ${errorMessage}</div>
@@ -32,7 +43,8 @@
 					<input class="field" type="password" name="password" size="12" value="${password}" /></div><br>
 			
 		
-			<input type = "Submit" name = "submit" value = "Login" /> 
+			<input type = "Submit" name = "submit" value = "Login" /> </form>
+			<form action="${pageContext.servletContext.contextPath}/register" method="get">
 			<input type="Submit" name="register" value="Register"> <br>
 
 				<input type="hidden" name="userName" value="user.getUsername">			

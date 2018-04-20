@@ -14,7 +14,7 @@ import edu.ycp.cs320.otterspace.controller.*;
 import edu.ycp.cs320.otterspace.model.*;
 
 
-public class RegisterServlet extends HttpServlet{
+public class AccountServlet extends HttpServlet{
 	private static final long serialVersionUID = 1L;
 	
 	

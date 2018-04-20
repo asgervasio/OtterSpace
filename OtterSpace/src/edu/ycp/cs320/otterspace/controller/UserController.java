@@ -44,9 +44,9 @@ public class UserController
 	}
 	
 	//adding a user to the database 
-	public void addUserToDatabase(String userName, String passWord, String email, String type, String firstName, String lastname) {
+	public void addUserToDatabase(String userName, String passWord, String email, String firstName, String lastName) {
 		
-		db.addUserToDatabase(userName, passWord, email, type, firstName);
+		db.addUserToDatabase(userName, passWord, email, firstName, lastName);
 	}
 	
 	//need to work out how to change this to archive user, not delete 

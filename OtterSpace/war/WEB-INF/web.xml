@@ -23,8 +23,12 @@
     <servlet-class>edu.ycp.cs320.otterspace.servlet.GameServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>EditorRoomServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.otterspace.servlet.EditorRoomServlet</servlet-class>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.otterspace.servlet.AccountServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>PlayersServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.otterspace.servlet.PlayersServlet</servlet-class>
   </servlet>
   <servlet>
     <servlet-name>EditorItemServlet</servlet-name>
@@ -54,7 +58,15 @@
     <url-pattern>/login</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>LoginServlet</servlet-name>
+    <servlet-name>AccountServlet</servlet-name>
+    <url-pattern>/account</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PlayersServlet</servlet-name>
+    <url-pattern>/players</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>RegisterServlet</servlet-name>
     <url-pattern>/register</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
