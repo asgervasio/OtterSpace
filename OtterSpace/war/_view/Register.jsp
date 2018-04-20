@@ -9,16 +9,14 @@
       </head>
 
 <form action="${pageContext.servletContext.contextPath}/register" method="post">
-UserName: <input type="text" name="username"><br>
-Password: <input type="password" name="password"><br>
-Confirm Password: <input type="password" name="passconfirm"><br>
+User Name: <input type="text" name="username"><br>
+Password Name: <input type="text" name="password"><br>
+<!--Employee Number: <input type ="text" name="UserID"><br>-->
 First Name: <input type="text" name="FirstName"><br>
 Last Name: <input type="text" name="LastName"><br>
 E-Mail: <input type="text" name="Email"><br>
 <td><input type = "Submit" name = "submit" value = "Submit" /> </td>
-</form>
-<form action="${pageContext.servletContext.contextPath}/login" method="get">
-<td><input type = "Submit" name = "login" value = "Back to Login" /> </td>
+<td><input type = "Back to Login" name = "login" value = "Login" /> </td>
 </form>
 
 
