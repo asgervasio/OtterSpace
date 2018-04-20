@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
+import edu.ycp.cs320.otterspace.controller.game.Pair;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.User;
 
@@ -26,10 +27,7 @@ public class InitialData {
 				room.setRoomId(roomId++);				
 				room.setTitle(i.next().toLowerCase());
 				room.setDescription(i.next());
-				room.setItems(i.next());
-				room.setConnectionTemp(i.next());
 				room.setRequirement(stringToBoolean(i.next()));
-				room.setLocation(i.next());
 				roomList.add(room);
 			}
 			return roomList;
@@ -72,7 +70,6 @@ public class InitialData {
 	
 
   public static List<Item> getItems() throws IOException {
-
 		List<Item> itemList = new ArrayList<Item>();
 		ReadCSV readRooms = new ReadCSV("items.csv");
 		try {
@@ -88,9 +85,9 @@ public class InitialData {
 				item.setItemId(itemId++);				
 				item.setTitle(i.next());
 				item.setDescription(i.next());
-				item.setRoomLocat(i.next().codePointAt(0));
+				item.setRoomLocat(Integer.parseInt(i.next()));
 				item.setStatAffected(i.next());
-				item.setStatChangeVal(i.next().codePointAt(0));
+				item.setStatChangeVal(Integer.parseInt(i.next()));
 				itemList.add(item);
 			}
 			return itemList;
@@ -98,6 +95,27 @@ public class InitialData {
 			readRooms.close();
 		}
 	}
+  
+  public static List<Pair<String, Integer>> getConnections() throws IOException {
+	  List<Pair<String, Integer>> connectList = new ArrayList<Pair<String, Integer>>();
+	  ReadCSV readConnection = new ReadCSV("connections.csv");
+	  try {
+		  while (true) {
+			  List<String> tuple = readConnection.next();
+			  if (tuple == null)
+				  break;
+			  
+			  Iterator<String> i = tuple.iterator();
+			  Pair<String, Integer> connect = new Pair();
+			  connect.setLeft(i.next());
+			  connect.setRight(Integer.parseInt(i.next()));
+			  connectList.add(connect);
+		  }
+		  return connectList;
+	  } finally {
+		  readConnection.close();
+	  }
+  }
   
   private static boolean stringToBoolean(String x){
 	  if(x.equals("true"))

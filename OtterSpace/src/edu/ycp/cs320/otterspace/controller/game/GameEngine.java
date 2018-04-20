@@ -1,6 +1,8 @@
 package edu.ycp.cs320.otterspace.controller.game;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletResponse;
@@ -32,18 +34,42 @@ public class GameEngine
 			case "walk":
 			case "head":
 				result = move(commandSplit);
+				break;
 			case "look":
 			case "inspect":
 				result = inspect(commandSplit);
+				break;
 			case "take":
 			case "pick":
 				result = take(commandSplit);
+				break;
+			case "inventory":
+			case "i":
+				result = displayInventory();
+				break;
+			case "start":
+			case "s":
+				result = initializePlayer();
+				break;
 			default:
 				result = invalid(); 
+				break;
 		}	
 		return result;
 			
 			
+	}
+	
+	public String displayInventory()
+	{
+		String result = "Your inventory contains: <br />";
+		List<Item> inventory = new ArrayList<Item>();
+		inventory = player.getInventory();
+		for(int i = 0; i < inventory.size(); i++)
+		{
+			result = result + inventory.get(i).getTitle() + "<br />";
+		}
+		return result;
 	}
 	
 	public String take(String[] item)
@@ -88,38 +114,27 @@ public class GameEngine
 		
 		return result;
 	}
+
 	
 	public String move(String[] direction)
 	{
 		
 		Room currentRoom = player.getCurrentRoom();
-		String destination = currentRoom.getConnection(direction[1]).getTitle();
+		int destinationRoomId = (int)db.findRoomIdFromConnection(direction[1]);
+		System.out.println("destination " + destinationRoomId);
 		String result = "";
 		Room testRoom;
-		if (destination == null)
+		
+		if (destinationRoomId == 0)
 		{
 			result = "Could not find that room";
 		}
 		else
 		{
-			player.setCurrentRoom(db.findRoomUsingTitle(destination));
-			currentRoom = player.getCurrentRoom();
-			String room = currentRoom.getTitle();
-			String description = currentRoom.getDescription();
-			String items = currentRoom.getItems();
-			result = room + "\n" + description + "\n" + items;
+			player.setCurrentRoom(db.findRoomUsingRoomId(destinationRoomId));
+			result = outputRoomData();
 						
 			
-	/*	if(direction.length > 2)
-		{
-			result = "Unknown Movement";
-		}
-		else
-		{
-			testRoom = db.findRoomUsingTitle(direction[1]);
-			result = testRoom.getTitle() + "<br /><br />" + testRoom.getDescription() + "<br /><br /> You see the following items on the ground: <br />" + testRoom.getItems();
-		}
-		*/
 		}
 		return result;
 	}
@@ -129,6 +144,38 @@ public class GameEngine
 		result = "Invalid Command";
 		return result;
 
+	}
+	
+	public String initializePlayer()
+	{
+		String result = "";
+		player.setCurrentRoom(db.findRoomUsingRoomId(1));
+		//List<Item> inventory = db.findItemsUsingLocation(1);
+		
+		//for(int i = 0; i < inventory.size(); i++)
+		//{
+		//	player.addItem(inventory.get(i));
+		//}
+		
+
+		result = outputRoomData();
+		return result;
+	}
+	
+	public String outputRoomData()
+	{
+		String result = "";
+		Room currentRoom = player.getCurrentRoom();
+		String items = "";
+		List<Item> itemList = db.findItemsUsingLocation(currentRoom.getRoomId());		
+		for(int i = 0; i < itemList.size(); i++)
+		{
+			items = items + itemList.get(i).getTitle() + "<br /> ";
+		}
+		result = ("You are in " + currentRoom.getTitle() + "<br /><br />" + currentRoom.getDescription() 
+			+ "<br /><br /> You see the following items on the ground: <br />" + items);
+		
+		return result;
 	}
 
 }

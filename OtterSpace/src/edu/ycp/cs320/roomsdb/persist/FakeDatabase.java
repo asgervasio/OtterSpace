@@ -44,9 +44,6 @@ public class FakeDatabase implements IDatabase {
 		newRoom.setRoomId(roomId);
 		newRoom.setTitle(room.getTitle());
 		newRoom.setDescription(room.getDescription());
-		newRoom.setItems(room.getItems());
-		newRoom.setConnectionTemp(room.getConnectionTemp());
-		newRoom.setLocation(room.getLocation());
 		newRoom.setRequirement(room.getRequirement());
 		roomList.add(newRoom);
 		System.out.println("Stored new room!!");	
@@ -109,13 +106,14 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Item findItemUsingLocation(int location) {
+	public List<Item> findItemsUsingLocation(int location) {
+		List<Item> itemList = new ArrayList<Item>();
 		for (Item item : itemList){
 			if(item.getRoomLocat() == location){
-				return item;
+				itemList.add(item);
 			}
 		}
-		return null;
+		return itemList;
 	}
 
 	@Override

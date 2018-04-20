@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
+import edu.ycp.cs320.otterspace.controller.game.Pair;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.User;
 import edu.ycp.cs320.sqldemo.DBUtil;
@@ -73,7 +74,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	private Connection connect() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
+		Connection conn = DriverManager.getConnection("jdbc:derby:database.db;create=true");
 		
 		// Set autocommit to false to allow execution of
 		// multiple queries/statements as part of the same transaction.
@@ -114,33 +115,47 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+				PreparedStatement stmt5 = null;
 				
 				try {
-					stmt1 = conn.prepareStatement(
-						"create table rooms (" +
-						"	room_id integer primary key " +
-						"		generated always as identity (start with 1, increment by 1), " +									
-						"	title varchar(40)," +
-						"	description varchar(100)" +
-						"	requirement varchar(10)" +
-						")"
-					);	
-					stmt1.executeUpdate();
-					
-					stmt2 = conn.prepareStatement(
-							"create table items (" +
-							"	item_id integer primary key " +
-							"		generated always as identity (start with 1, increment by 1), " +
-							"	roomLocat integer constraint roomLocat references room, " +
+					try {
+						stmt1 = conn.prepareStatement(
+							"create table rooms (" +
+							"	room_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +									
 							"	title varchar(40)," +
 							"	description varchar(100)," +
-							"   roomLocat integer " +
+							"	requirement varchar(10)" +
+							")"
+						);	
+						stmt1.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					
+					try {
+					stmt2 = conn.prepareStatement(
+							"create table items (" +
+							"   item_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +
+							"	title varchar(40)," +
+							"	description varchar(100)," +
+							"	roomLocat integer,"	+
 							"	statAff varchar(20)," +
-							"	statChangeVal integer," +
+							"	statChangeVal integer" +
 							")"
 					);
 					stmt2.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}
 					
+					try {
 					stmt3 = conn.prepareStatement(
 							"create table users (" +
 							"   user_id integer primary key " +
@@ -149,16 +164,57 @@ public class DerbyDatabase implements IDatabase {
 							"	password varchar(40)," +
 							"	firstname varchar(40)," +
 							"	lastname varchar(40)," +
-							"	Username varchar(40)," +
+							"	Username varchar(40)" +
 							")"
 							);
 					stmt3.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}
+
+					try {
+					stmt4 = conn.prepareStatement(
+							"create table connections (" +
+							"   connection_id integer primary key " +
+							"       generated always as identity (start with 1, increment by 1), " +
+							"   connectionDirection varchar(40)," +
+							"   roomID integer" +
+							")"
+							);
+					
+					stmt4.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}					
+					
+					try {
+					stmt5 = conn.prepareStatement(
+							"create table roomConnections (" +
+							"	room_id integer," +
+							"	connection_id integer," +
+							"   foreign key (room_id) references rooms(room_id), " +
+							"   foreign key (connection_id) references connections(connection_id) " +
+							")"
+							);
+					stmt5.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}
 					
 					return true;
+					
 				} finally {
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
+					DBUtil.closeQuietly(stmt4);
+					DBUtil.closeQuietly(stmt5);
 				}
 			}
 		});
@@ -171,11 +227,13 @@ public class DerbyDatabase implements IDatabase {
 				List<Room> roomList;
 				List<Item> itemList;
 				List<User> userList;
+				List<Pair<String, Integer>> connectionList;
 				
 				try {
 					roomList = InitialData.getRooms();
 					itemList = InitialData.getItems();
 					userList = InitialData.getUsers();
+					connectionList = InitialData.getConnections();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -183,12 +241,11 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertRoom = null;
 				PreparedStatement insertItem = null;
 				PreparedStatement insertUser = null;
+				PreparedStatement insertConnection = null;
 
 				try {
-					// populate authors table (do authors first, since author_id is foreign key in books table)
-					insertRoom = conn.prepareStatement("insert into room (title, description, locked) values (?, ?, ?)");
+					insertRoom = conn.prepareStatement("insert into rooms (title, description, requirement) values (?, ?, ?)");
 					for (Room room : roomList) {
-//						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
 						insertRoom.setString(1, room.getTitle());
 						insertRoom.setString(2, room.getDescription());
 						insertRoom.setString(3, room.getRequirement().toString());
@@ -196,11 +253,8 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertRoom.executeBatch();
 					
-					// populate books table (do this after authors table,
-					// since author_id must exist in authors table before inserting book)
-					insertItem = conn.prepareStatement("insert into item (title, description, roomLocat, statAff, statChange) values (?, ?, ?, ?, ?)");
+					insertItem = conn.prepareStatement("insert into items (title, description, roomLocat, statAff, statChangeVal) values (?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
-//						insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
 						insertItem.setString(1, item.getTitle());
 						insertItem.setString(2, item.getDescription());
 						insertItem.setInt(3, item.getRoomLocat());
@@ -210,7 +264,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertItem.executeBatch();
 					
-					insertUser = conn.prepareStatement("insert into user (emailAddress, password, firstname, lastname, Username) values (?, ?, ?, ?, ?)");
+					insertUser = conn.prepareStatement("insert into users (emailAddress, password, firstname, lastname, Username) values (?, ?, ?, ?, ?)");
 					for (User user : userList) {
 						insertUser.setString(1, user.getEmail());
 						insertUser.setString(2, user.getPassword());
@@ -221,6 +275,13 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertUser.executeBatch();
 					
+					insertConnection = conn.prepareStatement("insert into connections (connectionDirection, roomID) values (?, ?)");
+					for (Pair<String, Integer> connect : connectionList){
+						insertConnection.setString(1, connect.getLeft());
+						insertConnection.setInt(2, connect.getRight());
+						insertConnection.addBatch();
+					}
+					insertConnection.executeBatch();
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertItem);
@@ -234,6 +295,7 @@ public class DerbyDatabase implements IDatabase {
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
+		
 		DerbyDatabase db = new DerbyDatabase();
 		db.createTables();
 		
@@ -250,10 +312,10 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Room execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
-					// inserting the author_id, title, ISBN, published into database
+					// inserting the title description, and locked into the database
 				try {
 					stmt = conn.prepareStatement(
-							"insert into rooms (title, description, locked) "
+							"insert into rooms (title, description, requirement) "
 							+ "values (?, ?, ?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
@@ -265,7 +327,7 @@ public class DerbyDatabase implements IDatabase {
 					// execute the query
 					stmt.executeUpdate();
 					
-					System.out.println("Stored new book!!");
+					System.out.println("Stored new room!!");
 					
 					return null;
 				} finally {
@@ -329,6 +391,54 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
+	@Override
+	public Integer findRoomIdFromConnection(String connection) 
+	{
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from rooms table
+					stmt = conn.prepareStatement(
+							"select connections.roomID " +
+							"  from connections " +
+							" where  connections.connectionDirection = ?"
+					);
+					stmt.setString(1, connection);
+					
+					Integer result = 0;
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						result = resultSet.getInt(1);
+
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("<" + connection + "> was not found in the connections table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
 
 
 	@Override
@@ -345,7 +455,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 							"select rooms.* " +
 							"  from rooms " +
-							" where  rooms.id = ?"
+							" where  rooms.room_id = ?"
 					);
 					stmt.setInt(1, roomId);
 					
@@ -392,15 +502,15 @@ public class DerbyDatabase implements IDatabase {
 					// inserting the title, description, statAffected, statChangeVal, and roomLocat into database
 				try {
 					stmt = conn.prepareStatement(
-							"insert into items(title, description, statAffected, statChangeVal, roomLocat) "
+							"insert into items(title, description, roomLocat, statAff, statChangeVal) "
 							+ "values (?, ?, ?, ?, ?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
 					stmt.setString(1, item.getTitle());
 					stmt.setString(2, item.getDescription());
-					stmt.setString(3, item.getStatAffected());
-					stmt.setInt(4, item.getStatChangeVal());
-					stmt.setInt(5, item.getRoomLocat());
+					stmt.setInt(3, item.getRoomLocat());
+					stmt.setString(4, item.getStatAffected());
+					stmt.setInt(5, item.getStatChangeVal());
 					
 					// execute the query
 					stmt.executeUpdate();
@@ -452,7 +562,6 @@ public class DerbyDatabase implements IDatabase {
 						Item item = new Item();
 						loadItem(item, resultSet, 1);
 						
-						
 						result = item;
 					}
 					
@@ -484,7 +593,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 							"select items.* " +
 							"  from items " +
-							" where  items.id = ?"
+							" where  items.item_id = ?"
 					);
 					stmt.setInt(1, itemId);
 					
@@ -520,11 +629,61 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
+	
 
 	@Override
-	public Item findItemUsingLocation(int location) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Item> findItemsUsingLocation(int locationId) 
+	{
+		return executeTransaction(new Transaction<List<Item>>() {
+			@Override
+			public List<Item> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from items tables
+					stmt = conn.prepareStatement(
+							"select items.* " +
+							"  from items " +
+							" where  items.roomLocat = ?"
+					);
+					stmt.setInt(1, locationId);
+					
+					List<Item> result = new ArrayList<Item>();
+
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new item object
+						// retrieve attributes from resultSet starting with index 1
+						Item item = new Item();
+						loadItem(item, resultSet, 1);
+						
+						
+						result.add(item);
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("<" + locationId + "> was not found in the item table");
+
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+
 	}
 
 	@Override

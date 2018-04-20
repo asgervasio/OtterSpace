@@ -1,11 +1,16 @@
 package edu.ycp.cs320.otterspace.controller.game;
 
+import java.util.ArrayList;
 import java.util.List;
+
+import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
+import edu.ycp.cs320.roomsdb.persist.IDatabase;
 
 public class Player 
 {
 	Room currentRoom;
-	List<Item> inventory;
+	List<Item> inventory = new ArrayList<Item>();
+	IDatabase db = DatabaseProvider.getInstance();	
 	
 	public void setCurrentRoom(Room room)
 	{
@@ -25,6 +30,7 @@ public class Player
 	public void addItem(Item item)
 	{
 		inventory.add(item);
+		System.out.println(inventory.size());
 	}
 	
 	public boolean inventoryContains(Item item)
@@ -38,5 +44,6 @@ public class Player
 			return false;
 		}
 	}
+	
 
 }

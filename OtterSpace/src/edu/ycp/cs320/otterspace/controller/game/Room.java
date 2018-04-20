@@ -1,8 +1,9 @@
 
 package edu.ycp.cs320.otterspace.controller.game;
 
-import java.awt.Color;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Set;
 
 //This is only used as a stand-in for the real room class
 //Do not try to create or learn about items from this class,
@@ -10,9 +11,10 @@ import java.util.HashMap;
 
 public class Room {
 	int roomId;
-	String title, description, connectionTemp, location, itemList;
+	String title, description;
 	boolean requirement;
-	HashMap<String,Room> connections = new HashMap<String,Room>();
+	//               Key     Value
+	private HashMap<String, Integer> connections;
 	
 	public Room(){
 	}
@@ -48,41 +50,28 @@ public class Room {
 	public Boolean getRequirement(){
 		return requirement;
 	}
-	
-	public void setConnectionTemp(String connections){
-		this.connectionTemp = connections;		
-	}
-	
-	public String getConnectionTemp()
-	{
-		return connectionTemp;
-	}
 		
-	public void setLocation(String location){
-		this.location = location;		
+	public void setConnections(HashMap<String, Integer> connections){
+		this.connections = connections;
 	}
 	
-	public String getLocation(){
-		return location;
+	public Integer getConnectionID(String direction){
+		Integer id = connections.get(direction);
+		return id;
 	}
 	
-	public void setItems(String itemList){
-		this.itemList = itemList;		
+	public Set getConnections(){
+		return connections.entrySet();
 	}
 	
-	public String getItems()
-	{
-		return itemList;
+	public String getConnectionDirection(Integer id){
+		String returnVal = null;
+		Set<String> set = connections.keySet();
+		for(String name : set){
+			if (connections.get(name) == id)
+				returnVal = name;
+		}
+		return returnVal;
 	}
 	
-	public Room getConnection(String key)
-	{
-		return connections.get(key);
-	}
-	
-	public void setConnection(String key, Room room)
-	{
-		connections.put(key, room);
-	}
-	
-}
+}// end of room class

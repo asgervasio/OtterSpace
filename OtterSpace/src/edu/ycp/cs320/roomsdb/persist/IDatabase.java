@@ -15,7 +15,9 @@ public interface IDatabase {
 	public Item insertItem(Item item);
 	public Item findItemUsingTitle(String title);
 	public Item findItemUsingItemId(int itemId);
-	public Item findItemUsingLocation(int location);
+	public List<Item> findItemsUsingLocation(int location);
+	public Integer findRoomIdFromConnection(String connection);
+
   
 	//User-based methods
 	List<User> getAccountInfo(String Username);
