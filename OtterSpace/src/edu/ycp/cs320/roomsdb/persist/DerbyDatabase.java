@@ -74,7 +74,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	private Connection connect() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:derby:test.db;create=true");
+		Connection conn = DriverManager.getConnection("jdbc:derby:H:/mydatabase.db;create=true");
 		
 		// Set autocommit to false to allow execution of
 		// multiple queries/statements as part of the same transaction.
@@ -92,9 +92,9 @@ public class DerbyDatabase implements IDatabase {
 	
 	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException {
 		item.setItemId(resultSet.getInt(index++));
+		item.setRoomLocat(resultSet.getInt(index++));
 		item.setTitle(resultSet.getString(index++));
 		item.setDescription(resultSet.getString(index++));
-		item.setRoomLocat(resultSet.getInt(index++));
 		item.setStatAffected(resultSet.getString(index++));
 		item.setStatChangeVal(resultSet.getInt(index++));
 	}
@@ -119,31 +119,43 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt5 = null;
 				
 				try {
-					stmt1 = conn.prepareStatement(
-						"create table rooms (" +
-						"	room_id integer primary key " +
-						"		generated always as identity (start with 1, increment by 1), " +									
-						"	title varchar(40)," +
-						"	description varchar(100)" +
-						"	requirement varchar(10)" +
-						")"
-					);	
-					stmt1.executeUpdate();
-					
-					stmt2 = conn.prepareStatement(
-							"create table items (" +
-							"	item_id integer primary key " +
-							"		generated always as identity (start with 1, increment by 1), " +
-							"	roomLocat integer constraint roomLocat references room, " +
+					try {
+						stmt1 = conn.prepareStatement(
+							"create table rooms (" +
+							"	room_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +									
 							"	title varchar(40)," +
 							"	description varchar(100)," +
-							"   roomLocat integer " +
+							"	requirement varchar(10)" +
+							")"
+						);	
+						stmt1.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					
+					try {
+					stmt2 = conn.prepareStatement(
+							"create table items (" +
+							"   item_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +
+							"	title varchar(40)," +
+							"	description varchar(100)," +
+							"	roomLocat integer,"	+
 							"	statAff varchar(20)," +
-							"	statChangeVal integer," +
+							"	statChangeVal integer" +
 							")"
 					);
 					stmt2.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}
 					
+					try {
 					stmt3 = conn.prepareStatement(
 							"create table users (" +
 							"   user_id integer primary key " +
@@ -152,30 +164,51 @@ public class DerbyDatabase implements IDatabase {
 							"	password varchar(40)," +
 							"	firstname varchar(40)," +
 							"	lastname varchar(40)," +
-							"	Username varchar(40)," +
+							"	Username varchar(40)" +
 							")"
 							);
 					stmt3.executeUpdate();
-					
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}
+
+					try {
 					stmt4 = conn.prepareStatement(
 							"create table connections (" +
 							"   connection_id integer primary key " +
 							"       generated always as identity (start with 1, increment by 1), " +
-							"   connectionDirection varchar(40)" +
+							"   connectionDirection varchar(40)," +
 							"   roomID integer" +
 							")"
 							);
 					
 					stmt4.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}					
 					
+					try {
 					stmt5 = conn.prepareStatement(
 							"create table roomConnections (" +
-							"   room_id integer constraint room_id references rooms, " +
-							"   connection_id integer contraint connection_id references connections " +
+							"	room_id integer," +
+							"	connection_id integer," +
+							"   foreign key (room_id) references rooms(room_id), " +
+							"   foreign key (connection_id) references connections(connection_id) " +
 							")"
 							);
 					stmt5.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}
+					
 					return true;
+					
 				} finally {
 					DBUtil.closeQuietly(stmt1);
 					DBUtil.closeQuietly(stmt2);
@@ -211,10 +244,8 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertConnection = null;
 
 				try {
-					// populate authors table (do authors first, since author_id is foreign key in books table)
-					insertRoom = conn.prepareStatement("insert into room (title, description, locked) values (?, ?, ?)");
+					insertRoom = conn.prepareStatement("insert into rooms (title, description, requirement) values (?, ?, ?)");
 					for (Room room : roomList) {
-//						insertAuthor.setInt(1, author.getAuthorId());	// auto-generated primary key, don't insert this
 						insertRoom.setString(1, room.getTitle());
 						insertRoom.setString(2, room.getDescription());
 						insertRoom.setString(3, room.getRequirement().toString());
@@ -222,11 +253,8 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertRoom.executeBatch();
 					
-					// populate books table (do this after authors table,
-					// since author_id must exist in authors table before inserting book)
-					insertItem = conn.prepareStatement("insert into item (title, description, roomLocat, statAff, statChange) values (?, ?, ?, ?, ?)");
+					insertItem = conn.prepareStatement("insert into items (title, description, roomLocat, statAff, statChangeVal) values (?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
-//						insertBook.setInt(1, book.getBookId());		// auto-generated primary key, don't insert this
 						insertItem.setString(1, item.getTitle());
 						insertItem.setString(2, item.getDescription());
 						insertItem.setInt(3, item.getRoomLocat());
@@ -236,7 +264,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertItem.executeBatch();
 					
-					insertUser = conn.prepareStatement("insert into user (emailAddress, password, firstname, lastname, Username) values (?, ?, ?, ?, ?)");
+					insertUser = conn.prepareStatement("insert into users (emailAddress, password, firstname, lastname, Username) values (?, ?, ?, ?, ?)");
 					for (User user : userList) {
 						insertUser.setString(1, user.getEmail());
 						insertUser.setString(2, user.getPassword());
@@ -247,7 +275,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertUser.executeBatch();
 					
-					insertConnection = conn.prepareStatement("insert into connections (connectionDirection, roomID values (?, ?)");
+					insertConnection = conn.prepareStatement("insert into connections (connectionDirection, roomID) values (?, ?)");
 					for (Pair<String, Integer> connect : connectionList){
 						insertConnection.setString(1, connect.getLeft());
 						insertConnection.setInt(2, connect.getRight());
@@ -267,6 +295,7 @@ public class DerbyDatabase implements IDatabase {
 	// The main method creates the database tables and loads the initial data.
 	public static void main(String[] args) throws IOException {
 		System.out.println("Creating tables...");
+		
 		DerbyDatabase db = new DerbyDatabase();
 		db.createTables();
 		
@@ -286,7 +315,7 @@ public class DerbyDatabase implements IDatabase {
 					// inserting the title description, and locked into the database
 				try {
 					stmt = conn.prepareStatement(
-							"insert into rooms (title, description, locked) "
+							"insert into rooms (title, description, requirement) "
 							+ "values (?, ?, ?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
@@ -425,15 +454,15 @@ public class DerbyDatabase implements IDatabase {
 					// inserting the title, description, statAffected, statChangeVal, and roomLocat into database
 				try {
 					stmt = conn.prepareStatement(
-							"insert into items(title, description, statAffected, statChangeVal, roomLocat) "
+							"insert into items(title, description, roomLocat, statAff, statChangeVal) "
 							+ "values (?, ?, ?, ?, ?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
 					stmt.setString(1, item.getTitle());
 					stmt.setString(2, item.getDescription());
-					stmt.setString(3, item.getStatAffected());
-					stmt.setInt(4, item.getStatChangeVal());
-					stmt.setInt(5, item.getRoomLocat());
+					stmt.setInt(3, item.getRoomLocat());
+					stmt.setString(4, item.getStatAffected());
+					stmt.setInt(5, item.getStatChangeVal());
 					
 					// execute the query
 					stmt.executeUpdate();
