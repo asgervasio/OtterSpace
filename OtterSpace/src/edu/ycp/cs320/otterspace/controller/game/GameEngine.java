@@ -108,7 +108,7 @@ public class GameEngine
 	{
 		
 		Room currentRoom = player.getCurrentRoom();
-		String destination = currentRoom.getConnection(direction[1]).getTitle();
+		Integer destination = currentRoom.getConnectionID(direction[1]);
 		String result = "";
 		Room testRoom;
 		
@@ -118,11 +118,11 @@ public class GameEngine
 		}
 		else
 		{
-			player.setCurrentRoom(db.findRoomUsingTitle(destination));
+			player.setCurrentRoom(db.findRoomUsingRoomId(destination));
 			currentRoom = player.getCurrentRoom();
 			String room = currentRoom.getTitle();
 			String description = currentRoom.getDescription();
-			String items = currentRoom.getItems();
+			String items = db.findItemUsingLocation(destination).getTitle();
 			result = room + "\n" + description + "\n" + items;
 						
 			

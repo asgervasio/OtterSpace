@@ -4,7 +4,6 @@ package edu.ycp.cs320.otterspace.fakeDatabase;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -74,13 +73,12 @@ public class FakeDatabaseTest {
 //		userList.add(User2);
 	}
 	
-	// Tests to see if you can add a room that has neither an Actor nor an item into the fake database
+	// Tests to see if you can add a room into the fake database
 	@Test
 	public void testInsertRoom(){
 		database.insertRoom(room1);
 		roomBlank = database.findRoomUsingTitle("title");
 		assertEquals(room1.getTitle(), roomBlank.getTitle());
-		assertEquals(room1.getItems(), roomBlank.getItems());
 	}
 	
 	@Test
