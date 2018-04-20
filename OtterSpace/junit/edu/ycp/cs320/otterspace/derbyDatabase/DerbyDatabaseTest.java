@@ -64,8 +64,26 @@ public class DerbyDatabaseTest {
 	}
 	
 	@Test
+	public void testInsertRoom(){
+		database.insertRoom(room1);
+		roomBlank = database.findRoomUsingTitle("title");
+		assertEquals(room1.getTitle(), roomBlank.getTitle());
+	}
+	
+	@Test
 	public void testInsertItem(){
-		
+		database.insertItem(item);
+		itemBlank = database.findItemUsingTitle("titlePerItem");
+		assertEquals(item.getTitle(), itemBlank.getTitle());
+		assertEquals(item.getStatAffected(), itemBlank.getStatAffected());
+	}
+	
+	@Test
+	public void testFindItemUsingRoomLocat(){
+		database.insertItem(item);
+		itemBlank = database.findItemUsingLocation(4);
+		assertEquals(item.getTitle(), itemBlank.getTitle());
+		assertEquals(item.getStatAffected(), itemBlank.getStatAffected());		
 	}
 	
 	

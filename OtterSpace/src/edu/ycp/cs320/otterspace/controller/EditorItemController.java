@@ -14,9 +14,9 @@ public class EditorItemController {
 		Item item = new Item();
 		item.setTitle(model.getTitle());
 		item.setDescription(model.getDescription());
+		item.setRoomLocat(model.getRoomLocat());
 		item.setStatAffected(model.getStatAffected());
 		item.setStatChangeVal(model.getStatChangeVal());
-		item.setRoomLocat(model.getRoomLocat());
 		
 		return item;
 	}
