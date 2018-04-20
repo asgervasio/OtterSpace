@@ -106,13 +106,14 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public Item findItemUsingLocation(int location) {
+	public List<Item> findItemsUsingLocation(int location) {
+		List<Item> itemList = new ArrayList<Item>();
 		for (Item item : itemList){
 			if(item.getRoomLocat() == location){
-				return item;
+				itemList.add(item);
 			}
 		}
-		return null;
+		return itemList;
 	}
 
 	@Override

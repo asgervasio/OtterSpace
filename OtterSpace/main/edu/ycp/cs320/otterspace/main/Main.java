@@ -15,7 +15,6 @@ public class Main {
 		File warFile = new File(webappCodeBase);
 		Launcher launcher = new Launcher();
 		InitDatabase.init();
-		Player player = new Player();
 		IDatabase db = DatabaseProvider.getInstance();
 		
 		// get a server for port 8081
@@ -36,6 +35,5 @@ public class Main {
         // wait until the server is done executing.
         // See http://docs.oracle.com/javase/7/docs/api/java/lang/Thread.html#join()
 		server.join();
-		player.setCurrentRoom(db.findRoomUsingRoomId(1));
 	}
 }

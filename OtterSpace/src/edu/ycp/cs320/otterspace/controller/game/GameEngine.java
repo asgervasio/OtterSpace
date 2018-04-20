@@ -1,6 +1,7 @@
 package edu.ycp.cs320.otterspace.controller.game;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.servlet.http.HttpServletResponse;
@@ -38,12 +39,26 @@ public class GameEngine
 			case "take":
 			case "pick":
 				result = take(commandSplit);
+			case "inventory":
+			case "i":
+				result = displayInventory();
 			default:
 				result = invalid(); 
 		}	
 		return result;
 			
 			
+	}
+	
+	public String displayInventory()
+	{
+		String result = "Your inventory contains: \n";
+		List<Item> inventory = player.getInventory();
+		for(int i = 0; i < inventory.size(); i++)
+		{
+			result = result + inventory.get(i) + "\n";
+		}
+		return result;
 	}
 	
 	public String take(String[] item)
@@ -96,6 +111,7 @@ public class GameEngine
 		Integer destination = currentRoom.getConnectionID(direction[1]);
 		String result = "";
 		Room testRoom;
+		
 		if (destination == null)
 		{
 			result = "Could not find that room";
@@ -129,6 +145,22 @@ public class GameEngine
 		result = "Invalid Command";
 		return result;
 
+	}
+	
+	public String initializePlayer()
+	{
+		String result = "";
+		player.setCurrentRoom(db.findRoomUsingRoomId(1));
+		List<Item> inventory = db.findItemsUsingLocation(1);		
+		for(int i = 0; i < inventory.size(); i++)
+		{
+			player.addItem(inventory.get(i));
+		}
+		Room currentRoom = player.getCurrentRoom();
+		result = ("You are standing in the " + currentRoom.getTitle() + "<br /><br />" + currentRoom.getDescription() 
+			+ "<br /><br /> You see the following items on the ground: <br />" + currentRoom.getItems());
+		
+		return result;
 	}
 
 }

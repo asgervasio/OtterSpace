@@ -2,10 +2,14 @@ package edu.ycp.cs320.otterspace.controller.game;
 
 import java.util.List;
 
+import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
+import edu.ycp.cs320.roomsdb.persist.IDatabase;
+
 public class Player 
 {
 	Room currentRoom;
 	List<Item> inventory;
+	IDatabase db = DatabaseProvider.getInstance();	
 	
 	public void setCurrentRoom(Room room)
 	{
@@ -38,5 +42,6 @@ public class Player
 			return false;
 		}
 	}
+	
 
 }

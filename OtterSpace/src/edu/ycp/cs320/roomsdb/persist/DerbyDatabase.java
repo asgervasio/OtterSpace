@@ -582,12 +582,15 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
+	
 
 	@Override
-	public Item findItemUsingLocation(int location) {
-		return executeTransaction(new Transaction<Item>() {
+	public List<Item> findItemsUsingLocation(int locationId) 
+	{
+		return executeTransaction(new Transaction<List<Item>>() {
 			@Override
-			public Item execute(Connection conn) throws SQLException {
+			public List<Item> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
 				
@@ -596,11 +599,12 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 							"select items.* " +
 							"  from items " +
-							" where  items.roomLocat = ?"
+							" where  items.location = ?"
 					);
-					stmt.setInt(1, location);
+					stmt.setInt(1, locationId);
 					
-					Item result = new Item();
+					List<Item> result = new ArrayList<Item>();
+
 					
 					resultSet = stmt.executeQuery();
 					
@@ -616,12 +620,13 @@ public class DerbyDatabase implements IDatabase {
 						loadItem(item, resultSet, 1);
 						
 						
-						result = item;
+						result.add(item);
 					}
 					
 					// check if the id was found
 					if (!found) {
-						System.out.println("Room <" + location + "> does not conatain an item");
+						System.out.println("<" + locationId + "> was not found in the item table");
+
 					}
 					
 					return result;
