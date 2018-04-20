@@ -53,7 +53,7 @@ public class LoginServlet extends HttpServlet {
 			errorMessage = "Please specify both Username and password";
 			req.setAttribute("errorMessage", errorMessage);
 			req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
-			System.out.println("Please specify both Username and password");
+			System.out.println("Please specify both Username and Password");
 		} else {
 			
 			ArrayList<User> user = new ArrayList<User>();
@@ -69,13 +69,14 @@ public class LoginServlet extends HttpServlet {
 				if(UserController.authenticate(u, password) == true){
 					System.out.println("UserController.authenticate(u, password) == true = true");
 					HttpSession session = req.getSession();
+					u.setSessionid(session.getId());
 					session.setAttribute("username", u.getUsername());
 					session.setAttribute("firstName", u.getFirstName());
 					session.setAttribute("lastName", u.getLastName());
 					session.setAttribute("emailAddress", u.getEmail());
 					System.out.println("Session info:");
 					System.out.println(req.getSession().getAttribute("username"));
-					System.out.println(req.getSession().getAttribute("fristName"));
+					System.out.println(req.getSession().getAttribute("firstName"));
 					System.out.println(req.getSession().getAttribute("lastName"));
 					System.out.println(req.getSession().getAttribute("emailAddress"));
 					System.out.println(req.getSession().getAttribute("sessionid"));

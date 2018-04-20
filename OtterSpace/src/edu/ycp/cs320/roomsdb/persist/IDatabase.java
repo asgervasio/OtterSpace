@@ -21,7 +21,7 @@ public interface IDatabase {
 	List<User> getAccountInfo(String Username);
 	Boolean    addUserToDatabase(String Username, String pass, String email, String first, String last);
 	List<User> DeleteUserFromDatabase(String name, String pswd);
-	String changePassword(String name, String pswd, String newPassword);
+	String changeInfo(String newEmail, String username, String pswd, String newPassword);
 	List<User> findAllUsers();
 	List<User> findUserByLastName(String lastname);
 	List<User> matchUsernameWithPassword(String Username, String pass);

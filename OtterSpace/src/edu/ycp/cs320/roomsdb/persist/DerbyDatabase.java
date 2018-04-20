@@ -624,39 +624,46 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public String changePassword(String Username, String pswd, String newPassword) {
+	public String changeInfo(String newEmail, String username, String pswd, String newPassword) {
 		return executeTransaction(new Transaction<String>() {
 			@Override
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
 				ResultSet resultSet = null;
-				
+				User u = new User();
 				try {
 					stmt1 = conn.prepareStatement(
 							"select * " +
 									"  from users " +
 									" where  username = ? and password = ?"
 					);	
-					stmt1.setString(1, Username);
+					stmt1.setString(1, username);
 					stmt1.setString(2, pswd);
 					resultSet = stmt1.executeQuery();
-				
+					
+		
 						
 						// create new User object
 						// retrieve attributes from resultSet starting with index 1
-						User u = new User();
+					
 						loadUser(u, resultSet, 1);
 						
+		
+		
 					
 					
 					stmt2 = conn.prepareStatement(
 							"update user"
-							+ "set password = ?"
-							+ "where username = ?"
+							+ "set emailAddress = ?, password= ?, firstname= ?, lastname= ?, Username= ?"
+							+ "where Username = ?"
 					);
-					stmt1.setString(1, newPassword);
-					stmt1.setString(2, Username);
+					stmt2.setString(1, newEmail);
+					stmt2.setString(2, newPassword);
+					stmt2.setString(3, u.getFirstName());
+					stmt2.setString(2, u.getLastName());
+					stmt2.setString(4, u.getUsername());
+					
 					stmt2.executeUpdate();
 					
 					

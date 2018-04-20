@@ -14,7 +14,7 @@
 	
 
 <div class="heading">
-    		<h4>Hello, ${user.username}.</h4>
+    		<h4>Hello, ${username}.</h4>
   		</div>
 
   		<div class="Index">

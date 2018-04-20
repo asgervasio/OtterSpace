@@ -23,6 +23,11 @@ public class UserController
 		this.model = model;
 	}
 	
+	public User getModel()
+	{
+		return this.model;
+	}
+	
 	public static boolean authenticate(User u, String pass)
 	{
 		boolean real = false;
@@ -38,9 +43,15 @@ public class UserController
 		List<User> userList = db.getAccountInfo(username);
 		
 	}
+	/*
+	public void setAccountInfomation(String UserName, String Password, String Email, String FirstName, String LastName){
+		model.setUserAccountInformation(UserName, FirstName, LastName, Email, Password);
+		//basically unused/unneeded function
+	}
+	*/
 	
-	public void changeUserPassword(String Username, String oldpassword, String newpassword)  {
-		 db.changePassword(Username, oldpassword, newpassword);
+	public void changeUserInfo(String Email, String username, String pswd, String newPassword)  {
+		 db.changeInfo( Email,  username,  pswd,  newPassword);
 	}
 	
 	//adding a user to the database 

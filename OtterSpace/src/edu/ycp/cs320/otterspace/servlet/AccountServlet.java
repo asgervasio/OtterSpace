@@ -22,46 +22,51 @@ public class AccountServlet extends HttpServlet{
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
 		
-		System.out.println("\nLoginServlet: doGet");
-		
+		System.out.println("\nAccountServlet: doGet");
+		HttpSession session = req.getSession();
+		req.setAttribute("username", session.getAttribute("username"));
+		req.setAttribute("password", session.getAttribute("password"));
+		req.setAttribute("emailAddress", session.getAttribute("emailAddress"));
+		req.setAttribute("FirstName", session.getAttribute("FirstName"));
+		req.setAttribute("LastName", session.getAttribute("LastName"));
 		//no need to get session info here: this is the first page 
-		req.getRequestDispatcher("/_view/Register.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/Account.jsp").forward(req, resp);
 	}
 	
 	@Override
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		System.out.println("CreateAccountServlet: doPost");
+		System.out.println("AccountServlet: doPost");
 		
 		//session data 
+		HttpSession session = req.getSession();
+		
 		User model = new User();
+		
 		UserController controller = new UserController();
 		controller.setModel(model);
 		
-		//I'm taking this out because the DB will assign a user number
-		//int UserNumber = (int) req.getSession().getAttribute("UserID");
-		//model.setUserID(UserNumber);
-		String UserName = (String) req.getParameter("username");
-		model.setLastName(UserName);
-		String Password = (String) req.getParameter("password");
-		model.setLastName(Password);
-		String FirstName = (String) req.getParameter("FirstName");
-		model.setFirstName(FirstName);
-		String LastName = (String) req.getParameter("LastName");
-		model.setLastName(LastName);
-		String Email = (String) req.getParameter("Email");
-		model.setEmail(Email);
-		String isAdmin = (String) req.getParameter("Admin");
-		model.setEmail(isAdmin);
-
-		controller.addUserToDatabase(UserName, Password, Email, FirstName, LastName);
+		
+		req.setAttribute("username", session.getAttribute("username"));
+		//emailAddress password firstname lastname Username
+		if(req.getAttribute("password")==req.getAttribute("passconfirm")){
+			if(req.getAttribute("password")!=null && !req.getAttribute("password").toString().isEmpty()){
+				model.setPassword(req.getAttribute("password").toString());}}
+		if(req.getAttribute("emailAddress")!=null && !req.getAttribute("emailAddress").toString().isEmpty()){
+			model.setPassword(req.getAttribute("emailAddress").toString());}
+		if(req.getAttribute("password")!=null && !req.getAttribute("password").toString().isEmpty()){
+			model.setPassword(req.getAttribute("password").toString());}
+		if(req.getAttribute("password")!=null && !req.getAttribute("password").toString().isEmpty()){
+			model.setPassword(req.getAttribute("password").toString());}
+		
+		
 		req.setAttribute("sessionid", model);
 		if (req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/Index");
 		}
 		
-		req.getRequestDispatcher("/_view/CreateAccount.jsp").forward(req, resp);
+		req.getRequestDispatcher("/_view/Account.jsp").forward(req, resp);
 
 	}
 	

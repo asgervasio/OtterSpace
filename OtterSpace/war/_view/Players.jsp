@@ -14,29 +14,22 @@
 	
 
 <div class="heading">
-    		<h1>Otter Space</h1>
+    		<h1>Fellow Otters In Arms</h1>
   		</div>
-
-  		<div class="Index">
-  			<form action="${pageContext.servletContext.contextPath}/gameAjax.html" method="post">
-				<input type="submit" name="startGame" value="Play">
+			<div>
+/--SOPs needed for this Employee --/<br>
+<br>
+<c:forEach items="${users}" var="user">
+Username: ${user.Username} <br>
+Email Address: ${user.emailAdress}<br>
+<br>
+</c:forEach>
+<div>
+  		
+  			<form action="${pageContext.servletContext.contextPath}/index.html" method="post">
+				<input type="submit" name="Menu" value="Back to menu">
 			</form>
-  			<form action="${pageContext.servletContext.contextPath}/editorRoom" method="get">
-				<input type="submit" name="startGame" value="Create Room">
-
-			</form>  		
-  			<form action="${pageContext.servletContext.contextPath}/editorItem" method="get">
-				<input type="submit" name="startGame" value="Create Item">
-
-			</form>  
-			<form action="${pageContext.servletContext.contextPath}/editorItem" method="get">
-				<input type="submit" name="startGame" value="Create Item">
-
-			</form>  
-			<form action="${pageContext.servletContext.contextPath}/editorItem" method="get">
-				<input type="submit" name="startGame" value="Create Item">
-
-			</form>  		
-		</div>	
+ 
+		
 	</body>
 </html>

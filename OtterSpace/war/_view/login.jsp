@@ -46,10 +46,10 @@ session_start();
 			<input type = "Submit" name = "submit" value = "Login" /> </form>
 			<form action="${pageContext.servletContext.contextPath}/register" method="get">
 			<input type="Submit" name="register" value="Register"> <br>
-
+			</form>
 				<input type="hidden" name="userName" value="user.getUsername">			
 				<input type="hidden" name="sessionid" value="sessionid.getSessionid">
 			
-		</form>
+		
 	</body>
 </html>		

@@ -6,6 +6,7 @@ public class User {
 	private String password;
 	private String firstName;
 	private String lastName; 
+	private String sessionid;
 	private boolean loginStatus = false;
 	
 	
@@ -22,6 +23,14 @@ public class User {
 
 	public void setEmail(String emailAddress) {
 		this.emailAddress = emailAddress;
+	}
+	
+	public String getSessionid() {
+		return password;
+	}
+
+	public void setSessionid(String sessionid) {
+		this.sessionid = sessionid;
 	}
 	
 	public String getPassword() {

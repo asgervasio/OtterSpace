@@ -11,22 +11,25 @@
     <servlet-class>edu.ycp.cs320.otterspace.servlet.IndexServlet</servlet-class>
   </servlet>
   <servlet>
+    <servlet-name>AccountServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.otterspace.servlet.AccountServlet</servlet-class>
+  </servlet>
+  <servlet>
     <servlet-name>LoginServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.otterspace.servlet.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>GameServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.otterspace.servlet.GameServlet</servlet-class>
   </servlet>
    <servlet>
     <servlet-name>RegisterServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.otterspace.servlet.RegisterServlet</servlet-class>
   </servlet>
   <servlet>
-    <servlet-name>GameServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.otterspace.servlet.GameServlet</servlet-class>
-  </servlet>
-  <servlet>
-    <servlet-name>AccountServlet</servlet-name>
-    <servlet-class>edu.ycp.cs320.otterspace.servlet.AccountServlet</servlet-class>
-  </servlet>
-  <servlet>
+    <servlet-name>EditorRoomServlet</servlet-name>
+    <servlet-class>edu.ycp.cs320.otterspace.servlet.EditorRoomServlet</servlet-class>
+  </servlet><servlet>
     <servlet-name>PlayersServlet</servlet-name>
     <servlet-class>edu.ycp.cs320.otterspace.servlet.PlayersServlet</servlet-class>
   </servlet>
@@ -54,16 +57,12 @@
     <url-pattern>/index</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>LoginServlet</servlet-name>
-    <url-pattern>/login</url-pattern>
-  </servlet-mapping>
-  <servlet-mapping>
     <servlet-name>AccountServlet</servlet-name>
     <url-pattern>/account</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
-    <servlet-name>PlayersServlet</servlet-name>
-    <url-pattern>/players</url-pattern>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/login</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>RegisterServlet</servlet-name>
@@ -72,6 +71,10 @@
   <servlet-mapping>
     <servlet-name>GameServlet</servlet-name>
     <url-pattern>/game</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>PlayersServlet</servlet-name>
+    <url-pattern>/players</url-pattern>
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>EditorRoomServlet</servlet-name>

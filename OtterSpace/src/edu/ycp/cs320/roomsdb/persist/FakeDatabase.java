@@ -158,7 +158,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public String changePassword(String name, String pswd, String newPassword) {
+	public String  changeInfo(String Email, String username, String pswd, String newPassword) {
 		// TODO Auto-generated method stub
 		return null;
 	}
