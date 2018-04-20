@@ -20,8 +20,8 @@ public class FakeDatabase implements IDatabase {
 		// Add initial data
 		readInitialData();
 		
-		System.out.println(roomList.size() + " rooms");
-		System.out.println(userList.size() + " users");
+		System.out.println("DONT USE THIS ");
+		System.out.println("ITS THE FAKE DATABASE");
 	}
 
 	// Getting the author and book tables to access in the fake database
@@ -144,7 +144,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
+	public Boolean addUserToDatabase(String name, String pass, String email, String first, String last) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -156,7 +156,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> changePassword(String name, String pswd, String newPassword) {
+	public String  changeInfo(String Email, String username, String pswd, String newPassword) {
 		// TODO Auto-generated method stub
 		return null;
 	}

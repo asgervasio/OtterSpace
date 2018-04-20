@@ -43,19 +43,17 @@ public class RegisterServlet extends HttpServlet{
 		//int UserNumber = (int) req.getSession().getAttribute("UserID");
 		//model.setUserID(UserNumber);
 		String UserName = (String) req.getParameter("username");
-		model.setLastName(UserName);
+		model.setUsername(UserName);
 		String Password = (String) req.getParameter("password");
-		model.setLastName(Password);
+		model.setPassword(Password);
 		String FirstName = (String) req.getParameter("FirstName");
 		model.setFirstName(FirstName);
 		String LastName = (String) req.getParameter("LastName");
 		model.setLastName(LastName);
 		String Email = (String) req.getParameter("Email");
 		model.setEmail(Email);
-		String isAdmin = (String) req.getParameter("Admin");
-		model.setEmail(isAdmin);
 
-		controller.addUserToDatabase(UserName, Password, Email, FirstName, LastName, isAdmin);
+		controller.addUserToDatabase(UserName, Password, Email, FirstName, LastName);
 		req.setAttribute("sessionid", model);
 		if (req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/Index");
