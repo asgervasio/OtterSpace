@@ -74,7 +74,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	private Connection connect() throws SQLException {
-		Connection conn = DriverManager.getConnection("jdbc:derby:H:/mydatabase.db;create=true");
+		Connection conn = DriverManager.getConnection("jdbc:derby:database.db;create=true");
 		
 		// Set autocommit to false to allow execution of
 		// multiple queries/statements as part of the same transaction.
@@ -92,9 +92,9 @@ public class DerbyDatabase implements IDatabase {
 	
 	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException {
 		item.setItemId(resultSet.getInt(index++));
-		item.setRoomLocat(resultSet.getInt(index++));
 		item.setTitle(resultSet.getString(index++));
 		item.setDescription(resultSet.getString(index++));
+		item.setRoomLocat(resultSet.getInt(index++));
 		item.setStatAffected(resultSet.getString(index++));
 		item.setStatChangeVal(resultSet.getInt(index++));
 	}
@@ -391,6 +391,54 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
+	@Override
+	public Integer findRoomIdFromConnection(String connection) 
+	{
+		return executeTransaction(new Transaction<Integer>() {
+			@Override
+			public Integer execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from rooms table
+					stmt = conn.prepareStatement(
+							"select connections.roomID " +
+							"  from connections " +
+							" where  connections.connectionDirection = ?"
+					);
+					stmt.setString(1, connection);
+					
+					Integer result = 0;
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						result = resultSet.getInt(1);
+
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("<" + connection + "> was not found in the connections table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+	}
 
 
 	@Override
@@ -407,7 +455,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 							"select rooms.* " +
 							"  from rooms " +
-							" where  rooms.id = ?"
+							" where  rooms.room_id = ?"
 					);
 					stmt.setInt(1, roomId);
 					
@@ -514,7 +562,6 @@ public class DerbyDatabase implements IDatabase {
 						Item item = new Item();
 						loadItem(item, resultSet, 1);
 						
-						
 						result = item;
 					}
 					
@@ -546,7 +593,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 							"select items.* " +
 							"  from items " +
-							" where  items.id = ?"
+							" where  items.item_id = ?"
 					);
 					stmt.setInt(1, itemId);
 					
@@ -599,7 +646,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 							"select items.* " +
 							"  from items " +
-							" where  items.location = ?"
+							" where  items.roomLocat = ?"
 					);
 					stmt.setInt(1, locationId);
 					

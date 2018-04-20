@@ -15,16 +15,18 @@ import edu.ycp.cs320.otterspace.model.GameModel;
 public class GameAjaxServlet extends HttpServlet
 {
 	private static final long serialVersionUID = 1L;
-	public GameEngine game;
+	public GameEngine game = new GameEngine();
+
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		doRequest(req, resp);
-		GameEngine game = new GameEngine();
 
-		resp.setContentType("text/plain");
-		resp.getWriter().println(game.initializePlayer());
+		doRequest(req, resp);
+
+
+
+
 	}
 	
 	@Override
@@ -44,6 +46,7 @@ public class GameAjaxServlet extends HttpServlet
 		GameController controller = new GameController();
 		GameModel model = new GameModel();
 		String result = "";
+
 		
 
 		controller.setModel(model);
