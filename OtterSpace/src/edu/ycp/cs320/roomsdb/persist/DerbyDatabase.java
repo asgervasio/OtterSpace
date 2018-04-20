@@ -520,11 +520,58 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+	
+	
 
 	@Override
-	public Item findItemUsingLocation(int location) {
-		// TODO Auto-generated method stub
-		return null;
+	public List<Item> findItemsUsingLocation(int locationId) 
+	{
+		return executeTransaction(new Transaction<List<Item>>() {
+			@Override
+			public List<Item> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from items tables
+					stmt = conn.prepareStatement(
+							"select items.* " +
+							"  from items " +
+							" where  items.location = ?"
+					);
+					stmt.setInt(1, locationId);
+					
+					List<Item> result = new ArrayList<Item>();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new item object
+						// retrieve attributes from resultSet starting with index 1
+						Item item = new Item();
+						loadItem(item, resultSet, 1);
+						
+						
+						result.add(item);
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("<" + locationId + "> was not found in the item table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
 
 	@Override
