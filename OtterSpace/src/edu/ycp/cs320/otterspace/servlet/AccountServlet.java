@@ -41,12 +41,20 @@ public class AccountServlet extends HttpServlet{
 		
 		//session data 
 		HttpSession session = req.getSession();
+		req.setAttribute("username", session.getAttribute("username"));
+		req.setAttribute("password", session.getAttribute("password"));
+		req.setAttribute("emailAddress", session.getAttribute("emailAddress"));
+		req.setAttribute("FirstName", session.getAttribute("FirstName"));
+		req.setAttribute("LastName", session.getAttribute("LastName"));
 		
 		User model = new User();
 		
 		UserController controller = new UserController();
 		controller.setModel(model);
+		model.setSessionid(req.getSession().toString());
 		
+		model.setUserAccountInformation(session.getAttribute("username").toString(), session.getAttribute("FirstName").toString(), session.getAttribute("LastName").toString(), session.getAttribute("emailAddress").toString(), session.getAttribute("password").toString());
+		String oldpass = session.getAttribute("password").toString();
 		
 		req.setAttribute("username", session.getAttribute("username"));
 		//emailAddress password firstname lastname Username
@@ -60,7 +68,7 @@ public class AccountServlet extends HttpServlet{
 		if(req.getAttribute("password")!=null && !req.getAttribute("password").toString().isEmpty()){
 			model.setPassword(req.getAttribute("password").toString());}
 		
-		
+		controller.changeUserInfo(model.getEmail(), model.getUsername(), oldpass, model.getPassword());
 		req.setAttribute("sessionid", model);
 		if (req.getParameter("index") != null) {
 			resp.sendRedirect(req.getContextPath() + "/Index");

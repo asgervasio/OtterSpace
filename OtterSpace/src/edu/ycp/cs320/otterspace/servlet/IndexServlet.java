@@ -20,7 +20,7 @@ public class IndexServlet extends HttpServlet{
 		
 		if (session.getAttribute("username") == null) {
 			// user is not logged in, or the session expired
-			resp.sendRedirect(req.getContextPath() + "/Login");
+			resp.sendRedirect(req.getContextPath() + "/login");
 			return;
 		}
 		

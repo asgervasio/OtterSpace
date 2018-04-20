@@ -23,6 +23,7 @@ session_start();
 	$_SESSION["username"];
 	$_SESSION["firstName"];
 	$_SESSION["lastName"];
+	$_SESSION["password"];
 	$_SESSION["sessionid"];
 	$_SESSION["emailAddress"];
 	?>
