@@ -1,20 +1,19 @@
-package edu.ycp.cs320.otterspace.model;
+package edu.ycp.cs320.otterspace.servlet;
+import edu.ycp.cs320.roomsdb.*;
 
 public class User {
 	private String emailAddress;
 	private String password;
 	private String firstName;
 	private String lastName; 
-	private String Username; 
 	private boolean loginStatus = false;
-	private String sessionid;
 	
-	public void setUserAccountInformation(String usernm, String fn, String ln, String email, String pw) {
+	
+	public void setUserAccountInformation(String fn, String ln, String email, String pw) {
 		this.firstName = fn;
 		this.lastName = ln;
 		this.emailAddress = email;
 		this.password = pw;
-		this.Username = usernm;
 	}
 	
 	public String getEmail() {
@@ -40,22 +39,6 @@ public class User {
 	public void setFirstName(String firstName) {
 		this.firstName = firstName;
 	}
-	
-	public String getSessionid() {
-		return sessionid;
-	}
-
-	public void setSessionid(String sessionid) {
-		this.sessionid = sessionid;
-	}
-	
-	public String getUsername() {
-		return Username;
-	}
-
-	public void setUsername(String usernm) {
-		this.Username = usernm;
-	}
 
 	public String getLastName() {
 		return lastName;
@@ -70,8 +53,7 @@ public class User {
 		if(loginStatus != true) {
 			loginStatus = true; 
 			
-			//probably set this up in a controller 
-			//electronicSignatureFlag = true;
+		
 		}
 		
 		return loginStatus;
