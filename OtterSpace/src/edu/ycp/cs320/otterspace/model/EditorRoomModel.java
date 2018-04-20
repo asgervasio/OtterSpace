@@ -1,7 +1,8 @@
 package edu.ycp.cs320.otterspace.model;
 
-import edu.ycp.cs320.otterspace.controller.game.Item;
-import edu.ycp.cs320.otterspace.controller.game.Room;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Set;
 
 // Model class for GameModel
 // Only the controller should be allowed to call the set methods
@@ -9,6 +10,7 @@ public class EditorRoomModel {
 
 	private String description, title;
 	private boolean requirement;
+	private HashMap<String, Integer> connections;
 	
 	// Constructor for EditorRoomModel 
 	public EditorRoomModel() {
@@ -39,4 +41,20 @@ public class EditorRoomModel {
 		return requirement;
 	}
 	
+	public void setConnections(HashMap<String, Integer> connections){
+		this.connections = connections;
+	}
+	
+	public Integer getConnectionID(String direction){
+		Integer id = connections.get(direction);
+		return id;
+	}
+	
+	public Set getConnectionSet(){
+		return connections.entrySet();
+	}
+	
+	public HashMap<String, Integer> getConnections(){
+		return connections;
+	}
 }// end of class

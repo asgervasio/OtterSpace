@@ -4,7 +4,6 @@ package edu.ycp.cs320.otterspace.fakeDatabase;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -80,7 +79,6 @@ public class FakeDatabaseTest {
 		database.insertRoom(room1);
 		roomBlank = database.findRoomUsingTitle("title");
 		assertEquals(room1.getTitle(), roomBlank.getTitle());
-		assertEquals(room1.getItems(), roomBlank.getItems());
 	}
 	
 	@Test
