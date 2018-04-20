@@ -73,7 +73,7 @@ public class FakeDatabaseTest {
 //		userList.add(User2);
 	}
 	
-	// Tests to see if you can add a room that has neither an Actor nor an item into the fake database
+	// Tests to see if you can add a room into the fake database
 	@Test
 	public void testInsertRoom(){
 		database.insertRoom(room1);
