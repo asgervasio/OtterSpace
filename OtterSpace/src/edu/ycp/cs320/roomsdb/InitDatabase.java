@@ -10,7 +10,7 @@ public class InitDatabase
 {
 	public static void init() 
 	{
-		DatabaseProvider.setInstance(new FakeDatabase());
+		DatabaseProvider.setInstance(new DerbyDatabase());
 		
 	}
 }
