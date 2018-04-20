@@ -41,8 +41,8 @@ public class EditorRoomModel {
 		return requirement;
 	}
 	
-	public void setConnections(String direction, Integer id){
-		connections.put(direction, id);
+	public void setConnections(HashMap<String, Integer> connections){
+		this.connections = connections;
 	}
 	
 	public Integer getConnectionID(String direction){
@@ -50,7 +50,11 @@ public class EditorRoomModel {
 		return id;
 	}
 	
-	public Set getConnections(){
+	public Set getConnectionSet(){
 		return connections.entrySet();
+	}
+	
+	public HashMap<String, Integer> getConnections(){
+		return connections;
 	}
 }// end of class

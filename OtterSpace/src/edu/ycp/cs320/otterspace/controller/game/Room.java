@@ -13,6 +13,7 @@ public class Room {
 	int roomId;
 	String title, description;
 	boolean requirement;
+	//               Key     Value
 	private HashMap<String, Integer> connections;
 	
 	public Room(){
@@ -50,8 +51,8 @@ public class Room {
 		return requirement;
 	}
 		
-	public void setConnections(String direction, Integer id){
-		connections.put(direction, id);
+	public void setConnections(HashMap<String, Integer> connections){
+		this.connections = connections;
 	}
 	
 	public Integer getConnectionID(String direction){
@@ -61,6 +62,16 @@ public class Room {
 	
 	public Set getConnections(){
 		return connections.entrySet();
+	}
+	
+	public String getConnectionDirection(Integer id){
+		String returnVal = null;
+		Set<String> set = connections.keySet();
+		for(String name : set){
+			if (connections.get(name) == id)
+				returnVal = name;
+		}
+		return returnVal;
 	}
 	
 }// end of room class

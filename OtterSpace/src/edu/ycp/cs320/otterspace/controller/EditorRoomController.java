@@ -21,13 +21,7 @@ public class EditorRoomController {
 		room.setTitle(model.getTitle());
 		room.setDescription(model.getDescription());
 		room.setRequirement(model.getRequirement());	
-		Set set = model.getConnections();
-		Iterator iConnect = set.iterator();
-		while(iConnect.hasNext()){
-			Map.Entry<String, Integer> mEntry = (Map.Entry)iConnect.next();
-			room.setConnections(mEntry.getKey(), mEntry.getValue());
-		}
-
+		room.setConnections(model.getConnections());
 		return room;
 	}
 	
