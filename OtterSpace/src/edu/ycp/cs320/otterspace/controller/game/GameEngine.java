@@ -58,6 +58,7 @@ public class GameEngine
 				break;
 			case "load":
 			case "l":
+				//Do not load "load" load command into console
 				result = loadPlayer();
 				break;
 			default:
