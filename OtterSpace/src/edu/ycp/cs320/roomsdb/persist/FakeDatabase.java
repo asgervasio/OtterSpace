@@ -143,11 +143,7 @@ public class FakeDatabase implements IDatabase {
 
 	}
 
-	@Override
-	public List<User> addUserToDatabase(String name, String pass, String email, String first, String last) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+	
 
 	@Override
 	public List<User> DeleteUserFromDatabase(String name, String pswd) {
@@ -155,11 +151,7 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
-	public List<User> changePassword(String name, String pswd, String newPassword) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 	@Override
 	public List<User> findAllUsers() {
@@ -168,6 +160,24 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public List<User> findUserByLastName(String lastname) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer findRoomIdFromConnection(String connection) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Boolean addUserToDatabase(String Username, String pass, String email, String first, String last) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String changeInfo(String newEmail, String username, String pswd, String newPassword) {
 		// TODO Auto-generated method stub
 		return null;
 	}
