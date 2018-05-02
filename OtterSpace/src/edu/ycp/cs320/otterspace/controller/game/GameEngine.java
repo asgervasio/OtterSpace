@@ -63,6 +63,7 @@ public class GameEngine
 				result = loadPlayer(username);
 				break;
 			case "attack":
+				db.insertConsole("> " + command + "<br />", username);
 				result = attack(commandSplit, username);
 				break;
 			default:
@@ -89,6 +90,7 @@ public class GameEngine
 		{
 			result = enemy.getName() + " was hit!";
 		}
+		db.insertConsole(result, username);
 		return result;
 	}
 	public String displayInventory(String username)
