@@ -48,17 +48,18 @@ public class GameAjaxServlet extends HttpServlet
 		GameController controller = new GameController();
 		GameModel model = new GameModel();
 		String result = "";
-
-		
+		HttpSession session = req.getSession();
+		String username = (String) session.getAttribute("username");
 
 		controller.setModel(model);
+		model.setUsername(username);
 		String errorMessage = null;
 		
 		try 
 		{
 			cmd = getString(req, "cmd");
 			model.setCommand(cmd);
-			result = game.parse(model.getCommand());
+			result = game.parse(model.getCommand(), model.getUsername());
 		} 
 		catch (NumberFormatException e) 
 		{
