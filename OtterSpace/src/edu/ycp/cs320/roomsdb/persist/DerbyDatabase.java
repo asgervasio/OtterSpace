@@ -465,6 +465,47 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});	
 	}
+	@Override
+	public Player UpdatePlayer(Player player, String username) {
+		return executeTransaction(new Transaction<Player>() {
+			@Override
+			public Player execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				String playerTableName = username + "player";
+				
+				try {
+					stmt = conn.prepareStatement(
+							"update " + playerTableName 
+							+ " set name = ?, description = ?, health = ?, gold = ?, score = ?, attack = ?, defense = ?, hostility = ?, room = ?"
+							+ " where name = ?"
+							);
+					stmt.setString(1, player.getName());
+					stmt.setString(2, player.getDescription());
+					stmt.setInt(3, player.getHealth());
+					stmt.setInt(4, player.getGold());
+					stmt.setInt(5, player.getScore());
+					stmt.setInt(6, player.getAttack());
+					stmt.setInt(7, player.getDefense());
+					stmt.setBoolean(8, player.getHostility());
+					stmt.setInt(9, player.getCurrentRoom().getRoomId());
+					stmt.setString(10, player.getName());
+
+					// execute the query
+					stmt.executeUpdate();
+					
+					System.out.println("UPDATED player!!");
+					
+					return null;
+				} finally {
+					
+					DBUtil.closeQuietly(stmt);
+					
+					DBUtil.closeQuietly(conn);
+
+				}
+			}
+		});	
+	}
 	
 	public Player findPlayerUsingName(String name, String username){
 		return executeTransaction(new Transaction<Player>() {
@@ -516,25 +557,26 @@ public class DerbyDatabase implements IDatabase {
 		});		
 	}
 	
-	public Player findPlayerUsingLocation(Room roomLoc, String username){
-		return executeTransaction(new Transaction<Player>() {
+	public List<Player> findPlayersUsingLocation(Room roomLoc, String username){
+		return executeTransaction(new Transaction<List<Player>>() {
 			@Override
-			public Player execute(Connection conn) throws SQLException {
+			public List<Player> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
+				List<Player> result = new ArrayList<Player>();
+				
 				String playerTableName = username + "player";
 				try {
 					// retreive all attributes from rooms table
 					stmt = conn.prepareStatement(
 							"select "+ playerTableName + ".* " +
 							"  from "+ playerTableName + " " +
-							" where  "+ playerTableName + ".room = ?"
+							" where "+ playerTableName + ".room = ?"
 					);
 					stmt.setInt(1, roomLoc.getRoomId());
 					
 					System.out.println("Prepared Statement");
 					
-					Player result = new Player();
 					
 					resultSet = stmt.executeQuery();
 					
@@ -546,19 +588,18 @@ public class DerbyDatabase implements IDatabase {
 					while (resultSet.next()) {
 						found = true;
 						
-						// create new Room object
+						// create new item object
 						// retrieve attributes from resultSet starting with index 1
 						Player player = new Player();
-						System.out.println("About to load the players");
 						loadPlayer(player, resultSet, 1);
-						System.out.println("Loaded the players");
 						
-						result = player;
+						
+						result.add(player);
 					}
 					
 					// check if the id was found
 					if (!found) {
-						System.out.println("<" + roomLoc + "> was not found in the Room table");
+						System.out.println("No players found in <" + roomLoc + "> ");
 					}
 					
 					return result;
@@ -896,6 +937,46 @@ public class DerbyDatabase implements IDatabase {
 					return null;
 				} finally {
 ;					
+					DBUtil.closeQuietly(stmt);
+					
+					DBUtil.closeQuietly(conn);
+
+				}
+			}
+		});	
+	}
+	
+	@Override
+	public Item UpdateItem(Item item, String username) 
+	{
+		return executeTransaction(new Transaction<Item>() {
+			@Override
+			public Item execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				String itemTableName = username + "items";
+					// inserting the title, description, statAffected, statChangeVal, and roomLocat into database
+				try {
+					stmt = conn.prepareStatement(
+							"update " + itemTableName
+							+ " set title = ?, description = ?, roomLocat = ?, statAff = ?, statChangeVal = ?"
+							+ " where title = ?"
+							);
+					// substitute the title entered by the user for the placeholder in the query
+					stmt.setString(1, item.getTitle());
+					stmt.setString(2, item.getDescription());
+					stmt.setInt(3, item.getRoomLocat());
+					stmt.setString(4, item.getStatAffected());
+					stmt.setInt(5, item.getStatChangeVal());
+					stmt.setString(6, item.getTitle());
+					
+					// execute the query
+					stmt.executeUpdate();
+					
+					System.out.println("Updated item!!");
+					
+					return null;
+				} finally {
+				
 					DBUtil.closeQuietly(stmt);
 					
 					DBUtil.closeQuietly(conn);

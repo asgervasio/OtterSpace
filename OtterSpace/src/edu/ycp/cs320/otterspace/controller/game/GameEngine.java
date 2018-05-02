@@ -7,6 +7,8 @@ import java.util.Scanner;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.sun.media.jfxmedia.events.PlayerStateListener;
+
 import edu.ycp.cs320.roomsdb.InitDatabase;
 import edu.ycp.cs320.roomsdb.persist.DatabaseProvider;
 import edu.ycp.cs320.roomsdb.persist.IDatabase;
@@ -24,6 +26,7 @@ public class GameEngine
 		String command = cmd.toLowerCase();
 		String[] commandSplit = command.split(" ");
 		String result = "";
+
 		
 		switch(commandSplit[0])
 		{
@@ -52,13 +55,15 @@ public class GameEngine
 				break;
 			case "start":
 			case "s":
-				db.insertConsole("> " + command + "<br />", username);
-				result = initializePlayer(username);
+				result = initializePlayer(command, username);
 				break;
 			case "load":
 			case "l":
 				//Do not load "load" load command into console
 				result = loadPlayer(username);
+				break;
+			case "attack":
+				result = attack(commandSplit, username);
 				break;
 			default:
 				db.insertConsole("> " + command + "<br />", username);
@@ -70,6 +75,22 @@ public class GameEngine
 			
 	}
 	
+	public String attack(String[] command, String username)
+	{
+		Player enemy = db.findPlayerUsingName(command[1], username);
+		String result = "";
+		player.attackEnemy(enemy);
+		if(enemy.getHealth() == 0)
+		{
+			result = enemy.getName() + " is dead. You find " + enemy.getGold() + " gold on his body.";
+			player.setScore(player.getScore() + enemy.getGold());
+		}
+		else
+		{
+			result = enemy.getName() + " was hit!";
+		}
+		return result;
+	}
 	public String displayInventory(String username)
 	{
 		String result = "Your inventory contains: <br />";
@@ -103,6 +124,8 @@ public class GameEngine
 			{
 				player.addItem(inspectedItem);
 				result = inspectedItem.getTitle() + " picked up <br />";
+				inspectedItem.setRoomLocat(99);
+				db.UpdateItem(inspectedItem, username);
 			}
 		}
 		db.insertConsole(result, username);
@@ -159,12 +182,15 @@ public class GameEngine
 		return result;
 	}
 	
-	public String initializePlayer(String username)
+	public String initializePlayer(String command, String username)
 	{
 		String result = "";
 		player.setCurrentRoom(db.findRoomUsingRoomId(1));
 		db.createTables(username);
 		db.createPersistingTables(username);
+		db.loadInitialData(username);
+		db.insertConsole("> " + command + "<br />", username);
+
 		//List<Item> inventory = db.findItemsUsingLocation(1);
 		
 		//for(int i = 0; i < inventory.size(); i++)
@@ -185,7 +211,7 @@ public class GameEngine
 		consoleLog = db.loadConsole(username);
 		for(int i = 1; i < consoleLog.size(); i++)
 		{
-			result += consoleLog.get(i);
+			result += consoleLog.get(i) + "<br />";
 
 		}
 		return result;
@@ -197,15 +223,42 @@ public class GameEngine
 		String result = "";
 		Room currentRoom = player.getCurrentRoom();
 		String items = "";
-		List<Item> itemList = db.findItemsUsingLocation(currentRoom.getRoomId(), username);		
+		String players = "";
+		boolean itemFound = false;
+		boolean playerFound = false;
+		List<Item> itemList = db.findItemsUsingLocation(currentRoom.getRoomId(), username);	
+		List<Player> playerList = db.findPlayersUsingLocation(currentRoom, username);
 		for(int i = 0; i < itemList.size(); i++)
 		{
+			itemFound = true;
 			items = items + itemList.get(i).getTitle() + "<br /> ";
 		}
-		result = ("You are in " + currentRoom.getTitle() + "<br /><br />" + currentRoom.getDescription() 
-			+ "<br /><br /> You see the following items on the ground: <br />" + items + "<br />");
+		for(int j = 0; j < playerList.size(); j++)
+		{
+			playerFound = true;
+			players = players + playerList.get(j).getName() + "<br />";
+		}
+		result = ("You are in " + currentRoom.getTitle() + "<br /><br />" + currentRoom.getDescription());
+		if (itemFound)
+		{
+			result = result + ("<br /><br /> You see the following items on the ground: <br />" + items + "<br />");
+		}
+		if(playerFound)
+		{
+			result = result + "<br /><br /> These actors are in the room: <br />" + players + "<br />";
+		}
 		
 		return result;
+	}
+	
+	public void updatePlayer(Player player, String username)
+	{
+		db.UpdatePlayer(player, username);
+	}
+	
+	public void updateItem(Item item, String username)
+	{
+		db.UpdateItem(item, username);
 	}
 
 }

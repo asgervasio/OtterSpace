@@ -12,9 +12,16 @@ h1 {
   text-align: center;
 }
 
-body, html
+h4 {
+  color: #08088A;
+  font-family: "Courier New", Courier, monospace;
+  font-variant: small-caps;
+  text-align: center;
+}
+
+body
 {
-  background-color: black;
+  background-image: url('background/OtterSpacePicture.jpg');
   height: 100%;
 }
 .Index{

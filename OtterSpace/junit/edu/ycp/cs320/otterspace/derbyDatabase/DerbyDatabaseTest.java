@@ -89,13 +89,13 @@ public class DerbyDatabaseTest {
 	}
 	
 	
-	@Test
+/*	@Test
 	public void testInsertPlayer(){
 		database.insertPlayer(player, username);
 		playerBlank = database.findPlayerUsingLocation(room1, username);
 		assertEquals(player.getName(), playerBlank.getName());
 	}
-	
+	*/
 	@Test
 	public void testInsertRoom(){
 		database.insertRoom(room1);

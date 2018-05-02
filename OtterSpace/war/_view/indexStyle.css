@@ -12,10 +12,20 @@ h1 {
   text-align: center;
 }
 
-body, html
+h4 {
+  color: rgb(0, 96, 128);
+  font-family: "Courier New", Courier, monospace;
+  font-variant: small-caps;
+  text-align: center;
+}
+
+body
 {
-  background-color: rgb(120,120, 120);
+  background-image: url('background/OtterSpacePicture.jpg');
   height: 100%;
+}
+.account{
+  color: #d3d3d3;
 }
 .Index{
   display: flex;
