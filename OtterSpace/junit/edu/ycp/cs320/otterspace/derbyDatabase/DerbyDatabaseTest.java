@@ -30,7 +30,6 @@ public class DerbyDatabaseTest {
 	private Item item, itemBlank;
 	private List<Item> itemBlankList;
 	private Player player, playerBlank;
-	String bs;
  	
 	@Before
 	public void setUp(){
