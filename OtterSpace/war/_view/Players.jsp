@@ -22,7 +22,7 @@
 <c:forEach  items="${usernames}" var="user">
 	<c:forEach  items="${emails}" var="email">
    <tr>
-    <td>Username: ${username}</td>
+    <td>Username: ${user}</td>
 	<td>Email Address: ${email}</td>
     
    </tr>
