@@ -471,16 +471,16 @@ public class DerbyDatabase implements IDatabase {
 			public Player execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
+				String playerTableName = username + "player";
 				
 				try {
 					// retreive all attributes from both Books and Authors tables
 					stmt = conn.prepareStatement(
-							"select ?player.* " +
-							"  from ?player " +
-							" where ?player.name = ?"
+							"select "+ playerTableName + ".* " +
+							"  from "+ playerTableName + " " +
+							" where "+ playerTableName +".name = ?"
 					);
-					stmt.setString(1, username);
-					stmt.setString(2, name);
+					stmt.setString(1, name);
 					
 					Player result = new Player();
 					
@@ -521,16 +521,15 @@ public class DerbyDatabase implements IDatabase {
 			public Player execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				
+				String playerTableName = username + "player";
 				try {
 					// retreive all attributes from rooms table
 					stmt = conn.prepareStatement(
-							"select ?player.* " +
-							"  from ?player " +
-							" where  ?player.room = ?"
+							"select "+ playerTableName + ".* " +
+							"  from "+ playerTableName + " " +
+							" where  "+ playerTableName + ".room = ?"
 					);
-					stmt.setString(1, username);
-					stmt.setInt(2, roomLoc.getRoomId());
+					stmt.setInt(1, roomLoc.getRoomId());
 					
 					System.out.println("Prepared Statement");
 					
@@ -630,15 +629,16 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public String execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
+				String consoleTableName = username + "consolePersist";
+
 					// insert the command into the console table
 				try {
 					stmt = conn.prepareStatement(
-							"insert into ?consolePersist (data) "
+							"insert into " + consoleTableName + " (data) "
 							+ "values (?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
-					stmt.setString(1, username);
-					stmt.setString(2, data);
+					stmt.setString(1, data);
 					
 					// execute the query
 					stmt.executeUpdate();
@@ -668,15 +668,15 @@ public class DerbyDatabase implements IDatabase {
 			public List<String> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
-				
+				String consoleTableName = username + "consolePersist";
+
 				try {
 					// retreive all attributes from items tables
 					stmt = conn.prepareStatement(
-							"select ?consolePersist.data " +
-							"  from ?consolePersist "
+							"select " + consoleTableName + ".data " +
+							"  from " + consoleTableName + " "
 					);
-					stmt.setString(1, username);
-					stmt.setString(2, username);
+
 
 					List<String> result = new ArrayList<String>();
 					String data = "";
