@@ -79,8 +79,11 @@ public class DerbyDatabase implements IDatabase {
 		// Set autocommit to false to allow execution of
 		// multiple queries/statements as part of the same transaction.
 		conn.setAutoCommit(false);
-		
 		return conn;
+	}
+	
+	private void loadConsoleData(String data, ResultSet resultSet, int index) throws SQLException {
+		data = resultSet.getString(index++);
 	}
 	
 	private void loadRoom(Room room, ResultSet resultSet, int index) throws SQLException {
@@ -206,7 +209,6 @@ public class DerbyDatabase implements IDatabase {
 							throw e;
 						}						
 					}
-					
 					return true;
 					
 				} finally {
@@ -215,6 +217,60 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
+				}
+			}
+		});
+	}
+	public void createPersistingTables() {
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+
+				
+				try {
+					try {
+						stmt1 = conn.prepareStatement(
+							"create table consolePersist (" +
+							"	data_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +									
+							"	data varchar(1000)" +
+							")"
+						);	
+						stmt1.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					
+/*					UNCOMMENT WHEN NEEDED
+					try {
+					stmt2 = conn.prepareStatement(
+							"create table changesPersist (" +
+							"   change_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +
+							"	typeChange varchar(40)," +
+							"	typeId integer," +
+							"	healthChange integer,"	+
+							"	locatChange varchar(40)," +
+							")"
+					);
+					stmt2.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}						
+					}
+*/
+							
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+
 				}
 			}
 		});
@@ -298,12 +354,14 @@ public class DerbyDatabase implements IDatabase {
 		
 		DerbyDatabase db = new DerbyDatabase();
 		db.createTables();
+		db.createPersistingTables();
 		
 		System.out.println("Loading initial data...");
 		db.loadInitialData();
 		
 		System.out.println("Success!");
 	}
+	
 
 
 	@Override
@@ -340,7 +398,93 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});	
 		}
+	
+	@Override
+	public String insertConsole(String data) {
+		return executeTransaction(new Transaction<String>() {
+			@Override
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+					// insert the command into the console table
+				try {
+					stmt = conn.prepareStatement(
+							"insert into consolePersist (data) "
+							+ "values (?)"
+							);
+					// substitute the title entered by the user for the placeholder in the query
+					stmt.setString(1, data);
+					
+					// execute the query
+					stmt.executeUpdate();
+					
+					System.out.println("Console Logged!!" + data);
+					
+					return null;
+					
+				} finally {
+	
+					DBUtil.closeQuietly(stmt);
+					
+					DBUtil.closeQuietly(conn);
 
+				}
+
+			}
+		});	
+		}
+	
+	@Override
+	public List<String> loadConsole() 
+	{
+		return executeTransaction(new Transaction<List<String>>() {
+			@Override
+			public List<String> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from items tables
+					stmt = conn.prepareStatement(
+							"select consolePersist.data " +
+							"  from consolePersist "
+					);
+					
+					List<String> result = new ArrayList<String>();
+					String data = "";
+
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					int index = resultSet.getMetaData().getColumnCount();
+					while (resultSet.next()) 
+					{
+						found = true;
+				        for (int i = 1; i <= index; i++) 
+				        {
+							result.add(resultSet.getString(i));
+				        }
+
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("No previous data found");
+
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+
+	}
+	
+	
 	@Override
 	public Room findRoomUsingTitle(String title) 
 	{
@@ -351,7 +495,7 @@ public class DerbyDatabase implements IDatabase {
 				ResultSet resultSet = null;
 				
 				try {
-					// retreive all attributes from both Books and Authors tables
+					// retrieve all info from room matching title
 					stmt = conn.prepareStatement(
 							"select rooms.* " +
 							"  from rooms " +
@@ -378,7 +522,7 @@ public class DerbyDatabase implements IDatabase {
 						result = room;
 					}
 					
-					// check if the title was found
+					// output if title was not found
 					if (!found) {
 						System.out.println("<" + title + "> was not found in the Room table");
 					}

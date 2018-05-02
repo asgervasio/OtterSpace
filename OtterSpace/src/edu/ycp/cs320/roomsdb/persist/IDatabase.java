@@ -27,6 +27,8 @@ public interface IDatabase {
 	List<User> findAllUsers();
 	List<User> findUserByLastName(String lastname);
 	List<User> matchUsernameWithPassword(String Username, String pass);
+	String insertConsole(String data);
+	List<String> loadConsole();
 
 	
 }

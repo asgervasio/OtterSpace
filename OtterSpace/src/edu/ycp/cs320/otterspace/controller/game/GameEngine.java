@@ -33,25 +33,35 @@ public class GameEngine
 			case "m":
 			case "walk":
 			case "head":
+				db.insertConsole("> " + command + "<br />");
 				result = move(commandSplit);
 				break;
 			case "look":
 			case "inspect":
+				db.insertConsole("> " + command + "<br />");
 				result = inspect(commandSplit);
 				break;
 			case "take":
 			case "pick":
+				db.insertConsole("> " + command + "<br />");
 				result = take(commandSplit);
 				break;
 			case "inventory":
 			case "i":
+				db.insertConsole("> " + command + "<br />");
 				result = displayInventory();
 				break;
 			case "start":
 			case "s":
+				db.insertConsole("> " + command + "<br />");
 				result = initializePlayer();
 				break;
+			case "load":
+			case "l":
+				result = loadPlayer();
+				break;
 			default:
+				db.insertConsole("> " + command + "<br />");
 				result = invalid(); 
 				break;
 		}	
@@ -67,8 +77,9 @@ public class GameEngine
 		inventory = player.getInventory();
 		for(int i = 0; i < inventory.size(); i++)
 		{
-			result = result + inventory.get(i).getTitle() + "<br />";
+			result = result + inventory.get(i).getTitle();
 		}
+		db.insertConsole(result);
 		return result;
 	}
 	
@@ -91,10 +102,10 @@ public class GameEngine
 			else
 			{
 				player.addItem(inspectedItem);
-				result = inspectedItem.getTitle() + " picked up";
+				result = inspectedItem.getTitle() + " picked up <br />";
 			}
 		}
-		
+		db.insertConsole(result);
 		return result;
 	}
 	
@@ -109,9 +120,9 @@ public class GameEngine
 		}
 		else
 		{
-			result = inspectedItem.getDescription();
+			result = inspectedItem.getDescription() + "<br />";
 		}
-		
+		db.insertConsole(result);
 		return result;
 	}
 
@@ -136,12 +147,14 @@ public class GameEngine
 						
 			
 		}
+		db.insertConsole(result);
 		return result;
 	}
 	public String invalid()
 	{
 		String result = "";
-		result = "Invalid Command";
+		result = "Invalid Command <br />";
+		db.insertConsole(result);
 		return result;
 
 	}
@@ -159,7 +172,22 @@ public class GameEngine
 		
 
 		result = outputRoomData();
+		db.insertConsole(result);
 		return result;
+	}
+	
+	public String loadPlayer()
+	{
+		String result = "";
+		List<String> consoleLog = new ArrayList<String>();
+		consoleLog = db.loadConsole();
+		for(int i = 1; i < consoleLog.size(); i++)
+		{
+			result += consoleLog.get(i);
+
+		}
+		return result;
+		
 	}
 	
 	public String outputRoomData()
@@ -173,7 +201,7 @@ public class GameEngine
 			items = items + itemList.get(i).getTitle() + "<br /> ";
 		}
 		result = ("You are in " + currentRoom.getTitle() + "<br /><br />" + currentRoom.getDescription() 
-			+ "<br /><br /> You see the following items on the ground: <br />" + items);
+			+ "<br /><br /> You see the following items on the ground: <br />" + items + "<br />");
 		
 		return result;
 	}
