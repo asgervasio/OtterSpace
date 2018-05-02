@@ -245,7 +245,6 @@ public class DerbyDatabase implements IDatabase {
 						}
 					}
 					
-/*					UNCOMMENT WHEN NEEDED
 					try {
 					stmt2 = conn.prepareStatement(
 							"create table changesPersist (" +
@@ -254,7 +253,8 @@ public class DerbyDatabase implements IDatabase {
 							"	typeChange varchar(40)," +
 							"	typeId integer," +
 							"	healthChange integer,"	+
-							"	locatChange varchar(40)," +
+							"	locatChangeType varchar(40)," +
+							"	locatChangeId integer " +
 							")"
 					);
 					stmt2.executeUpdate();
@@ -263,7 +263,7 @@ public class DerbyDatabase implements IDatabase {
 							throw e;
 						}						
 					}
-*/
+
 							
 					return true;
 					
@@ -420,6 +420,98 @@ public class DerbyDatabase implements IDatabase {
 					System.out.println("Console Logged!!" + data);
 					
 					return null;
+					
+				} finally {
+	
+					DBUtil.closeQuietly(stmt);
+					
+					DBUtil.closeQuietly(conn);
+
+				}
+
+			}
+		});	
+		}
+	
+	@Override
+	public String insertChange(String typeChange, int typeId, int healthChange, String locatTypeChange, int locatTypeId) {
+		return executeTransaction(new Transaction<String>() {
+			@Override
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+					// insert the command into the console table
+				try {
+					stmt = conn.prepareStatement(
+							"insert into changesPersist (typeChange, typeId, healthChange, locatTypeChange, locatTypeId) "
+							+ "values (?, ?, ?, ?, ?)"
+							);
+					// substitute the title entered by the user for the placeholder in the query
+					stmt.setString(1, typeChange);
+					stmt.setInt(2, typeId);
+					stmt.setInt(3, healthChange);
+					stmt.setString(4, locatTypeChange);
+					stmt.setInt(5, locatTypeId);
+
+					// execute the query
+					stmt.executeUpdate();
+					
+					
+					return null;
+					
+				} finally {
+	
+					DBUtil.closeQuietly(stmt);
+					
+					DBUtil.closeQuietly(conn);
+
+				}
+
+			}
+		});	
+		}
+	@Override
+	public String loadChanges() {
+		return executeTransaction(new Transaction<String>() {
+			@Override
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+					// insert the command into the console table
+				try {
+					stmt = conn.prepareStatement(
+							"select changesPersist.* " +
+							"  from changesPersist "
+					);
+
+					// execute the query
+					stmt.executeUpdate();
+					
+							
+					String data = "";
+
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					int index = resultSet.getMetaData().getColumnCount();
+					while (resultSet.next()) 
+					{
+						found = true;
+				        for (int i = 1; i <= index; i++) 
+				        {
+							result.add(resultSet.getString(i));
+				        }
+
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("No previous data found");
+
+					}
+					
+					return result;
 					
 				} finally {
 	

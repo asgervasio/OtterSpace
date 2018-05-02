@@ -29,6 +29,7 @@ public interface IDatabase {
 	List<User> matchUsernameWithPassword(String Username, String pass);
 	String insertConsole(String data);
 	List<String> loadConsole();
+	String insertChange(String typeChange, int typeId, int healthChange, String locatTypeChange, int locatTypeId);
 
 	
 }

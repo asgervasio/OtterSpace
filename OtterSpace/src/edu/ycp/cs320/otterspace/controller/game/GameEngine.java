@@ -103,6 +103,8 @@ public class GameEngine
 			else
 			{
 				player.addItem(inspectedItem);
+				inspectedItem.setLocation("player");
+				db.insertChange("item", inspectedItem.getItemId(), (Integer) null, "actor", 1);
 				result = inspectedItem.getTitle() + " picked up <br />";
 			}
 		}
@@ -144,6 +146,7 @@ public class GameEngine
 		else
 		{
 			player.setCurrentRoom(db.findRoomUsingRoomId(destinationRoomId));
+			db.insertChange("actor", 1, (Integer) null, "room", player.getCurrentRoom().getRoomId());
 			result = outputRoomData();
 						
 			
@@ -151,13 +154,13 @@ public class GameEngine
 		db.insertConsole(result);
 		return result;
 	}
+	
 	public String invalid()
 	{
 		String result = "";
 		result = "Invalid Command <br />";
 		db.insertConsole(result);
 		return result;
-
 	}
 	
 	public String initializePlayer()
