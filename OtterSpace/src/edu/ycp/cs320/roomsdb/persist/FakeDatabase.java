@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
+import edu.ycp.cs320.otterspace.controller.game.Player;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.User;
 
@@ -178,6 +179,30 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public String changeInfo(String newEmail, String username, String pswd, String newPassword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Integer findRoomIdFromConnection(String connection) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player insertPlayer(Player player) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player findPlayerUsingName(String name) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player findPlayerUsingLocation(Room roomLoc) {
 		// TODO Auto-generated method stub
 		return null;
 	}

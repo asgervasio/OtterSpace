@@ -7,6 +7,7 @@ import java.util.List;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Pair;
+import edu.ycp.cs320.otterspace.controller.game.Player;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.User;
 
@@ -36,7 +37,6 @@ public class InitialData {
 		}
 	}
 
-
 	public static List<User> getUsers() throws IOException {
 		List<User> userList = new ArrayList<User>();
 		ReadCSV readUsers = new ReadCSV("Users.csv");
@@ -48,7 +48,7 @@ public class InitialData {
 					break;
 				}
 				Iterator<String> i = tuple.iterator();
-
+	
 				User user = new User();
 				user.setEmail(i.next());
 				
@@ -61,15 +61,15 @@ public class InitialData {
 				userList.add(user);
 				
 			}
-			System.out.println(userList.size()+" users");
+
 			return userList;
 		} finally {
 			readUsers.close();
 		}
 	}
+		
 	
-
-  public static List<Item> getItems() throws IOException {
+	public static List<Item> getItems() throws IOException {
 		List<Item> itemList = new ArrayList<Item>();
 		ReadCSV readRooms = new ReadCSV("items.csv");
 		try {
@@ -95,33 +95,60 @@ public class InitialData {
 			readRooms.close();
 		}
 	}
-  
-  public static List<Pair<String, Integer>> getConnections() throws IOException {
+	  
+	public static List<Pair<String, Integer>> getConnections() throws IOException {
 	  List<Pair<String, Integer>> connectList = new ArrayList<Pair<String, Integer>>();
 	  ReadCSV readConnection = new ReadCSV("connections.csv");
-	  try {
-		  while (true) {
-			  List<String> tuple = readConnection.next();
-			  if (tuple == null)
-				  break;
-			  
-			  Iterator<String> i = tuple.iterator();
-			  Pair<String, Integer> connect = new Pair();
-			  connect.setLeft(i.next());
-			  connect.setRight(Integer.parseInt(i.next()));
-			  connectList.add(connect);
+		  try {
+			  while (true) {
+				  List<String> tuple = readConnection.next();
+				  if (tuple == null)
+					  break;
+				  
+				  Iterator<String> i = tuple.iterator();
+				  Pair<String, Integer> connect = new Pair();
+				  connect.setLeft(i.next());
+				  connect.setRight(Integer.parseInt(i.next()));
+				  connectList.add(connect);
+			  }
+			  return connectList;
+		  } finally {
+			  readConnection.close();
 		  }
-		  return connectList;
-	  } finally {
-		  readConnection.close();
 	  }
-  }
+	  
+	public static List<Player> getPlayers() throws IOException {
+		List<Player> playerList = new ArrayList<Player>();
+		ReadCSV readPlayer = new ReadCSV("players.csv");
+		try {
+			while (true) {
+				List<String> tuple = readPlayer.next();
+				if (tuple == null)
+					break;
+				  
+				Iterator<String> i = tuple.iterator();
+				Player player = new Player();
+				player.setName(i.next());
+				player.setDescription(i.next());
+				player.setHealth(Integer.parseInt(i.next()));
+				player.setGold(Integer.parseInt(i.next()));
+				player.setScore(Integer.parseInt(i.next()));
+				player.setAttack(Integer.parseInt(i.next()));
+				player.setDefense(Integer.parseInt(i.next()));
+				player.setRoomLoc(Integer.parseInt(i.next()));
+				player.setHostility(stringToBoolean(i.next()));
+				playerList.add(player);  
+			}
+			return playerList;
+		  } finally {
+			  readPlayer.close();
+		  }
+	}
   
-  private static boolean stringToBoolean(String x){
-	  if(x.equals("true"))
-		  return true;
-	  else
-		  return false;
-  }
-
+	private static boolean stringToBoolean(String x){
+		  if(x.equals("true"))
+			  return true;
+		  else
+			  return false;
+	}
 }

@@ -1,8 +1,10 @@
 
 package edu.ycp.cs320.otterspace.controller.game;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Set;
 
 //This is only used as a stand-in for the real room class
@@ -58,6 +60,10 @@ public class Room {
 	public Integer getConnectionID(String direction){
 		Integer id = connections.get(direction);
 		return id;
+	}
+	
+	public HashMap<String, Integer> getTrueConnections(){
+		return connections;
 	}
 	
 	public Set getConnections(){

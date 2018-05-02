@@ -18,6 +18,9 @@ public interface IDatabase {
 	public List<Item> findItemsUsingLocation(int location);
 	public Integer findRoomIdFromConnection(String connection);
 
+	public Player insertPlayer(Player player);
+	public Player findPlayerUsingName(String name);
+	public Player findPlayerUsingLocation(Room roomLoc);
   
 	//User-based methods
 	List<User> getAccountInfo(String Username);
