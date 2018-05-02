@@ -6,6 +6,29 @@ h1 {
   font-variant: small-caps;
   text-align: center;
 }
+
+
+h4 {
+  color: rgb(0, 96, 128);
+  font-family: "Courier New", Courier, monospace;
+  font-variant: small-caps;
+  text-align: center;
+}
+
+body
+{
+  background-image: url('background/OtterSpacePicture.jpg');
+  height: 100%;
+}
+.account{
+  color: #d3d3d3;
+}
+.Index{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(50,50,50,0.1);
+
 .error{
 	color: red;
 }
@@ -24,6 +47,7 @@ background-position: 0 0, 40px 60px, 130px 270px, 70px 100px;
 
 .label{
 	color: white;
+
   font-family: "scifi_thin";
   font-size: 200%;
   font-variant: small-caps;

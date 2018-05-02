@@ -14,6 +14,7 @@
 	
 
 <div class="heading">
+			<h1>Otter Space</h1>
     		<h4>Hello, ${username}.</h4>
   		</div>
 

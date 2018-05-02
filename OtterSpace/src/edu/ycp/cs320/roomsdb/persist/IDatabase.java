@@ -21,7 +21,7 @@ public interface IDatabase {
 
 	public Player insertPlayer(Player actor, String username);
 	public Player findPlayerUsingName(String name, String username);
-	public Player findPlayerUsingLocation(Room roomLoc, String username);
+	public List<Player> findPlayersUsingLocation(Room roomLoc, String username);
   
 	//User-based methods
     List<User> getAccountInfo(String Username);
@@ -36,6 +36,9 @@ public interface IDatabase {
 	List<String> loadConsole(String username);
 	public void createTables(String username);
 	public void createPersistingTables(String username);
+	public void loadInitialData(String username);
+	Player UpdatePlayer(Player player, String username);
+	Item UpdateItem(Item item, String username);
     
 
 

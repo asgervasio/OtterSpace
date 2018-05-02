@@ -3,12 +3,17 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
 <html>
+	<style>
+		<jsp:include page="indexStyle.css"/>	
+	</style>
+	
 	<head>
       <title>Account info</title>
 		
       </head>
 	<body>
 
+<div class="account">
 
 User Name: 	${username}<br>
 First name:	${firstName}<br>
@@ -26,7 +31,7 @@ New E-Mail (leave blank if n/a): 	<input type="text" ><br>
 			<input type="Submit" name="index" value="Back To Menu"> <br>
 	</form>
 
-
+</div>
 
 	</body>
 </html>
