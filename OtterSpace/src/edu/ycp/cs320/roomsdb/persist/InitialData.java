@@ -61,6 +61,7 @@ public class InitialData {
 				userList.add(user);
 				
 			}
+
 			return userList;
 		} finally {
 			readUsers.close();
