@@ -1345,11 +1345,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
-	@Override
-	public List<User> changePassword(String name, String pswd, String newPassword) {
-		// TODO Auto-generated method stub
-		return null;
-	}
+
 
 
 
