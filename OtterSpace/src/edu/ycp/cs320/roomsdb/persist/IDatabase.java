@@ -31,5 +31,18 @@ public interface IDatabase {
 	List<String> loadConsole();
 	String insertChange(String typeChange, int typeId, int healthChange, String locatTypeChange, int locatTypeId);
 
-	
+
+		List<User> getAccountInfo(String Username);
+		Boolean    addUserToDatabase(String Username, String pass, String email, String first, String last);
+		List<User> DeleteUserFromDatabase(String name, String pswd);
+		String changeInfo(String newEmail, String username, String pswd, String newPassword);
+		List<User> findAllUsers();
+		List<User> findUserByLastName(String lastname);
+		List<User> matchUsernameWithPassword(String Username, String pass);
+    
+  //Console methods
+	  String insertConsole(String data);
+	  List<String> loadConsole();
+
+
 }

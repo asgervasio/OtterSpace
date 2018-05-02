@@ -81,7 +81,7 @@ public class DerbyDatabaseTest {
 	@Test
 	public void testFindItemUsingRoomLocat(){
 		database.insertItem(item);
-		itemBlank = database.findItemUsingLocation(4);
+		itemBlank = (Item) database.findItemsUsingLocation(4);
 		assertEquals(item.getTitle(), itemBlank.getTitle());
 		assertEquals(item.getStatAffected(), itemBlank.getStatAffected());		
 	}

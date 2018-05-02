@@ -814,7 +814,13 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-
+	
+	@Override
+	public List<Item> findItemsUsingLocation(int location) {
+		// TODO Auto-generated method stub
+		return null;
+		
+	}
 	@Override
 	public Item findItemUsingItemId(int itemId) 
 	{
@@ -869,60 +875,6 @@ public class DerbyDatabase implements IDatabase {
 	
 
 	@Override
-	public List<Item> findItemsUsingLocation(int locationId) 
-	{
-		return executeTransaction(new Transaction<List<Item>>() {
-			@Override
-			public List<Item> execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-				
-				try {
-					// retreive all attributes from items tables
-					stmt = conn.prepareStatement(
-							"select items.* " +
-							"  from items " +
-							" where  items.roomLocat = ?"
-					);
-					stmt.setInt(1, locationId);
-					
-					List<Item> result = new ArrayList<Item>();
-
-					
-					resultSet = stmt.executeQuery();
-					
-					// for testing that a result was returned
-					Boolean found = false;
-					
-					while (resultSet.next()) {
-						found = true;
-						
-						// create new item object
-						// retrieve attributes from resultSet starting with index 1
-						Item item = new Item();
-						loadItem(item, resultSet, 1);
-						
-						
-						result.add(item);
-					}
-					
-					// check if the id was found
-					if (!found) {
-						System.out.println("<" + locationId + "> was not found in the item table");
-
-					}
-					
-					return result;
-				} finally {
-					DBUtil.closeQuietly(resultSet);
-					DBUtil.closeQuietly(stmt);
-				}
-			}
-		});
-
-	}
-
-	@Override
 	public List<User> getAccountInfo(String username) {
 		return executeTransaction(new Transaction< List<User>>() {
 			@Override
@@ -935,7 +887,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt = conn.prepareStatement(
 							"select * " +
 							"  from users " +
-							" where  username = ?"
+							" where  Username = ?"
 					);
 					stmt.setString(1, username);
 					
@@ -949,12 +901,11 @@ public class DerbyDatabase implements IDatabase {
 					while (resultSet.next()) {
 						found = true;
 						
-						// create new Room object
+						// create new User object
 						// retrieve attributes from resultSet starting with index 1
 						User u = new User();
 						loadUser(u, resultSet, 1);
-						
-						
+					
 						result.add(u);
 					}
 					
@@ -974,11 +925,11 @@ public class DerbyDatabase implements IDatabase {
 
 
 	@Override
-	public List<User> addUserToDatabase(String username, String pass, String email, String first, String last) {
+	public Boolean addUserToDatabase(String username, String pass, String email, String first, String last) {
 		{
-			return executeTransaction(new Transaction<List<User>>() {
+			return executeTransaction(new Transaction<Boolean>() {
 				@Override
-				public List<User> execute(Connection conn) throws SQLException {
+				public Boolean execute(Connection conn) throws SQLException {
 					PreparedStatement stmt = null;
 						// user into data base
 					try {
@@ -999,7 +950,7 @@ public class DerbyDatabase implements IDatabase {
 						
 						System.out.println("New user <"+username+">!");
 						
-						return null;
+						return true;
 					} finally {
 						
 						DBUtil.closeQuietly(stmt);
@@ -1019,9 +970,60 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public List<User> changePassword(String name, String pswd, String newPassword) {
-		// TODO Auto-generated method stub
-		return null;
+	public String changeInfo(String newEmail, String username, String pswd, String newPassword) {
+		return executeTransaction(new Transaction<String>() {
+			@Override
+			public String execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+				ResultSet resultSet = null;
+				User u = new User();
+				try {
+					stmt1 = conn.prepareStatement(
+							"select * " +
+									"  from users " +
+									" where  username = ? and password = ?"
+					);	
+					stmt1.setString(1, username);
+					stmt1.setString(2, pswd);
+					resultSet = stmt1.executeQuery();
+					
+		
+						
+						// create new User object
+						// retrieve attributes from resultSet starting with index 1
+					
+						loadUser(u, resultSet, 1);
+						System.out.println("User pulled in db.changeInfo() ");
+						System.out.println(u.getEmail());
+						System.out.println(u.getFirstName());
+						System.out.println(u.getLastName());
+						System.out.println(u.getPassword());
+						System.out.println(u.getUsername());
+					
+					stmt2 = conn.prepareStatement(
+							"update user"
+							+ "set emailAddress = ?, password= ?, firstname= ?, lastname= ?, Username= ?"
+							+ "where Username = ?"
+					);
+					stmt2.setString(1, newEmail);
+					stmt2.setString(2, newPassword);
+					stmt2.setString(3, u.getFirstName());
+					stmt2.setString(2, u.getLastName());
+					stmt2.setString(4, u.getUsername());
+					
+					stmt2.executeUpdate();
+					
+					
+					
+					return newPassword;
+					
+				} finally {
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+				}
+			}
+		});
 	}
 
 	@Override
@@ -1084,7 +1086,7 @@ public class DerbyDatabase implements IDatabase {
 						// retreive all attributes from rooms table
 						stmt = conn.prepareStatement(
 								"select * " +
-								"  from users " +
+								"from users " +
 								" where  lastname = ?"
 						);
 						stmt.setString(1, lastname);
@@ -1124,8 +1126,55 @@ public class DerbyDatabase implements IDatabase {
 
 	@Override
 	public List<User> matchUsernameWithPassword(String Username, String pass) {
-		// TODO Auto-generated method stub
-		return null;
+		return executeTransaction(new Transaction< List<User>>() {
+			@Override
+			public  List<User> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from rooms table
+					stmt = conn.prepareStatement(
+							"select username, password " +
+							"  from users " +
+							" where  username = ? and password = ?"
+					);
+					stmt.setString(1, Username);
+					stmt.setString(1, pass);
+					 List<User> result = new ArrayList<User>();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						User u = new User();
+						loadUser(u, resultSet, 1);
+						
+						
+						result.add(u);
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("<" + Username + "> was not found in the user table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
 	}
+
+	
+
 
 }
