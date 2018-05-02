@@ -144,6 +144,26 @@ public class InitialData {
 			  readPlayer.close();
 		  }
 	}
+	
+	public static List<Pair<Integer, Integer>> getRoomConnections() throws IOException {
+		List<Pair<Integer, Integer>> roomConnectionList = new ArrayList<Pair<Integer, Integer>>();
+		ReadCSV readRoomConnect = new ReadCSV("roomConnections.csv");
+		try {
+			while (true) {
+				List<String> tuple = readRoomConnect.next();
+				if(tuple == null)
+					break;
+				Iterator<String> i = tuple.iterator();
+				Pair<Integer, Integer> roomConnection = new Pair();
+				roomConnection.setLeft(Integer.parseInt(i.next()));
+				roomConnection.setRight(Integer.parseInt(i.next()));
+				roomConnectionList.add(roomConnection);
+			}
+			return roomConnectionList;
+		} finally {
+			readRoomConnect.close();
+		}
+	}
   
 	private static boolean stringToBoolean(String x){
 		  if(x.equals("true"))

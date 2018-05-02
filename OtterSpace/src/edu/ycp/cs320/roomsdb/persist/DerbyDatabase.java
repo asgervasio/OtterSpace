@@ -315,6 +315,8 @@ public class DerbyDatabase implements IDatabase {
 				List<Player> playerList;
 				String itemTableName = username + "items";
 				String playerTableName = username + "player";
+				List<Pair<Integer, Integer>> roomConnectionList;
+
 				
 				try {
 					roomList = InitialData.getRooms();
@@ -322,6 +324,7 @@ public class DerbyDatabase implements IDatabase {
 					userList = InitialData.getUsers();
 					connectionList = InitialData.getConnections();
 					playerList = InitialData.getPlayers();
+					roomConnectionList = InitialData.getRoomConnections();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -331,6 +334,7 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertUser = null;
 				PreparedStatement insertConnection = null;
 				PreparedStatement insertPlayer = null;
+				PreparedStatement insertRoomConnection = null;
 				
 				try {
 					insertRoom = conn.prepareStatement("insert into rooms (title, description, requirement) values (?, ?, ?)");
@@ -387,6 +391,14 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertPlayer.executeBatch();
 					
+					insertRoomConnection = conn.prepareStatement("insert into roomConnections (room_id, connection_id) values (?, ?)");
+					for (Pair<Integer, Integer> roomConnection : roomConnectionList){
+						insertRoomConnection.setInt(1, roomConnection.getLeft());
+						insertRoomConnection.setInt(2, roomConnection.getRight());
+						insertRoomConnection.addBatch();
+					}
+					insertRoomConnection.executeBatch();
+					
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertItem);
@@ -394,6 +406,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertUser);
 					DBUtil.closeQuietly(insertConnection);
 					DBUtil.closeQuietly(insertPlayer);
+					DBUtil.closeQuietly(insertRoomConnection);
 				}
 			}
 		});
@@ -564,6 +577,7 @@ public class DerbyDatabase implements IDatabase {
 			public Room execute(Connection conn) throws SQLException {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
+
 					// inserting the title description, and locked into the database
 				try {
 					stmt1 = conn.prepareStatement(
@@ -592,9 +606,7 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.addBatch();
 					}
 					stmt2.executeBatch();
-					
-					
-					
+
 					System.out.println("Stored new room!!");
 					
 					return null;
@@ -609,6 +621,7 @@ public class DerbyDatabase implements IDatabase {
 		});	
 
 	}
+
 		
 	
 	@Override
@@ -697,6 +710,7 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
+
 
 	}
 	
