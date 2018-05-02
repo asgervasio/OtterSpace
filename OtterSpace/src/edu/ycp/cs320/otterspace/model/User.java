@@ -76,5 +76,11 @@ public class User {
 		
 		return loginStatus;
 	}
+	
+	public boolean logOut(String Username, String password){
+		loginStatus = false;
+		
+		return loginStatus;
+	}
 
 }
