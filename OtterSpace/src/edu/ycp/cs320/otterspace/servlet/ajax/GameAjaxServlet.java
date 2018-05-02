@@ -24,8 +24,9 @@ public class GameAjaxServlet extends HttpServlet
 			throws ServletException, IOException {
 
 		doRequest(req, resp);
-
-
+		HttpSession session = req.getSession();
+		String username = (String) session.getAttribute("username");
+		System.out.println(username);
 
 
 	}

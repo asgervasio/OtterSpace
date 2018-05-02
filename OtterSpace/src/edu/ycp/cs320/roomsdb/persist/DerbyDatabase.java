@@ -1126,17 +1126,17 @@ public class DerbyDatabase implements IDatabase {
 						// user into data base
 					try {
 						stmt = conn.prepareStatement(
-								"insert into user(emailAddress, password, firstname, lastname, Username) "
+								"insert into users (emailAddress, password, firstname, lastname, Username) "
 								+ "values (?, ?, ?, ?, ?)"
 								);
 						// substitute the title entered by the user for the placeholder in the query
 						
-						stmt.setString(1, username);
+
+						stmt.setString(1, email);
 						stmt.setString(2, pass);
-						stmt.setString(3, email);
-						stmt.setString(4, first);
-						stmt.setString(5, last);
-						
+						stmt.setString(3, first);
+						stmt.setString(4, last);
+						stmt.setString(5, username);
 						// execute the query
 						stmt.executeUpdate();
 						
@@ -1166,53 +1166,32 @@ public class DerbyDatabase implements IDatabase {
 		return executeTransaction(new Transaction<String>() {
 			@Override
 			public String execute(Connection conn) throws SQLException {
-				PreparedStatement stmt1 = null;
-				PreparedStatement stmt2 = null;
-				ResultSet resultSet = null;
-				User u = new User();
-				try {
-					stmt1 = conn.prepareStatement(
-							"select * " +
-									"  from users " +
-									" where  username = ? and password = ?"
-					);	
-					stmt1.setString(1, username);
-					stmt1.setString(2, pswd);
-					resultSet = stmt1.executeQuery();
-					
-		
-						
-						// create new User object
-						// retrieve attributes from resultSet starting with index 1
-					
-						loadUser(u, resultSet, 1);
-						System.out.println("User pulled in db.changeInfo() ");
-						System.out.println(u.getEmail());
-						System.out.println(u.getFirstName());
-						System.out.println(u.getLastName());
-						System.out.println(u.getPassword());
-						System.out.println(u.getUsername());
-					
-					stmt2 = conn.prepareStatement(
-							"update user"
-							+ "set emailAddress = ?, password= ?, firstname= ?, lastname= ?, Username= ?"
+				
+				PreparedStatement stmt = null;
+				
+				//ensuring that the user is valid
+				if(!matchUsernameWithPassword(username, pswd).isEmpty()){
+					return "User not Valid";
+				}
+				try{
+					stmt = conn.prepareStatement(
+							"update users"
+							+ "set emailAddress = ?, password= ?"
 							+ "where Username = ?"
 					);
-					stmt2.setString(1, newEmail);
-					stmt2.setString(2, newPassword);
-					stmt2.setString(3, u.getFirstName());
-					stmt2.setString(2, u.getLastName());
-					stmt2.setString(4, u.getUsername());
+					stmt.setString(1, newEmail);
+					stmt.setString(2, newPassword);
+					stmt.setString(3, username);
 					
-					stmt2.executeUpdate();
+					stmt.executeUpdate();
 					
 					
 					
-					return newPassword;
+					return "Password Changed";
 					
 				} finally {
-					DBUtil.closeQuietly(stmt1);
-					DBUtil.closeQuietly(stmt2);
+					
+					DBUtil.closeQuietly(stmt);
 				}
 			}
 		});
@@ -1327,12 +1306,12 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// retreive all attributes from rooms table
 					stmt = conn.prepareStatement(
-							"select username, password " +
+							"select * " +
 							"  from users " +
 							" where  username = ? and password = ?"
 					);
 					stmt.setString(1, Username);
-					stmt.setString(1, pass);
+					stmt.setString(2, pass);
 					 List<User> result = new ArrayList<User>();
 					
 					resultSet = stmt.executeQuery();

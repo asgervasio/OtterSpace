@@ -44,11 +44,8 @@ public class UserController
 		
 	}
 	/*
-	public void setAccountInfomation(String UserName, String Password, String Email, String FirstName, String LastName){
-		model.setUserAccountInformation(UserName, FirstName, LastName, Email, Password);
-		//basically unused/unneeded function
-	}
-	*/
+	PLEASE LET ME COMMIT
+		*/
 	
 	public void changeUserInfo(String Email, String username, String pswd, String newPassword)  {
 		 db.changeInfo(Email,  username,  pswd,  newPassword);

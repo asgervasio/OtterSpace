@@ -184,6 +184,7 @@ public class FakeDatabase implements IDatabase {
 	}
 
 	@Override
+
 	public Integer findRoomIdFromConnection(String connection) {
 		// TODO Auto-generated method stub
 		return null;
@@ -257,15 +258,18 @@ public class FakeDatabase implements IDatabase {
 
 	@Override
 	public String insertConsole(String data, String username) {
+
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+
 	public List<String> loadConsole(String username) {
+>
 		// TODO Auto-generated method stub
 		return null;
 	}
+
 
 	@Override
 	public void createTables(String username) {
@@ -278,5 +282,6 @@ public class FakeDatabase implements IDatabase {
 		// TODO Auto-generated method stub
 		
 	}
+
 
 }// end of class
