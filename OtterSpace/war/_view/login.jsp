@@ -11,7 +11,7 @@ session_start();
 	<title> Login </title>
 
 	<style>
-		<link rel="stylesheet" type="text/css" href="css/loginStyle.css">
+		<jsp:include page="loginStyle.css"/>
 	</style>
 
 	</head>
