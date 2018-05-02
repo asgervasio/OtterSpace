@@ -7,10 +7,14 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import edu.ycp.cs320.otterspace.controller.game.Item;
 import edu.ycp.cs320.otterspace.controller.game.Pair;
+import edu.ycp.cs320.otterspace.controller.game.Player;
 import edu.ycp.cs320.otterspace.controller.game.Room;
 import edu.ycp.cs320.otterspace.model.User;
 import edu.ycp.cs320.sqldemo.DBUtil;
@@ -107,6 +111,18 @@ public class DerbyDatabase implements IDatabase {
 		user.setLastName(resultSet.getString(index++));
 		user.setUsername(resultSet.getString(index++));
 	}
+	
+	private void loadPlayer(Player player, ResultSet resultSet, int index) throws SQLException {
+		player.setRoomLoc(resultSet.getInt(index++));
+		player.setName(resultSet.getString(index++));
+		player.setDescription(resultSet.getString(index++));
+		player.setHealth(resultSet.getInt(index++));		
+		player.setGold(resultSet.getInt(index++));	
+		player.setScore(resultSet.getInt(index++));	
+		player.setAttack(resultSet.getInt(index++));	
+		player.setDefense(resultSet.getInt(index++));
+		player.setHostility(resultSet.getBoolean(index++));
+	}
 
 	public void createTables() {
 		executeTransaction(new Transaction<Boolean>() {
@@ -117,6 +133,7 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt3 = null;
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
+				PreparedStatement stmt6 = null;
 				
 				try {
 					try {
@@ -207,6 +224,29 @@ public class DerbyDatabase implements IDatabase {
 						}						
 					}
 					
+					try {
+						stmt6 = conn.prepareStatement(
+							"create table player (" +
+							"	player_id integer primary key "+
+							"		generated always as identity (start with 1, increment by 1), " +
+							"	name varchar(40)," +
+							"	description varchar(40)," +
+							"	health integer," +
+							"	gold integer," +
+							"   score integer," +
+							"	attack integer," +
+							"	defense integer," +
+							"	room integer," +
+							"	hostility varchar(10)" +
+							")"
+							);
+						stmt6.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}												
+					}
+
 					return true;
 					
 				} finally {
@@ -215,6 +255,7 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
+					DBUtil.closeQuietly(stmt6);
 				}
 			}
 		});
@@ -228,21 +269,24 @@ public class DerbyDatabase implements IDatabase {
 				List<Item> itemList;
 				List<User> userList;
 				List<Pair<String, Integer>> connectionList;
+				List<Player> playerList;
 				
 				try {
 					roomList = InitialData.getRooms();
 					itemList = InitialData.getItems();
 					userList = InitialData.getUsers();
 					connectionList = InitialData.getConnections();
+					playerList = InitialData.getPlayers();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
-
+				
 				PreparedStatement insertRoom = null;
 				PreparedStatement insertItem = null;
 				PreparedStatement insertUser = null;
 				PreparedStatement insertConnection = null;
-
+				PreparedStatement insertPlayer = null;
+				
 				try {
 					insertRoom = conn.prepareStatement("insert into rooms (title, description, requirement) values (?, ?, ?)");
 					for (Room room : roomList) {
@@ -252,7 +296,7 @@ public class DerbyDatabase implements IDatabase {
 						insertRoom.addBatch();
 					}
 					insertRoom.executeBatch();
-					
+										
 					insertItem = conn.prepareStatement("insert into items (title, description, roomLocat, statAff, statChangeVal) values (?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
 						insertItem.setString(1, item.getTitle());
@@ -262,7 +306,7 @@ public class DerbyDatabase implements IDatabase {
 						insertItem.setInt(5, item.getStatChangeVal());
 						insertItem.addBatch();
 					}
-					insertItem.executeBatch();
+					insertItem.executeBatch();				
 					
 					insertUser = conn.prepareStatement("insert into users (emailAddress, password, firstname, lastname, Username) values (?, ?, ?, ?, ?)");
 					for (User user : userList) {
@@ -273,7 +317,7 @@ public class DerbyDatabase implements IDatabase {
 						insertUser.setString(5, user.getUsername());
 						insertUser.addBatch();
 					}
-					insertUser.executeBatch();
+					insertUser.executeBatch();				
 					
 					insertConnection = conn.prepareStatement("insert into connections (connectionDirection, roomID) values (?, ?)");
 					for (Pair<String, Integer> connect : connectionList){
@@ -282,11 +326,29 @@ public class DerbyDatabase implements IDatabase {
 						insertConnection.addBatch();
 					}
 					insertConnection.executeBatch();
+					
+					insertPlayer = conn.prepareStatement("insert into player (name, description, health, gold, score, attack, defense, hostility, room) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					for (Player player : playerList) {
+						insertPlayer.setString(1, player.getName());
+						insertPlayer.setString(2, player.getDescription());
+						insertPlayer.setInt(3, player.getHealth());
+						insertPlayer.setInt(4, player.getGold());
+						insertPlayer.setInt(5, player.getScore());
+						insertPlayer.setInt(6, player.getAttack());
+						insertPlayer.setInt(7, player.getDefense());
+						insertPlayer.setBoolean(8, player.getHostility());
+						insertPlayer.setInt(9, player.getRoomLoc());
+						insertPlayer.addBatch();
+					}
+					insertPlayer.executeBatch();
+					
 					return true;
 				} finally {
 					DBUtil.closeQuietly(insertItem);
 					DBUtil.closeQuietly(insertRoom);
 					DBUtil.closeQuietly(insertUser);
+					DBUtil.closeQuietly(insertConnection);
+					DBUtil.closeQuietly(insertPlayer);
 				}
 			}
 		});
@@ -305,33 +367,34 @@ public class DerbyDatabase implements IDatabase {
 		System.out.println("Success!");
 	}
 
-
-	@Override
-	public Room insertRoom(Room room) {
-		return executeTransaction(new Transaction<Room>() {
+	public Player insertPlayer(Player player) {
+		return executeTransaction(new Transaction<Player>() {
 			@Override
-			public Room execute(Connection conn) throws SQLException {
+			public Player execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
-					// inserting the title description, and locked into the database
 				try {
 					stmt = conn.prepareStatement(
-							"insert into rooms (title, description, requirement) "
-							+ "values (?, ?, ?)"
+							"insert into player (name, description, health, gold, score, attack, defense, hostility, room) "
+							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 							);
-					// substitute the title entered by the user for the placeholder in the query
-					stmt.setString(1, room.getTitle());
-					stmt.setString(2, room.getDescription());
-					stmt.setBoolean(3, room.getRequirement());
-					
+					stmt.setString(1, player.getName());
+					stmt.setString(2, player.getDescription());
+					stmt.setInt(3, player.getHealth());
+					stmt.setInt(4, player.getGold());
+					stmt.setInt(5, player.getScore());
+					stmt.setInt(6, player.getAttack());
+					stmt.setInt(7, player.getDefense());
+					stmt.setBoolean(8, player.getHostility());
+					stmt.setInt(9, player.getCurrentRoom().getRoomId());
 
 					// execute the query
 					stmt.executeUpdate();
 					
-					System.out.println("Stored new room!!");
+					System.out.println("Stored new player!!");
 					
 					return null;
 				} finally {
-;					
+					
 					DBUtil.closeQuietly(stmt);
 					
 					DBUtil.closeQuietly(conn);
@@ -339,7 +402,162 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});	
-		}
+	}
+	
+	public Player findPlayerUsingName(String name){
+		return executeTransaction(new Transaction<Player>() {
+			@Override
+			public Player execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from both Books and Authors tables
+					stmt = conn.prepareStatement(
+							"select player.* " +
+							"  from player " +
+							" where player.name = ?"
+					);
+					stmt.setString(1, name);
+					
+					Player result = new Player();
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						Player player = new Player();
+						loadPlayer(player, resultSet, 1);
+						
+						
+						result = player;
+					}
+					
+					// check if the title was found
+					if (!found) {
+						System.out.println("<" + name + "> was not found in the Room table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});		
+	}
+	
+	public Player findPlayerUsingLocation(Room roomLoc){
+		return executeTransaction(new Transaction<Player>() {
+			@Override
+			public Player execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from rooms table
+					stmt = conn.prepareStatement(
+							"select player.* " +
+							"  from player " +
+							" where  player.room = ?"
+					);
+					stmt.setInt(1, roomLoc.getRoomId());
+					
+					System.out.println("Prepared Statement");
+					
+					Player result = new Player();
+					
+					resultSet = stmt.executeQuery();
+					
+					System.out.println("Executed Query");
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new Room object
+						// retrieve attributes from resultSet starting with index 1
+						Player player = new Player();
+						System.out.println("About to load the players");
+						loadPlayer(player, resultSet, 1);
+						System.out.println("Loaded the players");
+						
+						result = player;
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("<" + roomLoc + "> was not found in the Room table");
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});		
+	}
+	
+	@Override
+	public Room insertRoom(Room room) {
+		return executeTransaction(new Transaction<Room>() {
+			@Override
+			public Room execute(Connection conn) throws SQLException {
+				PreparedStatement stmt1 = null;
+				PreparedStatement stmt2 = null;
+					// inserting the title description, and locked into the database
+				try {
+					stmt1 = conn.prepareStatement(
+						"insert into rooms (title, description, requirement) "
+						+ "values (?, ?, ?)"
+						);
+					// substitute the title entered by the user for the placeholder in the query
+					stmt1.setString(1, room.getTitle());
+					stmt1.setString(2, room.getDescription());
+					stmt1.setBoolean(3, room.getRequirement());
+					
+					// execute the query
+					stmt1.executeUpdate();
+					
+					HashMap<String, Integer> map = room.getTrueConnections();
+					stmt2 = conn.prepareStatement(
+						"insert into connections (connectionDirection, roomID)"
+						+ "values (?, ?)"
+						);
+					Set<String> keySet = map.keySet();
+					Iterator<String> iter = keySet.iterator();
+					while(iter.hasNext()){
+						String direction = iter.next();
+						stmt2.setString(1, direction);
+						stmt2.setInt(2, map.get(direction));
+						stmt2.addBatch();
+					}
+					stmt2.executeBatch();
+					
+					
+					
+					System.out.println("Stored new room!!");
+					
+					return null;
+				} finally {
+					
+					DBUtil.closeQuietly(stmt1);
+					DBUtil.closeQuietly(stmt2);
+					DBUtil.closeQuietly(conn);
+
+				}
+			}
+		});	
+	}
 
 	@Override
 	public Room findRoomUsingTitle(String title) 

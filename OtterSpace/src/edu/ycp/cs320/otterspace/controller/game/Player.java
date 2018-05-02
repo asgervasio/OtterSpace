@@ -8,9 +8,75 @@ import edu.ycp.cs320.roomsdb.persist.IDatabase;
 
 public class Player 
 {
-	Room currentRoom;
-	List<Item> inventory = new ArrayList<Item>();
-	IDatabase db = DatabaseProvider.getInstance();	
+	private Room currentRoom;
+	private List<Item> inventory = new ArrayList<Item>();
+	private int health, gold, score, attack, defense, roomLoc;
+	private boolean hostility;
+	private String name, description;
+	
+	public void setName(String name){
+		this.name = name;
+	}
+	
+	public String getName(){
+		return name;
+	}
+	
+	public void setDescription(String description){
+		this.description = description;
+	}
+	
+	public String getDescription(){
+		return description;
+	}
+	
+	public void setHealth(int health){
+		this.health = health;
+	}
+	
+	public int getHealth(){
+		return health;
+	}
+	
+	public void setGold(int gold){
+		this.gold = gold;
+	}
+	
+	public int getGold(){
+		return gold;
+	}
+	
+	public void setScore(int score){
+		this.score = score;
+	}
+	
+	public int getScore(){
+		return score;
+	}
+	
+	public void setAttack(int attack){
+		this.attack = attack;
+	}
+	
+	public int getAttack(){
+		return attack;
+	}
+	
+	public void setDefense(int defense){
+		this.defense = defense;
+	}
+	
+	public int getDefense(){
+		return defense;
+	}
+	
+	public void setHostility(boolean hostile){
+		this.hostility = hostile;
+	}
+	
+	public boolean getHostility(){
+		return hostility;
+	}
 	
 	public void setCurrentRoom(Room room)
 	{
@@ -25,6 +91,16 @@ public class Player
 	public List<Item> getInventory()
 	{
 		return inventory;
+	}
+	
+	public void setRoomLoc(int id)
+	{
+		roomLoc = id;
+	}
+	
+	public int getRoomLoc()
+	{
+		return roomLoc;
 	}
 	
 	public void addItem(Item item)
@@ -45,5 +121,14 @@ public class Player
 		}
 	}
 	
+	public void attackEnemy(Player player){
+		player.setHealth(player.getHealth() - (attack - player.getDefense()));
+	}
+	
+	public void dropItems(){
+		for(int i = 0; i < inventory.size(); i++){
+			inventory.get(i).setRoomLocat(currentRoom.getRoomId());
+		}
+	}
 
 }
