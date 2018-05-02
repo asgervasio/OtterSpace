@@ -32,7 +32,7 @@ public class RegisterServlet extends HttpServlet{
 	
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp)
 			throws ServletException, IOException {
-		System.out.println("CreateAccountServlet: doPost");
+		System.out.println("register: doPost");
 		
 		//session data 
 		User model = new User();
@@ -54,12 +54,9 @@ public class RegisterServlet extends HttpServlet{
 		model.setEmail(Email);
 
 		controller.addUserToDatabase(UserName, Password, Email, FirstName, LastName);
-		req.setAttribute("sessionid", model);
-		if (req.getParameter("index") != null) {
-			resp.sendRedirect(req.getContextPath() + "/Index");
-		}
 		
-		req.getRequestDispatcher("/_view/CreateAccount.jsp").forward(req, resp);
+		
+		req.getRequestDispatcher("/_view/login.jsp").forward(req, resp);
 
 	}
 	

@@ -182,4 +182,16 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
+	@Override
+	public String insertConsole(String data) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> loadConsole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }// end of class

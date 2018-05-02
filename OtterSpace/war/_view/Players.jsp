@@ -17,16 +17,23 @@
     		<h1>Fellow Otters In Arms</h1>
   		</div>
 			<div>
-/--SOPs needed for this Employee --/<br>
+
 <br>
-<c:forEach items="${users}" var="user">
-Username: ${user.Username} <br>
-Email Address: ${user.emailAdress}<br>
+<c:forEach  items="${usernames}" var="user">
+	<c:forEach  items="${emails}" var="email">
+   <tr>
+    <td>Username: ${username}</td>
+	<td>Email Address: ${email}</td>
+    
+   </tr>
+
+</a>
 <br>
+	</c:forEach>
 </c:forEach>
 <div>
   		
-  			<form action="${pageContext.servletContext.contextPath}/index.html" method="post">
+  			<form action="${pageContext.servletContext.contextPath}/index" method="get">
 				<input type="submit" name="Menu" value="Back to menu">
 			</form>
  
