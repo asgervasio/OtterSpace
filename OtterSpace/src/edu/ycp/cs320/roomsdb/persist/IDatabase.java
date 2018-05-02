@@ -20,6 +20,7 @@ public interface IDatabase {
 
   
 	//User-based methods
+
 		List<User> getAccountInfo(String Username);
 		Boolean    addUserToDatabase(String Username, String pass, String email, String first, String last);
 		List<User> DeleteUserFromDatabase(String name, String pswd);
@@ -27,5 +28,10 @@ public interface IDatabase {
 		List<User> findAllUsers();
 		List<User> findUserByLastName(String lastname);
 		List<User> matchUsernameWithPassword(String Username, String pass);
-	
+    
+  //Console methods
+	  String insertConsole(String data);
+	  List<String> loadConsole();
+
+
 }
