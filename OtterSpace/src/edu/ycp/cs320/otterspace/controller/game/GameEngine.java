@@ -13,14 +13,13 @@ import edu.ycp.cs320.roomsdb.persist.IDatabase;
 import edu.ycp.cs320.roomsdb.persist.FakeDatabase;
 import edu.ycp.cs320.otterspace.model.GameModel;
 
-public class GameEngine 
+public class GameEngine
 {
-	GameModel model = new GameModel();
 	Player player = new Player();
 	//HttpServletResponse resp;
-	IDatabase db = DatabaseProvider.getInstance();	
+	IDatabase db = DatabaseProvider.getInstance();
 	
-	public String parse(String cmd)
+	public String parse(String cmd, String username)
 	{
 		String command = cmd.toLowerCase();
 		String[] commandSplit = command.split(" ");
@@ -33,37 +32,37 @@ public class GameEngine
 			case "m":
 			case "walk":
 			case "head":
-				db.insertConsole("> " + command + "<br />");
-				result = move(commandSplit);
+				db.insertConsole("> " + command + "<br />", username);
+				result = move(commandSplit, username);
 				break;
 			case "look":
 			case "inspect":
-				db.insertConsole("> " + command + "<br />");
-				result = inspect(commandSplit);
+				db.insertConsole("> " + command + "<br />", username);
+				result = inspect(commandSplit, username);
 				break;
 			case "take":
 			case "pick":
-				db.insertConsole("> " + command + "<br />");
-				result = take(commandSplit);
+				db.insertConsole("> " + command + "<br />", username);
+				result = take(commandSplit, username);
 				break;
 			case "inventory":
 			case "i":
-				db.insertConsole("> " + command + "<br />");
-				result = displayInventory();
+				db.insertConsole("> " + command + "<br />", username);
+				result = displayInventory(username);
 				break;
 			case "start":
 			case "s":
-				db.insertConsole("> " + command + "<br />");
-				result = initializePlayer();
+				db.insertConsole("> " + command + "<br />", username);
+				result = initializePlayer(username);
 				break;
 			case "load":
 			case "l":
 				//Do not load "load" load command into console
-				result = loadPlayer();
+				result = loadPlayer(username);
 				break;
 			default:
-				db.insertConsole("> " + command + "<br />");
-				result = invalid(); 
+				db.insertConsole("> " + command + "<br />", username);
+				result = invalid(username); 
 				break;
 		}	
 		return result;
@@ -71,7 +70,7 @@ public class GameEngine
 			
 	}
 	
-	public String displayInventory()
+	public String displayInventory(String username)
 	{
 		String result = "Your inventory contains: <br />";
 		List<Item> inventory = new ArrayList<Item>();
@@ -80,11 +79,11 @@ public class GameEngine
 		{
 			result = result + inventory.get(i).getTitle();
 		}
-		db.insertConsole(result);
+		db.insertConsole(result, username);
 		return result;
 	}
 	
-	public String take(String[] item)
+	public String take(String[] item, String username)
 	{
 		String result = "";
 		Item inspectedItem;
@@ -95,7 +94,7 @@ public class GameEngine
 		}
 		else
 		{
-			inspectedItem = db.findItemUsingTitle(item[1]);
+			inspectedItem = db.findItemUsingTitle(item[1], username);
 			if(inspectedItem == null)
 			{
 				result = "Could not find that item";
@@ -103,19 +102,17 @@ public class GameEngine
 			else
 			{
 				player.addItem(inspectedItem);
-				inspectedItem.setLocation("player");
-				db.insertChange("item", inspectedItem.getItemId(), (Integer) null, "actor", 1);
 				result = inspectedItem.getTitle() + " picked up <br />";
 			}
 		}
-		db.insertConsole(result);
+		db.insertConsole(result, username);
 		return result;
 	}
 	
-	public String inspect(String[] item)
+	public String inspect(String[] item, String username)
 	{
 		String result = "";
-		Item inspectedItem = db.findItemUsingTitle(item[1]);
+		Item inspectedItem = db.findItemUsingTitle(item[1], username);
 		
 		if(item.length > 2)
 		{
@@ -125,12 +122,12 @@ public class GameEngine
 		{
 			result = inspectedItem.getDescription() + "<br />";
 		}
-		db.insertConsole(result);
+		db.insertConsole(result, username);
 		return result;
 	}
 
 	
-	public String move(String[] direction)
+	public String move(String[] direction, String username)
 	{
 		
 		Room currentRoom = player.getCurrentRoom();
@@ -146,27 +143,28 @@ public class GameEngine
 		else
 		{
 			player.setCurrentRoom(db.findRoomUsingRoomId(destinationRoomId));
-			db.insertChange("actor", 1, (Integer) null, "room", player.getCurrentRoom().getRoomId());
-			result = outputRoomData();
+			result = outputRoomData(username);
 						
 			
 		}
-		db.insertConsole(result);
+		db.insertConsole(result, username);
 		return result;
 	}
 	
-	public String invalid()
+	public String invalid(String username)
 	{
 		String result = "";
 		result = "Invalid Command <br />";
-		db.insertConsole(result);
+		db.insertConsole(result, username);
 		return result;
 	}
 	
-	public String initializePlayer()
+	public String initializePlayer(String username)
 	{
 		String result = "";
 		player.setCurrentRoom(db.findRoomUsingRoomId(1));
+		db.createTables(username);
+		db.createPersistingTables(username);
 		//List<Item> inventory = db.findItemsUsingLocation(1);
 		
 		//for(int i = 0; i < inventory.size(); i++)
@@ -175,16 +173,16 @@ public class GameEngine
 		//}
 		
 
-		result = outputRoomData();
-		db.insertConsole(result);
+		result = outputRoomData(username);
+		db.insertConsole(result, username);
 		return result;
 	}
 	
-	public String loadPlayer()
+	public String loadPlayer(String username)
 	{
 		String result = "";
 		List<String> consoleLog = new ArrayList<String>();
-		consoleLog = db.loadConsole();
+		consoleLog = db.loadConsole(username);
 		for(int i = 1; i < consoleLog.size(); i++)
 		{
 			result += consoleLog.get(i);
@@ -194,12 +192,12 @@ public class GameEngine
 		
 	}
 	
-	public String outputRoomData()
+	public String outputRoomData(String username)
 	{
 		String result = "";
 		Room currentRoom = player.getCurrentRoom();
 		String items = "";
-		List<Item> itemList = db.findItemsUsingLocation(currentRoom.getRoomId());		
+		List<Item> itemList = db.findItemsUsingLocation(currentRoom.getRoomId(), username);		
 		for(int i = 0; i < itemList.size(); i++)
 		{
 			items = items + itemList.get(i).getTitle() + "<br /> ";

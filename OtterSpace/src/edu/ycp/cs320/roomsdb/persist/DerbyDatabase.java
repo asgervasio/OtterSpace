@@ -127,7 +127,7 @@ public class DerbyDatabase implements IDatabase {
 		player.setHostility(resultSet.getBoolean(index++));
 	}
 
-	public void createTables() {
+	public void createTables(String username) {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
@@ -137,6 +137,9 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
 				PreparedStatement stmt6 = null;
+				String itemTableName = username + "items";
+				String playerTableName = username + "player";
+
 				
 				try {
 					try {
@@ -158,7 +161,7 @@ public class DerbyDatabase implements IDatabase {
 					
 					try {
 					stmt2 = conn.prepareStatement(
-							"create table items (" +
+							"create table " + itemTableName + " ( " +
 							"   item_id integer primary key " +
 							"		generated always as identity (start with 1, increment by 1), " +
 							"	title varchar(40)," +
@@ -230,8 +233,8 @@ public class DerbyDatabase implements IDatabase {
 					
 					try {
 						stmt6 = conn.prepareStatement(
-							"create table player (" +
-							"	player_id integer primary key "+
+							"create table " + playerTableName + " (" +
+							"	player integer primary key "+
 							"		generated always as identity (start with 1, increment by 1), " +
 							"	name varchar(40)," +
 							"	description varchar(40)," +
@@ -265,18 +268,18 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-	public void createPersistingTables() {
+	public void createPersistingTables(String username) {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
-
+				String consoleTableName = username + "consolePersist";
 				
 				try {
 					try {
 						stmt1 = conn.prepareStatement(
-							"create table consolePersist (" +
+							"create table " + consoleTableName + " (" +
 							"	data_id integer primary key " +
 							"		generated always as identity (start with 1, increment by 1), " +									
 							"	data varchar(1000)" +
@@ -287,25 +290,6 @@ public class DerbyDatabase implements IDatabase {
 						if(!e.getSQLState().equals("X0Y32")){
 							throw e;
 						}
-					}
-					
-					try {
-					stmt2 = conn.prepareStatement(
-							"create table changesPersist (" +
-							"   change_id integer primary key " +
-							"		generated always as identity (start with 1, increment by 1), " +
-							"	typeChange varchar(40)," +
-							"	typeId integer," +
-							"	healthChange integer,"	+
-							"	locatChangeType varchar(40)," +
-							"	locatChangeId integer " +
-							")"
-					);
-					stmt2.executeUpdate();
-					} catch (SQLException e){
-						if(!e.getSQLState().equals("X0Y32")){
-							throw e;
-						}						
 					}
 
 							
@@ -320,7 +304,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 
-	public void loadInitialData() {
+	public void loadInitialData(String username) {
 		executeTransaction(new Transaction<Boolean>() {
 			@Override
 			public Boolean execute(Connection conn) throws SQLException {
@@ -329,7 +313,10 @@ public class DerbyDatabase implements IDatabase {
 				List<User> userList;
 				List<Pair<String, Integer>> connectionList;
 				List<Player> playerList;
+				String itemTableName = username + "items";
+				String playerTableName = username + "player";
 				List<Pair<Integer, Integer>> roomConnectionList;
+
 				
 				try {
 					roomList = InitialData.getRooms();
@@ -359,7 +346,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertRoom.executeBatch();
 										
-					insertItem = conn.prepareStatement("insert into items (title, description, roomLocat, statAff, statChangeVal) values (?, ?, ?, ?, ?)");
+					insertItem = conn.prepareStatement("insert into " + itemTableName + " (title, description, roomLocat, statAff, statChangeVal) values (?, ?, ?, ?, ?)");
 					for (Item item : itemList) {
 						insertItem.setString(1, item.getTitle());
 						insertItem.setString(2, item.getDescription());
@@ -389,7 +376,7 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertConnection.executeBatch();
 					
-					insertPlayer = conn.prepareStatement("insert into player (name, description, health, gold, score, attack, defense, hostility, room) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
+					insertPlayer = conn.prepareStatement("insert into " + playerTableName + " (name, description, health, gold, score, attack, defense, hostility, room) values (?, ?, ?, ?, ?, ?, ?, ?, ?)");
 					for (Player player : playerList) {
 						insertPlayer.setString(1, player.getName());
 						insertPlayer.setString(2, player.getDescription());
@@ -430,35 +417,36 @@ public class DerbyDatabase implements IDatabase {
 		System.out.println("Creating tables...");
 		
 		DerbyDatabase db = new DerbyDatabase();
-		db.createTables();
-		db.createPersistingTables();
+		db.createTables("new");
+		db.createPersistingTables("new");
 		
 		System.out.println("Loading initial data...");
-		db.loadInitialData();
+		db.loadInitialData("new");
 		
 		System.out.println("Success!");
 	}
 	
 
-	public Player insertPlayer(Player player) {
+	public Player insertPlayer(Player player, String username) {
 		return executeTransaction(new Transaction<Player>() {
 			@Override
 			public Player execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				try {
 					stmt = conn.prepareStatement(
-							"insert into player (name, description, health, gold, score, attack, defense, hostility, room) "
+							"insert into ?player (name, description, health, gold, score, attack, defense, hostility, room) "
 							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 							);
-					stmt.setString(1, player.getName());
-					stmt.setString(2, player.getDescription());
-					stmt.setInt(3, player.getHealth());
-					stmt.setInt(4, player.getGold());
-					stmt.setInt(5, player.getScore());
-					stmt.setInt(6, player.getAttack());
-					stmt.setInt(7, player.getDefense());
-					stmt.setBoolean(8, player.getHostility());
-					stmt.setInt(9, player.getCurrentRoom().getRoomId());
+					stmt.setString(1, username);
+					stmt.setString(2, player.getName());
+					stmt.setString(3, player.getDescription());
+					stmt.setInt(4, player.getHealth());
+					stmt.setInt(5, player.getGold());
+					stmt.setInt(6, player.getScore());
+					stmt.setInt(7, player.getAttack());
+					stmt.setInt(8, player.getDefense());
+					stmt.setBoolean(9, player.getHostility());
+					stmt.setInt(10, player.getCurrentRoom().getRoomId());
 
 					// execute the query
 					stmt.executeUpdate();
@@ -477,7 +465,7 @@ public class DerbyDatabase implements IDatabase {
 		});	
 	}
 	
-	public Player findPlayerUsingName(String name){
+	public Player findPlayerUsingName(String name, String username){
 		return executeTransaction(new Transaction<Player>() {
 			@Override
 			public Player execute(Connection conn) throws SQLException {
@@ -487,11 +475,12 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// retreive all attributes from both Books and Authors tables
 					stmt = conn.prepareStatement(
-							"select player.* " +
-							"  from player " +
-							" where player.name = ?"
+							"select ?player.* " +
+							"  from ?player " +
+							" where ?player.name = ?"
 					);
-					stmt.setString(1, name);
+					stmt.setString(1, username);
+					stmt.setString(2, name);
 					
 					Player result = new Player();
 					
@@ -526,7 +515,7 @@ public class DerbyDatabase implements IDatabase {
 		});		
 	}
 	
-	public Player findPlayerUsingLocation(Room roomLoc){
+	public Player findPlayerUsingLocation(Room roomLoc, String username){
 		return executeTransaction(new Transaction<Player>() {
 			@Override
 			public Player execute(Connection conn) throws SQLException {
@@ -536,11 +525,12 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// retreive all attributes from rooms table
 					stmt = conn.prepareStatement(
-							"select player.* " +
-							"  from player " +
-							" where  player.room = ?"
+							"select ?player.* " +
+							"  from ?player " +
+							" where  ?player.room = ?"
 					);
-					stmt.setInt(1, roomLoc.getRoomId());
+					stmt.setString(1, username);
+					stmt.setInt(2, roomLoc.getRoomId());
 					
 					System.out.println("Prepared Statement");
 					
@@ -635,7 +625,7 @@ public class DerbyDatabase implements IDatabase {
 		
 	
 	@Override
-	public String insertConsole(String data) {
+	public String insertConsole(String data, String username) {
 		return executeTransaction(new Transaction<String>() {
 			@Override
 			public String execute(Connection conn) throws SQLException {
@@ -643,11 +633,12 @@ public class DerbyDatabase implements IDatabase {
 					// insert the command into the console table
 				try {
 					stmt = conn.prepareStatement(
-							"insert into consolePersist (data) "
+							"insert into ?consolePersist (data) "
 							+ "values (?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
-					stmt.setString(1, data);
+					stmt.setString(1, username);
+					stmt.setString(2, data);
 					
 					// execute the query
 					stmt.executeUpdate();
@@ -668,100 +659,9 @@ public class DerbyDatabase implements IDatabase {
 		});	
 		}
 	
-	@Override
-	public String insertChange(String typeChange, int typeId, int healthChange, String locatTypeChange, int locatTypeId) {
-		return executeTransaction(new Transaction<String>() {
-			@Override
-			public String execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-					// insert the command into the console table
-				try {
-					stmt = conn.prepareStatement(
-							"insert into changesPersist (typeChange, typeId, healthChange, locatTypeChange, locatTypeId) "
-							+ "values (?, ?, ?, ?, ?)"
-							);
-					// substitute the title entered by the user for the placeholder in the query
-					stmt.setString(1, typeChange);
-					stmt.setInt(2, typeId);
-					stmt.setInt(3, healthChange);
-					stmt.setString(4, locatTypeChange);
-					stmt.setInt(5, locatTypeId);
-
-					// execute the query
-					stmt.executeUpdate();
-					
-					
-					return null;
-					
-				} finally {
-	
-					DBUtil.closeQuietly(stmt);
-					
-					DBUtil.closeQuietly(conn);
-
-				}
-
-			}
-		});	
-		}
-	@Override
-	public String loadChanges() {
-		return executeTransaction(new Transaction<String>() {
-			@Override
-			public String execute(Connection conn) throws SQLException {
-				PreparedStatement stmt = null;
-				ResultSet resultSet = null;
-					// insert the command into the console table
-				try {
-					stmt = conn.prepareStatement(
-							"select changesPersist.* " +
-							"  from changesPersist "
-					);
-
-					// execute the query
-					stmt.executeUpdate();
-					
-							
-					String data = "";
-
-					
-					resultSet = stmt.executeQuery();
-					
-					// for testing that a result was returned
-					Boolean found = false;
-					int index = resultSet.getMetaData().getColumnCount();
-					while (resultSet.next()) 
-					{
-						found = true;
-				        for (int i = 1; i <= index; i++) 
-				        {
-							result.add(resultSet.getString(i));
-				        }
-
-					}
-					
-					// check if the id was found
-					if (!found) {
-						System.out.println("No previous data found");
-
-					}
-					
-					return result;
-					
-				} finally {
-	
-					DBUtil.closeQuietly(stmt);
-					
-					DBUtil.closeQuietly(conn);
-
-				}
-
-			}
-		});	
-		}
 	
 	@Override
-	public List<String> loadConsole() 
+	public List<String> loadConsole(String username) 
 	{
 		return executeTransaction(new Transaction<List<String>>() {
 			@Override
@@ -772,10 +672,12 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// retreive all attributes from items tables
 					stmt = conn.prepareStatement(
-							"select consolePersist.data " +
-							"  from consolePersist "
+							"select ?consolePersist.data " +
+							"  from ?consolePersist "
 					);
-					
+					stmt.setString(1, username);
+					stmt.setString(2, username);
+
 					List<String> result = new ArrayList<String>();
 					String data = "";
 
@@ -965,7 +867,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public Item insertItem(Item item) 
+	public Item insertItem(Item item, String username) 
 	{
 		return executeTransaction(new Transaction<Item>() {
 			@Override
@@ -974,15 +876,16 @@ public class DerbyDatabase implements IDatabase {
 					// inserting the title, description, statAffected, statChangeVal, and roomLocat into database
 				try {
 					stmt = conn.prepareStatement(
-							"insert into items(title, description, roomLocat, statAff, statChangeVal) "
+							"insert into ?items(title, description, roomLocat, statAff, statChangeVal) "
 							+ "values (?, ?, ?, ?, ?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
-					stmt.setString(1, item.getTitle());
-					stmt.setString(2, item.getDescription());
-					stmt.setInt(3, item.getRoomLocat());
-					stmt.setString(4, item.getStatAffected());
-					stmt.setInt(5, item.getStatChangeVal());
+					stmt.setString(1, username);
+					stmt.setString(2, item.getTitle());
+					stmt.setString(3, item.getDescription());
+					stmt.setInt(4, item.getRoomLocat());
+					stmt.setString(5, item.getStatAffected());
+					stmt.setInt(6, item.getStatChangeVal());
 					
 					// execute the query
 					stmt.executeUpdate();
@@ -1002,7 +905,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 
 	@Override
-	public Item findItemUsingTitle(String title) 
+	public Item findItemUsingTitle(String title, String username) 
 	{
 		return executeTransaction(new Transaction<Item>() {
 			@Override
@@ -1013,11 +916,14 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// retreive all attributes from items table
 					stmt = conn.prepareStatement(
-							"select items.* " +
-							"  from items " +
-							" where  items.title = ?"
+							"select ?items.* " +
+							"  from ?items " +
+							" where  ?items.title = ?"
 					);
-					stmt.setString(1, title);
+					stmt.setString(1, username);
+					stmt.setString(2, username);
+					stmt.setString(3, username);
+					stmt.setString(4, title);
 					
 					Item result = new Item();
 					
@@ -1051,14 +957,9 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
+
 	@Override
-	public List<Item> findItemsUsingLocation(int location) {
-		// TODO Auto-generated method stub
-		return null;
-		
-	}
-	@Override
-	public Item findItemUsingItemId(int itemId) 
+	public Item findItemUsingItemId(int itemId, String username) 
 	{
 		return executeTransaction(new Transaction<Item>() {
 			@Override
@@ -1069,11 +970,14 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// retreive all attributes from items tables
 					stmt = conn.prepareStatement(
-							"select items.* " +
-							"  from items " +
-							" where  items.item_id = ?"
+							"select ?items.* " +
+							"  from ?items " +
+							" where  ?items.item_id = ?"
 					);
-					stmt.setInt(1, itemId);
+					stmt.setString(1, username);
+					stmt.setString(2, username);
+					stmt.setString(3, username);
+					stmt.setInt(4, itemId);
 					
 					Item result = new Item();
 					
@@ -1108,6 +1012,63 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
+
+	@Override
+	public List<Item> findItemsUsingLocation(int locationId, String username) 
+	{
+		return executeTransaction(new Transaction<List<Item>>() {
+			@Override
+			public List<Item> execute(Connection conn) throws SQLException {
+				PreparedStatement stmt = null;
+				ResultSet resultSet = null;
+				
+				try {
+					// retreive all attributes from items tables
+					stmt = conn.prepareStatement(
+							"select ?items.* " +
+							"  from ?items " +
+							" where  ?items.roomLocat = ?"
+					);
+					stmt.setString(1, username);
+					stmt.setString(2, username);
+					stmt.setString(3, username);
+					stmt.setInt(4, locationId);
+					
+					List<Item> result = new ArrayList<Item>();
+
+					
+					resultSet = stmt.executeQuery();
+					
+					// for testing that a result was returned
+					Boolean found = false;
+					
+					while (resultSet.next()) {
+						found = true;
+						
+						// create new item object
+						// retrieve attributes from resultSet starting with index 1
+						Item item = new Item();
+						loadItem(item, resultSet, 1);
+						
+						
+						result.add(item);
+					}
+					
+					// check if the id was found
+					if (!found) {
+						System.out.println("<" + locationId + "> was not found in the item table");
+
+					}
+					
+					return result;
+				} finally {
+					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(stmt);
+				}
+			}
+		});
+
+	}
 	
 
 	@Override
@@ -1409,6 +1370,15 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
+
+	@Override
+	public List<User> changePassword(String name, String pswd, String newPassword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+
 
 	
 
