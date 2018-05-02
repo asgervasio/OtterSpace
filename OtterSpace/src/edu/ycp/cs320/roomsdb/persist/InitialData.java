@@ -61,7 +61,7 @@ public class InitialData {
 				userList.add(user);
 				
 			}
-			System.out.print(userList.size()+" users");
+			System.out.println(userList.size()+" users");
 			return userList;
 		} finally {
 			readUsers.close();
