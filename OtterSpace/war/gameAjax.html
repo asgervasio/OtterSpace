@@ -12,9 +12,11 @@
 	<script>
 	function add()
 	{
-		var output = $('.commandline');
+		var output = $('.content');
 		var input = $('input');
 		var cmd = input.val();
+		var element = document.getElementById("screen");
+
 		output.before("> " + cmd + "<br /><br />");
 		$.ajax({
 			type: 'POST',
@@ -24,6 +26,7 @@
 					function(data, textStatus, jqXHR) 
 					{
 						output.before(data + "<br /><br />");
+						element.scrollTop = element.scrollHeight;
 					},
 				error:
 					function(jqXHR, textStatus, errorThrown) 
@@ -33,8 +36,11 @@
 				dataType: 'text'
 			});
 			input.val('');
+			
 	}
+	
 	</script>
+
 	
 	</script>
 	<head>
@@ -50,12 +56,13 @@
 					<div class="score">Score: 0</div>
 				</div>
 
-				<div class="screen">
+				<div class="screen" id="screen">
 					<div class="content" id="content">
-						<div class="commandline">
-							> <input type="text" id="cmd" name="cmd"  onKeyDown="if(event.keyCode==13) add();" autofocus/>
-						</div>
+
 					</div>
+				</div>
+				<div class="commandline">
+					> <input type="text" id="cmd" name="cmd"  onKeyDown="if(event.keyCode==13) add();" autofocus/>
 				</div>
 			</div>
 			<div>
