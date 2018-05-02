@@ -432,21 +432,22 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Player execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
+				String playerTableName = username + "player";
+				
 				try {
 					stmt = conn.prepareStatement(
-							"insert into ?player (name, description, health, gold, score, attack, defense, hostility, room) "
+							"insert into " + playerTableName + " (name, description, health, gold, score, attack, defense, hostility, room) "
 							+ "values (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 							);
-					stmt.setString(1, username);
-					stmt.setString(2, player.getName());
-					stmt.setString(3, player.getDescription());
-					stmt.setInt(4, player.getHealth());
-					stmt.setInt(5, player.getGold());
-					stmt.setInt(6, player.getScore());
-					stmt.setInt(7, player.getAttack());
-					stmt.setInt(8, player.getDefense());
-					stmt.setBoolean(9, player.getHostility());
-					stmt.setInt(10, player.getCurrentRoom().getRoomId());
+					stmt.setString(1, player.getName());
+					stmt.setString(2, player.getDescription());
+					stmt.setInt(3, player.getHealth());
+					stmt.setInt(4, player.getGold());
+					stmt.setInt(5, player.getScore());
+					stmt.setInt(6, player.getAttack());
+					stmt.setInt(7, player.getDefense());
+					stmt.setBoolean(8, player.getHostility());
+					stmt.setInt(9, player.getCurrentRoom().getRoomId());
 
 					// execute the query
 					stmt.executeUpdate();
