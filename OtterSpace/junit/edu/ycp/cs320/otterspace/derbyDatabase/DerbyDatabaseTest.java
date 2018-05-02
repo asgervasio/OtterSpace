@@ -30,11 +30,13 @@ public class DerbyDatabaseTest {
 	private Item item, itemBlank;
 	private List<Item> itemBlankList;
 	private Player player, playerBlank;
+	private String username;
  	
 	@Before
 	public void setUp(){
 		database = new DerbyDatabase();
 		
+		username = "tester";
 		roomModel = new EditorRoomModel();
 		itemModel = new EditorItemModel();
 		controller = new EditorRoomController();
@@ -82,15 +84,15 @@ public class DerbyDatabaseTest {
 		player = playerController.createPlayer(playerName, playerDescrip, health, gold,
 				score, attack, defense, hostile, room1);
 
-		database.createTables();
-		database.loadInitialData();
+		database.createTables(username);
+		database.loadInitialData(username);
 	}
 	
 	
 	@Test
 	public void testInsertPlayer(){
-		database.insertPlayer(player);
-		playerBlank = database.findPlayerUsingLocation(room1);
+		database.insertPlayer(player, username);
+		playerBlank = database.findPlayerUsingLocation(room1, username);
 		assertEquals(player.getName(), playerBlank.getName());
 	}
 	
@@ -103,16 +105,16 @@ public class DerbyDatabaseTest {
 	
 	@Test
 	public void testInsertItem(){
-		database.insertItem(item);
-		itemBlank = database.findItemUsingTitle("titlePerItem");
+		database.insertItem(item, username);
+		itemBlank = database.findItemUsingTitle("titlePerItem", username);
 		assertEquals(item.getTitle(), itemBlank.getTitle());
 		assertEquals(item.getStatAffected(), itemBlank.getStatAffected());
 	}
 	
 	@Test
 	public void testFindItemUsingRoomLocat(){
-		database.insertItem(item);
-		itemBlankList = database.findItemsUsingLocation(4);
+		database.insertItem(item, username);
+		itemBlankList = database.findItemsUsingLocation(4, username);
 		assertEquals(item.getTitle(), itemBlankList.get(0).getTitle());
 		assertEquals(item.getStatAffected(), itemBlankList.get(0).getStatAffected());		
 	}

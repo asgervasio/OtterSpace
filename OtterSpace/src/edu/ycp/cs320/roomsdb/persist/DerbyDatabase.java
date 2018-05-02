@@ -873,19 +873,19 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Item execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
+				String itemTableName = username + "items";
 					// inserting the title, description, statAffected, statChangeVal, and roomLocat into database
 				try {
 					stmt = conn.prepareStatement(
-							"insert into ?items(title, description, roomLocat, statAff, statChangeVal) "
+							"insert into " + itemTableName + "(title, description, roomLocat, statAff, statChangeVal) "
 							+ "values (?, ?, ?, ?, ?)"
 							);
 					// substitute the title entered by the user for the placeholder in the query
-					stmt.setString(1, username);
-					stmt.setString(2, item.getTitle());
-					stmt.setString(3, item.getDescription());
-					stmt.setInt(4, item.getRoomLocat());
-					stmt.setString(5, item.getStatAffected());
-					stmt.setInt(6, item.getStatChangeVal());
+					stmt.setString(1, item.getTitle());
+					stmt.setString(2, item.getDescription());
+					stmt.setInt(3, item.getRoomLocat());
+					stmt.setString(4, item.getStatAffected());
+					stmt.setInt(5, item.getStatChangeVal());
 					
 					// execute the query
 					stmt.executeUpdate();
@@ -912,18 +912,16 @@ public class DerbyDatabase implements IDatabase {
 			public Item execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
+				String itemTableName = username + "items";
 				
 				try {
 					// retreive all attributes from items table
 					stmt = conn.prepareStatement(
-							"select ?items.* " +
-							"  from ?items " +
-							" where  ?items.title = ?"
+							"select " + itemTableName + ".* " +
+							"  from " + itemTableName +
+							" where  " + itemTableName + ".title = ?"
 					);
-					stmt.setString(1, username);
-					stmt.setString(2, username);
-					stmt.setString(3, username);
-					stmt.setString(4, title);
+					stmt.setString(1, title);
 					
 					Item result = new Item();
 					
@@ -966,18 +964,16 @@ public class DerbyDatabase implements IDatabase {
 			public Item execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
+				String itemTableName = username + "items";
 				
 				try {
 					// retreive all attributes from items tables
 					stmt = conn.prepareStatement(
-							"select ?items.* " +
-							"  from ?items " +
-							" where  ?items.item_id = ?"
+							"select " + itemTableName + ".* " +
+							"  from " + itemTableName +
+							" where  " + itemTableName + ".item_id = ?"
 					);
-					stmt.setString(1, username);
-					stmt.setString(2, username);
-					stmt.setString(3, username);
-					stmt.setInt(4, itemId);
+					stmt.setInt(1, itemId);
 					
 					Item result = new Item();
 					
@@ -1021,18 +1017,16 @@ public class DerbyDatabase implements IDatabase {
 			public List<Item> execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
 				ResultSet resultSet = null;
+				String itemTableName = username + "items";
 				
 				try {
 					// retreive all attributes from items tables
 					stmt = conn.prepareStatement(
-							"select ?items.* " +
-							"  from ?items " +
-							" where  ?items.roomLocat = ?"
+							"select " + itemTableName + ".* " +
+							"  from " + itemTableName +
+							" where " + itemTableName + ".roomLocat = ?"
 					);
-					stmt.setString(1, username);
-					stmt.setString(2, username);
-					stmt.setString(3, username);
-					stmt.setInt(4, locationId);
+					stmt.setInt(1, locationId);
 					
 					List<Item> result = new ArrayList<Item>();
 

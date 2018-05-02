@@ -71,7 +71,7 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
+
 	public Item insertItem(Item item) {
 		int itemId = roomList.size();
 		Item newItem = new Item();
@@ -86,7 +86,7 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
+
 	public Item findItemUsingTitle(String title) {
 		for (Item item : itemList){
 			if(item.getTitle() == title){
@@ -96,7 +96,7 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
+
 	public Item findItemUsingItemId(int itemId) {
 		for (Item item : itemList){
 			if(item.getItemId() == itemId){
@@ -106,7 +106,7 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
+
 	public List<Item> findItemsUsingLocation(int location) {
 		List<Item> itemList = new ArrayList<Item>();
 		for (Item item : itemList){
@@ -165,8 +165,8 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
-	public Integer findRoomIdFromConnection(String connection) {
+
+	public Integer findRoomIdFromConnection1(String connection) {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -189,22 +189,94 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
+
 	public Player insertPlayer(Player player) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+
 	public Player findPlayerUsingName(String name) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+
 	public Player findPlayerUsingLocation(Room roomLoc) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public Item insertItem(Item item, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Item findItemUsingTitle(String title, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Item findItemUsingItemId(int itemId, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Item> findItemsUsingLocation(int location, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player insertPlayer(Player actor, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player findPlayerUsingName(String name, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Player findPlayerUsingLocation(Room roomLoc, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<User> changePassword(String name, String pswd, String newPassword) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String insertConsole(String data, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<String> loadConsole(String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void createTables(String username) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void createPersistingTables(String username) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }// end of class
