@@ -1,5 +1,8 @@
 <!DOCTYPE html>
 
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
 <html>
 	<style>
 		<jsp:include page="indexStyle.css"/>	
@@ -7,7 +10,7 @@
 	
 	
 	<head>
-		<title>Otter Space Index</title>
+		<title>View Other Otters</title>
 	</head>
 
 	<body>
@@ -19,17 +22,17 @@
 			<div>
 
 <br>
-<c:forEach  items="${usernames}" var="user">
-	<c:forEach  items="${emails}" var="email">
+<c:forEach  items="${poop}" var="user" varStatus = "iter">
+	
    <tr>
-    <td>Username: ${user}</td>
-	<td>Email Address: ${email}</td>
+    <td>Username: ${user.username}</td>
+	<td>Email Address: ${user.email}</td>
     
    </tr>
 
-</a>
+
 <br>
-	</c:forEach>
+	
 </c:forEach>
 <div>
   		

@@ -6,7 +6,9 @@ h1 {
   font-variant: small-caps;
   text-align: center;
 }
-
+.error{
+	color: red;
+}
 body
 {
 background-color:black;

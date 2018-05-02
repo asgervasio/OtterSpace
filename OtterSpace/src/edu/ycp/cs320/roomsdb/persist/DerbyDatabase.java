@@ -1186,7 +1186,7 @@ public class DerbyDatabase implements IDatabase {
 					stmt.executeUpdate();
 					
 					
-					
+					System.out.println("Password Changed");
 					return "Password Changed";
 					
 				} finally {
@@ -1222,8 +1222,6 @@ public class DerbyDatabase implements IDatabase {
 					while (resultSet.next()) {
 						found = true;
 						
-						// create new Room object
-						// retrieve attributes from resultSet starting with index 1
 						User u = new User();
 						loadUser(u, resultSet, 1);
 						
