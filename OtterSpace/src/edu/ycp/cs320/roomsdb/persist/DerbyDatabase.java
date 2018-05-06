@@ -109,7 +109,11 @@ public class DerbyDatabase implements IDatabase {
 		room.setRoomId(resultSet.getInt(index++));
 		room.setTitle(resultSet.getString(index++));
 		room.setDescription(resultSet.getString(index++));
+
 		room.setRequirement(resultSet.getString(index++));
+		room.setConnections();
+		room.setConnections(resultSet.getString(index++), resultSet.getInt(index++));
+
 	}
 	
 	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException {
@@ -152,7 +156,6 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement dropStmt2 = null;
 				PreparedStatement dropStmt3 = null;
 				PreparedStatement dropStmt4 = null;
-				PreparedStatement dropStmt5 = null;
 				PreparedStatement dropStmt6 = null;
 				PreparedStatement dropStmt7 = null;
 				String itemTableName = username + "items";
@@ -172,20 +175,7 @@ public class DerbyDatabase implements IDatabase {
 
 							throw e;
 						}
-					}
-					
-					try {
-						dropStmt5 = conn.prepareStatement(
-							"DROP TABLE roomConnections"
-
-						);	
-						dropStmt5.executeUpdate();
-					} catch (SQLException e){
-						if(!e.getSQLState().equals("X0Y32")){
-							throw e;
-						}
-					}
-					
+					}					
 					try {
 						dropStmt1 = conn.prepareStatement(
 							"DROP TABLE rooms"
@@ -252,7 +242,6 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(dropStmt2);
 					DBUtil.closeQuietly(dropStmt3);
 					DBUtil.closeQuietly(dropStmt4);
-					DBUtil.closeQuietly(dropStmt5);
 					DBUtil.closeQuietly(dropStmt6);
 					DBUtil.closeQuietly(dropStmt7);
 				}
@@ -268,7 +257,6 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt2 = null;
 				PreparedStatement stmt3 = null;
 				PreparedStatement stmt4 = null;
-				PreparedStatement stmt5 = null;
 				PreparedStatement stmt6 = null;
 				PreparedStatement stmt7 = null;
 
@@ -346,8 +334,9 @@ public class DerbyDatabase implements IDatabase {
 							"create table connections (" +
 							"   connection_id integer primary key " +
 							"       generated always as identity (start with 1, increment by 1), " +
+							"	roomStart integer, " +
 							"   connectionDirection varchar(40)," +
-							"   roomID integer" +
+							"   roomEnd integer" +
 							")"
 							);
 					
@@ -357,23 +346,6 @@ public class DerbyDatabase implements IDatabase {
 							throw e;
 						}						
 					}					
-					
-					try {
-					stmt5 = conn.prepareStatement(
-							"create table roomConnections (" +
-							"	room_id integer," +
-							"	connection_id integer," +
-							"   foreign key (room_id) references rooms(room_id), " +
-							"   foreign key (connection_id) references connections(connection_id) " +
-							")"
-							);
-					stmt5.executeUpdate();
-					} catch (SQLException e){
-						if(!e.getSQLState().equals("X0Y32")){
-							throw e;
-						}						
-					}
-
 					
 					try {
 						stmt6 = conn.prepareStatement(
@@ -420,7 +392,6 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt2);
 					DBUtil.closeQuietly(stmt3);
 					DBUtil.closeQuietly(stmt4);
-					DBUtil.closeQuietly(stmt5);
 					DBUtil.closeQuietly(stmt6);
 					DBUtil.closeQuietly(stmt7);
 
@@ -437,11 +408,10 @@ public class DerbyDatabase implements IDatabase {
 				List<Room> roomList;
 				List<Item> itemList;
 				List<User> userList;
-				List<Pair<String, Integer>> connectionList;
+				List<List<String>> connectionList;
 				List<Player> playerList;
 				String itemTableName = username + "items";
 				String playerTableName = username + "player";
-				List<Pair<Integer, Integer>> roomConnectionList;
 
 				
 				try {
@@ -450,7 +420,6 @@ public class DerbyDatabase implements IDatabase {
 					userList = InitialData.getUsers();
 					connectionList = InitialData.getConnections();
 					playerList = InitialData.getPlayers();
-					roomConnectionList = InitialData.getRoomConnections();
 				} catch (IOException e) {
 					throw new SQLException("Couldn't read initial data", e);
 				}
@@ -460,7 +429,6 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement insertUser = null;
 				PreparedStatement insertConnection = null;
 				PreparedStatement insertPlayer = null;
-				PreparedStatement insertRoomConnection = null;
 				
 				try {
 					insertRoom = conn.prepareStatement("insert into rooms (title, description, requirement) values (?, ?, ?)");
@@ -494,10 +462,11 @@ public class DerbyDatabase implements IDatabase {
 					}
 					insertUser.executeBatch();				
 					
-					insertConnection = conn.prepareStatement("insert into connections (connectionDirection, roomID) values (?, ?)");
-					for (Pair<String, Integer> connect : connectionList){
-						insertConnection.setString(1, connect.getLeft());
-						insertConnection.setInt(2, connect.getRight());
+					insertConnection = conn.prepareStatement("insert into connections (roomStart, connectionDirection, roomEnd) values (?, ?, ?)");
+					for (List<String> connect : connectionList){
+						insertConnection.setInt(1, Integer.parseInt(connect.get(0)));
+						insertConnection.setString(2, connect.get(1));
+						insertConnection.setInt(3, Integer.parseInt(connect.get(2)));
 						insertConnection.addBatch();
 					}
 					insertConnection.executeBatch();
@@ -515,15 +484,7 @@ public class DerbyDatabase implements IDatabase {
 						insertPlayer.setInt(9, player.getRoomId());
 						insertPlayer.addBatch();
 					}
-					insertPlayer.executeBatch();
-					
-					insertRoomConnection = conn.prepareStatement("insert into roomConnections (room_id, connection_id) values (?, ?)");
-					for (Pair<Integer, Integer> roomConnection : roomConnectionList){
-						insertRoomConnection.setInt(1, roomConnection.getLeft());
-						insertRoomConnection.setInt(2, roomConnection.getRight());
-						insertRoomConnection.addBatch();
-					}
-					insertRoomConnection.executeBatch();
+					insertPlayer.executeBatch();					
 					
 					return true;
 				} finally {
@@ -532,7 +493,6 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(insertUser);
 					DBUtil.closeQuietly(insertConnection);
 					DBUtil.closeQuietly(insertPlayer);
-					DBUtil.closeQuietly(insertRoomConnection);
 				}
 			}
 		});
@@ -732,6 +692,14 @@ public class DerbyDatabase implements IDatabase {
 			public Room execute(Connection conn) throws SQLException {
 				PreparedStatement stmt1 = null;
 				PreparedStatement stmt2 = null;
+				PreparedStatement stmt3 = null;
+				PreparedStatement stmt4 = null;
+				PreparedStatement stmt5 = null;
+				
+				ResultSet resultSetBefore = null;
+				ResultSet resultSetAfter  = null;
+				ResultSet resultSetRoomID = null;  
+				int before, after, roomID;
 
 					// inserting the title description, and locked into the database
 				try {
@@ -747,6 +715,14 @@ public class DerbyDatabase implements IDatabase {
 					// execute the query
 					stmt1.executeUpdate();
 					
+					stmt3 = conn.prepareStatement(
+							"select MAX(connections.connection_id)" +
+							"	from connections"
+							);
+					
+					resultSetBefore = stmt3.executeQuery();
+					before = 0;
+					
 					HashMap<String, Integer> map = room.getTrueConnections();
 					stmt2 = conn.prepareStatement(
 						"insert into connections (connectionDirection, roomID)"
@@ -761,7 +737,28 @@ public class DerbyDatabase implements IDatabase {
 						stmt2.addBatch();
 					}
 					stmt2.executeBatch();
-
+					
+					resultSetAfter = stmt3.executeQuery();
+					after = 2;
+					
+//					stmt4 = conn.prepareStatement(
+//							"select max(rooms.room_id) as largestID" +
+//							"	from rooms"
+//							);
+//					resultSetRoomID = stmt4.executeQuery();
+//					roomID = resultSetRoomID.getInt(1);
+					
+					for(int i = before; i <= after; i++){
+						stmt5 = conn.prepareStatement(
+								"insert into roomConnections(room, connectID) "
+								+ "values (?, ?)"
+								);
+						stmt5.setInt(1, room.getRoomId());
+						stmt5.setInt(2, i);
+						stmt5.addBatch();
+					}
+					stmt5.executeBatch();
+					
 					System.out.println("Stored new room!!");
 					
 					return null;
@@ -878,7 +875,9 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Room execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
 				ResultSet resultSet = null;
+				ResultSet resultSetCon = null;
 				
 				try {
 					// retrieve all info from room matching title
@@ -893,6 +892,20 @@ public class DerbyDatabase implements IDatabase {
 					
 					resultSet = stmt.executeQuery();
 					
+					stmt2 = conn.prepareStatement(
+							"select connections.* " +
+							"	from connections, rooms, roomConnections " +
+							"	where rooms.room_id = roomConnections.room" +
+							"	and connections.connection_id = roomConnections.connectID" +
+							"	and rooms.title = ?"
+							);
+					
+					stmt2.setString(1, title);
+					
+					resultSetCon = stmt2.executeQuery();
+					
+					System.out.println(resultSetCon.getFetchSize());
+
 					// for testing that a result was returned
 					Boolean found = false;
 					
@@ -934,7 +947,7 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// retreive all attributes from rooms table
 					stmt = conn.prepareStatement(
-							"select connections.roomID " +
+							"select connections.roomEnd " +
 							"  from connections " +
 							" where  connections.connectionDirection = ?"
 					);
@@ -978,14 +991,17 @@ public class DerbyDatabase implements IDatabase {
 			@Override
 			public Room execute(Connection conn) throws SQLException {
 				PreparedStatement stmt = null;
+				PreparedStatement stmt2 = null;
 				ResultSet resultSet = null;
+				ResultSet resultSetCon = null;
 				
 				try {
 					// retreive all attributes from rooms table
 					stmt = conn.prepareStatement(
-							"select rooms.* " +
-							"  from rooms " +
-							" where  rooms.room_id = ?"
+							"select rooms.*, connections.connectionDirection, connections.roomEnd" +
+							" 	from rooms, connections " +
+							"	where  rooms.room_id = connections.roomStart " +
+							"	and rooms.room_id = ?"
 					);
 					stmt.setInt(1, roomId);
 					
@@ -1537,13 +1553,5 @@ public class DerbyDatabase implements IDatabase {
 			}
 		});
 	}
-
-
-
-
-
-
-	
-
 
 }

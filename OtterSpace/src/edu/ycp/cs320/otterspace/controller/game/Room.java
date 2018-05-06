@@ -52,8 +52,8 @@ public class Room {
 		return requirement;
 	}
 		
-	public void setConnections(HashMap<String, Integer> connections){
-		this.connections = connections;
+	public void setConnections(){
+		connections = new HashMap<String, Integer>();
 	}
 	
 	public Integer getConnectionID(String direction){
@@ -77,6 +77,10 @@ public class Room {
 				returnVal = name;
 		}
 		return returnVal;
+	}
+	
+	public void setConnections(String key, int val){
+		connections.put(key, val);
 	}
 	
 }// end of room class

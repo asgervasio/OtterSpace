@@ -20,8 +20,10 @@ public class EditorRoomController {
 		Room room = new Room();
 		room.setTitle(model.getTitle());
 		room.setDescription(model.getDescription());
+    
 		//room.setRequirement(model.getRequirement());	
 		room.setConnections(model.getConnections());
+
 		return room;
 	}
 	
