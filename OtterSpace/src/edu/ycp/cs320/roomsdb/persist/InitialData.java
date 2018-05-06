@@ -96,8 +96,8 @@ public class InitialData {
 		}
 	}
 	  
-	public static List<Pair<String, Integer>> getConnections() throws IOException {
-	  List<Pair<String, Integer>> connectList = new ArrayList<Pair<String, Integer>>();
+	public static List<List<String>> getConnections() throws IOException {
+	  List<List<String>> connectList = new ArrayList<List<String>>();
 	  ReadCSV readConnection = new ReadCSV("connections.csv");
 		  try {
 			  while (true) {
@@ -106,9 +106,10 @@ public class InitialData {
 					  break;
 				  
 				  Iterator<String> i = tuple.iterator();
-				  Pair<String, Integer> connect = new Pair();
-				  connect.setLeft(i.next());
-				  connect.setRight(Integer.parseInt(i.next()));
+				  List<String> connect = new ArrayList<String>();
+				  connect.add(i.next());
+				  connect.add(i.next());
+				  connect.add(i.next());
 				  connectList.add(connect);
 			  }
 			  return connectList;
