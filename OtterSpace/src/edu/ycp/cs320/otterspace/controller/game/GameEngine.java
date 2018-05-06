@@ -59,7 +59,7 @@ public class GameEngine
 				break;
 			case "load":
 			case "l":
-				//Do not load "load" load command into console
+				//Do not load "load" command into console
 				result = loadPlayer(username);
 				break;
 			case "attack":
@@ -90,6 +90,8 @@ public class GameEngine
 		{
 			result = enemy.getName() + " was hit!";
 		}
+		//updatePlayer(player, username);
+		updatePlayer(enemy, username);
 		db.insertConsole(result, username);
 		return result;
 	}
@@ -143,6 +145,10 @@ public class GameEngine
 		{
 			result = "Too many arguments";
 		}
+		else if(item[1].equals("around"))
+		{
+			result = outputRoomData(username);
+		}
 		else
 		{
 			result = inspectedItem.getDescription() + "<br />";
@@ -150,7 +156,6 @@ public class GameEngine
 		db.insertConsole(result, username);
 		return result;
 	}
-
 	
 	public String move(String[] direction, String username)
 	{
@@ -170,7 +175,6 @@ public class GameEngine
 			player.setCurrentRoom(db.findRoomUsingRoomId(destinationRoomId));
 			result = outputRoomData(username);
 						
-			
 		}
 		db.insertConsole(result, username);
 		return result;
@@ -188,18 +192,10 @@ public class GameEngine
 	{
 		String result = "";
 		player.setCurrentRoom(db.findRoomUsingRoomId(1));
+		db.dropTables(username);
 		db.createTables(username);
-		db.createPersistingTables(username);
 		db.loadInitialData(username);
-		db.insertConsole("> " + command + "<br />", username);
-
-		//List<Item> inventory = db.findItemsUsingLocation(1);
-		
-		//for(int i = 0; i < inventory.size(); i++)
-		//{
-		//	player.addItem(inventory.get(i));
-		//}
-		
+		db.insertConsole("> " + command + "<br />", username);	
 
 		result = outputRoomData(username);
 		db.insertConsole(result, username);
@@ -208,9 +204,11 @@ public class GameEngine
 	
 	public String loadPlayer(String username)
 	{
+		//ADD PLAYER INFO LOAD
 		String result = "";
 		List<String> consoleLog = new ArrayList<String>();
 		consoleLog = db.loadConsole(username);
+		player = db.findPlayerUsingName("otter", username);
 		for(int i = 1; i < consoleLog.size(); i++)
 		{
 			result += consoleLog.get(i) + "<br />";
@@ -237,8 +235,15 @@ public class GameEngine
 		}
 		for(int j = 0; j < playerList.size(); j++)
 		{
-			playerFound = true;
-			players = players + playerList.get(j).getName() + "<br />";
+			if (playerList.get(j).getName().equals("otter"))
+			{
+				
+			}
+			else
+			{
+				players = players + playerList.get(j).getName() + "<br />";
+				playerFound = true;
+			}
 		}
 		result = ("You are in " + currentRoom.getTitle() + "<br /><br />" + currentRoom.getDescription());
 		if (itemFound)

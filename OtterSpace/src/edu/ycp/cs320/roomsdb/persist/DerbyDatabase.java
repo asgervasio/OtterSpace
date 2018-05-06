@@ -2,6 +2,7 @@ package edu.ycp.cs320.roomsdb.persist;
 
 import java.io.IOException;
 import java.sql.Connection;
+import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -86,6 +87,20 @@ public class DerbyDatabase implements IDatabase {
 		return conn;
 	}
 	
+	// The main method creates the database tables and loads the initial data.
+	public static void main(String[] args) throws IOException {
+		System.out.println("Creating tables...");
+		
+		DerbyDatabase db = new DerbyDatabase();
+		db.dropTables("new");
+		db.createTables("new");
+		
+		System.out.println("Loading initial data...");
+		db.loadInitialData("new");
+		
+		System.out.println("Success!");
+	}
+	
 	private void loadConsoleData(String data, ResultSet resultSet, int index) throws SQLException {
 		data = resultSet.getString(index++);
 	}
@@ -126,6 +141,124 @@ public class DerbyDatabase implements IDatabase {
 		player.setDefense(resultSet.getInt(index++));
 		player.setHostility(resultSet.getBoolean(index++));
 	}
+	
+	public void dropTables(String username) {
+		createTables(username);
+		executeTransaction(new Transaction<Boolean>() {
+			@Override
+			public Boolean execute(Connection conn) throws SQLException {
+				//DROP STATEMENTS
+				PreparedStatement dropStmt1 = null;
+				PreparedStatement dropStmt2 = null;
+				PreparedStatement dropStmt3 = null;
+				PreparedStatement dropStmt4 = null;
+				PreparedStatement dropStmt5 = null;
+				PreparedStatement dropStmt6 = null;
+				PreparedStatement dropStmt7 = null;
+				String itemTableName = username + "items";
+				String playerTableName = username + "player";
+				String consoleTableName = username + "consolePersist";
+
+				
+				try {
+					try {
+						dropStmt6 = conn.prepareStatement(
+							"DROP TABLE " + playerTableName + " " 
+
+						);	
+						dropStmt6.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+
+							throw e;
+						}
+					}
+					
+					try {
+						dropStmt5 = conn.prepareStatement(
+							"DROP TABLE roomConnections"
+
+						);	
+						dropStmt5.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					
+					try {
+						dropStmt1 = conn.prepareStatement(
+							"DROP TABLE rooms"
+
+						);	
+						dropStmt1.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					try {
+						dropStmt2 = conn.prepareStatement(
+							"DROP TABLE " + itemTableName + ""
+
+						);	
+						dropStmt2.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					
+					try {
+						dropStmt3 = conn.prepareStatement(
+							"DROP TABLE users"
+
+						);	
+						dropStmt3.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					
+					try {
+						dropStmt4 = conn.prepareStatement(
+							"DROP TABLE connections"
+
+						);	
+						dropStmt4.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					
+					try {
+						dropStmt7 = conn.prepareStatement(
+							"DROP TABLE " + consoleTableName + " "
+
+						);	
+						dropStmt7.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
+					
+					return true;
+					
+				} finally {
+					DBUtil.closeQuietly(dropStmt1);
+					DBUtil.closeQuietly(dropStmt2);
+					DBUtil.closeQuietly(dropStmt3);
+					DBUtil.closeQuietly(dropStmt4);
+					DBUtil.closeQuietly(dropStmt5);
+					DBUtil.closeQuietly(dropStmt6);
+					DBUtil.closeQuietly(dropStmt7);
+				}
+			}
+		});
+	}
 
 	public void createTables(String username) {
 		executeTransaction(new Transaction<Boolean>() {
@@ -137,12 +270,23 @@ public class DerbyDatabase implements IDatabase {
 				PreparedStatement stmt4 = null;
 				PreparedStatement stmt5 = null;
 				PreparedStatement stmt6 = null;
+				PreparedStatement stmt7 = null;
+
 				String itemTableName = username + "items";
 				String playerTableName = username + "player";
+				String consoleTableName = username + "consolePersist";
 
 				
 				try {
+					
+				/**********************CREATE TABLES****************************************************/
 					try {
+					    DatabaseMetaData databaseMetadata = conn.getMetaData();
+					    ResultSet resultSet = databaseMetadata.getTables(null, null, "rooms", null);
+					    if (resultSet.next()) {
+					       System.out.println("TABLE ALREADY EXISTS");
+					    }
+					    
 						stmt1 = conn.prepareStatement(
 							"create table rooms (" +
 							"	room_id integer primary key " +
@@ -253,6 +397,20 @@ public class DerbyDatabase implements IDatabase {
 							throw e;
 						}												
 					}
+					try {
+						stmt7 = conn.prepareStatement(
+							"create table " + consoleTableName + " (" +
+							"	data_id integer primary key " +
+							"		generated always as identity (start with 1, increment by 1), " +									
+							"	data varchar(1000)" +
+							")"
+						);	
+						stmt7.executeUpdate();
+					} catch (SQLException e){
+						if(!e.getSQLState().equals("X0Y32")){
+							throw e;
+						}
+					}
 
 
 					return true;
@@ -264,40 +422,8 @@ public class DerbyDatabase implements IDatabase {
 					DBUtil.closeQuietly(stmt4);
 					DBUtil.closeQuietly(stmt5);
 					DBUtil.closeQuietly(stmt6);
-				}
-			}
-		});
-	}
-	public void createPersistingTables(String username) {
-		executeTransaction(new Transaction<Boolean>() {
-			@Override
-			public Boolean execute(Connection conn) throws SQLException {
-				PreparedStatement stmt1 = null;
-				PreparedStatement stmt2 = null;
-				String consoleTableName = username + "consolePersist";
-				
-				try {
-					try {
-						stmt1 = conn.prepareStatement(
-							"create table " + consoleTableName + " (" +
-							"	data_id integer primary key " +
-							"		generated always as identity (start with 1, increment by 1), " +									
-							"	data varchar(1000)" +
-							")"
-						);	
-						stmt1.executeUpdate();
-					} catch (SQLException e){
-						if(!e.getSQLState().equals("X0Y32")){
-							throw e;
-						}
-					}
+					DBUtil.closeQuietly(stmt7);
 
-							
-					return true;
-					
-				} finally {
-					DBUtil.closeQuietly(stmt1);
-					DBUtil.closeQuietly(stmt2);
 
 				}
 			}
@@ -412,19 +538,7 @@ public class DerbyDatabase implements IDatabase {
 		});
 	}
 	
-	// The main method creates the database tables and loads the initial data.
-	public static void main(String[] args) throws IOException {
-		System.out.println("Creating tables...");
-		
-		DerbyDatabase db = new DerbyDatabase();
-		db.createTables("new");
-		db.createPersistingTables("new");
-		
-		System.out.println("Loading initial data...");
-		db.loadInitialData("new");
-		
-		System.out.println("Success!");
-	}
+
 	
 
 	public Player insertPlayer(Player player, String username) {

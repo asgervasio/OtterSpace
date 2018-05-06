@@ -35,10 +35,10 @@ public interface IDatabase {
   String insertConsole(String data, String username);
 	List<String> loadConsole(String username);
 	public void createTables(String username);
-	public void createPersistingTables(String username);
 	public void loadInitialData(String username);
 	Player UpdatePlayer(Player player, String username);
 	Item UpdateItem(Item item, String username);
+	public void dropTables(String username);
     
 
 
