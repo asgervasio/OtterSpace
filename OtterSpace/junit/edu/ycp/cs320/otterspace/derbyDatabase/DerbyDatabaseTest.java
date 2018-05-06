@@ -48,8 +48,8 @@ public class DerbyDatabaseTest {
 		String roomDescription = "description";
 		boolean requirement = true;
 		HashMap<String, Integer> map = new HashMap<String, Integer>();
-		map.put("North", 2);
-		map.put("South", 3);
+		map.put("north", 2);
+		map.put("south", 3);
 		
 		roomModel.setTitle(roomTitle);
 		roomModel.setDescription(roomDescription);
@@ -84,6 +84,7 @@ public class DerbyDatabaseTest {
 		player = playerController.createPlayer(playerName, playerDescrip, health, gold,
 				score, attack, defense, hostile, room1);
 
+		database.dropTables(username);
 		database.createTables(username);
 		database.loadInitialData(username);
 	}
@@ -96,11 +97,13 @@ public class DerbyDatabaseTest {
 		assertEquals(player.getName(), playerBlank.getName());
 	}
 	*/
+	
 	@Test
 	public void testInsertRoom(){
-		database.insertRoom(room1);
-		roomBlank = database.findRoomUsingTitle("title");
-		assertEquals(room1.getTitle(), roomBlank.getTitle());
+		roomBlank = database.findRoomUsingRoomId(1);
+		HashMap<String, Integer> connections = roomBlank.getTrueConnections();
+		System.out.println(connections.get("north"));
+		assertEquals("testroom1", roomBlank.getTitle());
 	}
 	
 	@Test

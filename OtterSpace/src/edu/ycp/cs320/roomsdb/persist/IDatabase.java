@@ -10,7 +10,6 @@ public interface IDatabase {
 	public Room insertRoom(Room room);
 	public Room findRoomUsingTitle(String title);
 	public Room findRoomUsingRoomId(int roomId);
-
 	
 	public Item insertItem(Item item, String username);
 	public Item findItemUsingTitle(String title, String username);
