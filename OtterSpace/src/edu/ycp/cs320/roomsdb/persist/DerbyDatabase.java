@@ -109,9 +109,11 @@ public class DerbyDatabase implements IDatabase {
 		room.setRoomId(resultSet.getInt(index++));
 		room.setTitle(resultSet.getString(index++));
 		room.setDescription(resultSet.getString(index++));
-		room.setRequirement(resultSet.getBoolean(index++));
+
+		room.setRequirement(resultSet.getString(index++));
 		room.setConnections();
 		room.setConnections(resultSet.getString(index++), resultSet.getInt(index++));
+
 	}
 	
 	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException {
@@ -133,7 +135,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	private void loadPlayer(Player player, ResultSet resultSet, int index) throws SQLException {
-		player.setRoomLoc(resultSet.getInt(index++));
+		player.setRoomId(resultSet.getInt(index++));
 		player.setName(resultSet.getString(index++));
 		player.setDescription(resultSet.getString(index++));
 		player.setHealth(resultSet.getInt(index++));		
@@ -279,7 +281,7 @@ public class DerbyDatabase implements IDatabase {
 							"		generated always as identity (start with 1, increment by 1), " +									
 							"	title varchar(40)," +
 							"	description varchar(100)," +
-							"	requirement varchar(10)" +
+							"	requirement varchar(20)" +
 							")"
 						);	
 						stmt1.executeUpdate();
@@ -479,7 +481,7 @@ public class DerbyDatabase implements IDatabase {
 						insertPlayer.setInt(6, player.getAttack());
 						insertPlayer.setInt(7, player.getDefense());
 						insertPlayer.setBoolean(8, player.getHostility());
-						insertPlayer.setInt(9, player.getRoomLoc());
+						insertPlayer.setInt(9, player.getRoomId());
 						insertPlayer.addBatch();
 					}
 					insertPlayer.executeBatch();					
@@ -708,7 +710,7 @@ public class DerbyDatabase implements IDatabase {
 					// substitute the title entered by the user for the placeholder in the query
 					stmt1.setString(1, room.getTitle());
 					stmt1.setString(2, room.getDescription());
-					stmt1.setBoolean(3, room.getRequirement());
+					stmt1.setString(3, room.getRequirement());
 					
 					// execute the query
 					stmt1.executeUpdate();

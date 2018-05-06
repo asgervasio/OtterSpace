@@ -24,6 +24,7 @@ body
   background-image: url('background/OtterSpacePicture.jpg');
   height: 100%;
 }
+
 .Index{
   display: flex;
   align-items: center;
@@ -31,16 +32,20 @@ body
   background-color: black;
   font-family: "Courier New", Courier, monospace;
 }
-.Button
+#submitButton
 {
-  background-color: black;
-  font-family: "Courier New", Courier, monospace;
-  border: 0;
-  color: #08088A;
-  font-size: 200%;
-  margin-top: 50%;
-  margin-bottom: 50%;
-  margin-right: 5%;
-  margin-left: 5%;
+    border: 1px solid #f44c0e;
+    color: #fff;
+    background: tomato;
+    padding: 10px 20px;
+    border-radius: 3px;
+}
+input[type=submit]
+{
+    border: 1px solid #f44c0e;
+    color: #fff;
+    background: tomato;
+    padding: 10px 20px;
+    border-radius: 3px;
 
 }
