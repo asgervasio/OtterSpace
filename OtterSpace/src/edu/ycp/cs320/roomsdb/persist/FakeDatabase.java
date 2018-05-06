@@ -244,13 +244,13 @@ public class FakeDatabase implements IDatabase {
 		return null;
 	}
 
-	@Override
+
 	public Player findPlayerUsingLocation(Room roomLoc, String username) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	@Override
+	
 	public List<User> changePassword(String name, String pswd, String newPassword) {
 		// TODO Auto-generated method stub
 		return null;
@@ -265,7 +265,7 @@ public class FakeDatabase implements IDatabase {
 
 
 	public List<String> loadConsole(String username) {
->
+
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -277,8 +277,34 @@ public class FakeDatabase implements IDatabase {
 		
 	}
 
+
+
 	@Override
-	public void createPersistingTables(String username) {
+	public List<Player> findPlayersUsingLocation(Room roomLoc, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void loadInitialData(String username) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Player UpdatePlayer(Player player, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Item UpdateItem(Item item, String username) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void dropTables(String username) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -19,7 +19,7 @@
 <div class="heading">
     		<h1>Fellow Otters In Arms</h1>
   		</div>
-			<div>
+			<div class="playerList">
 
 <br>
 <c:forEach  items="${poop}" var="user" varStatus = "iter">
