@@ -1,2 +1,3 @@
-TestRoom1|You are standing in a cramped room|false
-TestRoom2|You are standing on the deck of a spaceship|false
+Closet|You are standing in a cramped room there is a door to the north|none
+Hallway|This is a long hallway that leads to the right and another door faces in front of you|none
+Bedroom|You see a bed in the corner and a desk littered with personal items. It seems long abandoned|key

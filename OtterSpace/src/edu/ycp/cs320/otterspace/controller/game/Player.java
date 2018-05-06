@@ -10,7 +10,7 @@ public class Player
 {
 	private Room currentRoom;
 	private List<Item> inventory = new ArrayList<Item>();
-	private int health, gold, score, attack, defense, roomLoc;
+	private int health, gold, score, attack, defense, roomId;
 	private boolean hostility;
 	private String name, description;
 	
@@ -93,14 +93,14 @@ public class Player
 		return inventory;
 	}
 	
-	public void setRoomLoc(int id)
+	public void setRoomId(int id)
 	{
-		roomLoc = id;
+		roomId = id;
 	}
 	
-	public int getRoomLoc()
+	public int getRoomId()
 	{
-		return roomLoc;
+		return roomId;
 	}
 	
 	public void addItem(Item item)
@@ -122,7 +122,12 @@ public class Player
 	}
 	
 	public void attackEnemy(Player player){
-		player.setHealth(player.getHealth() - (attack - player.getDefense()));
+		int damage = attack - player.getDefense();
+		if(damage < 0)
+		{
+			damage = 0;
+		}
+		player.setHealth(player.getHealth() - damage);
 	}
 	
 	public void dropItems(){

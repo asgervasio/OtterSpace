@@ -26,51 +26,68 @@ public class GameEngine
 		String command = cmd.toLowerCase();
 		String[] commandSplit = command.split(" ");
 		String result = "";
-
-		
-		switch(commandSplit[0])
+/*
+		if(player.getHealth() <= 0)
 		{
-		
-			case "move":
-			case "m":
-			case "walk":
-			case "head":
-				db.insertConsole("> " + command + "<br />", username);
-				result = move(commandSplit, username);
-				break;
-			case "look":
-			case "inspect":
-				db.insertConsole("> " + command + "<br />", username);
-				result = inspect(commandSplit, username);
-				break;
-			case "take":
-			case "pick":
-				db.insertConsole("> " + command + "<br />", username);
-				result = take(commandSplit, username);
-				break;
-			case "inventory":
-			case "i":
-				db.insertConsole("> " + command + "<br />", username);
-				result = displayInventory(username);
-				break;
-			case "start":
-			case "s":
-				result = initializePlayer(command, username);
-				break;
-			case "load":
-			case "l":
-				//Do not load "load" command into console
-				result = loadPlayer(username);
-				break;
-			case "attack":
-				db.insertConsole("> " + command + "<br />", username);
-				result = attack(commandSplit, username);
-				break;
-			default:
-				db.insertConsole("> " + command + "<br />", username);
-				result = invalid(username); 
-				break;
-		}	
+			switch(commandSplit[0])
+			{
+				case "restart":
+				case "start":
+				case "r":
+					result = initializePlayer(command, username);
+					break;
+				default:
+					result = "You are dead! type 'r' to restart";
+					break;
+			}
+				
+		}
+		*/
+
+			switch(commandSplit[0])
+			{
+			
+				case "move":
+				case "m":
+				case "walk":
+				case "head":
+					db.insertConsole("> " + command + "<br />", username);
+					result = move(commandSplit, username);
+					break;
+				case "look":
+				case "inspect":
+					db.insertConsole("> " + command + "<br />", username);
+					result = inspect(commandSplit, username);
+					break;
+				case "take":
+				case "pick":
+					db.insertConsole("> " + command + "<br />", username);
+					result = take(commandSplit, username);
+					break;
+				case "inventory":
+				case "i":
+					db.insertConsole("> " + command + "<br />", username);
+					result = displayInventory(username);
+					break;
+				case "start":
+				case "s":
+					result = initializePlayer(command, username);
+					break;
+				case "load":
+				case "l":
+					//Do not load "load" command into console
+					result = loadPlayer(username);
+					break;
+				case "attack":
+					db.insertConsole("> " + command + "<br />", username);
+					result = attack(commandSplit, username);
+					break;
+				default:
+					db.insertConsole("> " + command + "<br />", username);
+					result = invalid(username); 
+					break;
+			}	
+
 		return result;
 			
 			
@@ -79,18 +96,31 @@ public class GameEngine
 	public String attack(String[] command, String username)
 	{
 		Player enemy = db.findPlayerUsingName(command[1], username);
+		enemy.setCurrentRoom(db.findRoomUsingRoomId(enemy.getRoomId()));
 		String result = "";
 		player.attackEnemy(enemy);
-		if(enemy.getHealth() == 0)
+		enemy.attackEnemy(player);
+		//If enemy is not hostile and is attacked, he becomes hostile
+		if(!enemy.getHostility())
+		{
+			enemy.setHostility(true);
+		}
+		
+		//if enemy dies
+		if(enemy.getHealth() <= 0)
 		{
 			result = enemy.getName() + " is dead. You find " + enemy.getGold() + " gold on his body.";
 			player.setScore(player.getScore() + enemy.getGold());
 		}
+		
+		//if enemy is not dead
 		else
 		{
-			result = enemy.getName() + " was hit!";
+			result = enemy.getName() + " was hit! " + enemy.getHealth();
 		}
-		//updatePlayer(player, username);
+		
+		//updates the user and the enemy
+		updatePlayer(player, username);
 		updatePlayer(enemy, username);
 		db.insertConsole(result, username);
 		return result;
@@ -102,8 +132,9 @@ public class GameEngine
 		inventory = player.getInventory();
 		for(int i = 0; i < inventory.size(); i++)
 		{
-			result = result + inventory.get(i).getTitle();
+			result = result + inventory.get(i).getTitle() + "<br />";
 		}
+		result = result + "Gold: " + player.getGold() + "<br />";
 		db.insertConsole(result, username);
 		return result;
 	}
@@ -120,19 +151,27 @@ public class GameEngine
 		else
 		{
 			inspectedItem = db.findItemUsingTitle(item[1], username);
-			if(inspectedItem == null)
+			if(inspectedItem.getRoomLocat() == player.getCurrentRoom().getRoomId() )
 			{
-				result = "Could not find that item";
+				if(inspectedItem == null)
+				{
+					result = "Could not find that item";
+				}
+				else
+				{
+					player.addItem(inspectedItem);
+					result = inspectedItem.getTitle() + " picked up <br />";
+					inspectedItem.setRoomLocat(999);
+					db.UpdateItem(inspectedItem, username);
+				}
 			}
 			else
 			{
-				player.addItem(inspectedItem);
-				result = inspectedItem.getTitle() + " picked up <br />";
-				inspectedItem.setRoomLocat(99);
-				db.UpdateItem(inspectedItem, username);
+				result = "That item is not here <br />";
 			}
 		}
 		db.insertConsole(result, username);
+		updatePlayer(player, username);
 		return result;
 	}
 	
@@ -151,7 +190,14 @@ public class GameEngine
 		}
 		else
 		{
-			result = inspectedItem.getDescription() + "<br />";
+			if(inspectedItem.getRoomLocat() == player.getCurrentRoom().getRoomId() || inspectedItem.getRoomLocat() == 999)
+			{
+				result = inspectedItem.getDescription() + "<br />";
+			}
+			else
+			{
+				result = "That item is not here <br />" + inspectedItem.getRoomLocat() + player.getCurrentRoom().getRoomId();
+			}
 		}
 		db.insertConsole(result, username);
 		return result;
@@ -161,6 +207,7 @@ public class GameEngine
 	{
 		
 		Room currentRoom = player.getCurrentRoom();
+		Room destinationRoom;
 		int destinationRoomId = (int)db.findRoomIdFromConnection(direction[1]);
 		System.out.println("destination " + destinationRoomId);
 		String result = "";
@@ -172,11 +219,41 @@ public class GameEngine
 		}
 		else
 		{
-			player.setCurrentRoom(db.findRoomUsingRoomId(destinationRoomId));
-			result = outputRoomData(username);
+			destinationRoom = db.findRoomUsingRoomId(destinationRoomId);
+			if(destinationRoom.getRequirement().equals("none"))
+			{
+				player.setCurrentRoom(destinationRoom);
+				result = outputRoomData(username);
+			}
+			else //Room is locked
+			{
+				String requirement = destinationRoom.getRequirement();
+				List<Item> inventory = new ArrayList<Item>();
+				boolean hasItem = false;
+				inventory = player.getInventory();
+				
+				//Iterate through player inventory
+				for(int i = 0; i < inventory.size(); i++)
+				{
+					//if the requirement is in the player's inventory
+					if(inventory.get(i).getTitle().equals(requirement))
+					{
+						hasItem = true;
+						player.setCurrentRoom(destinationRoom);
+						result = destinationRoom.getTitle() + " opened with " + inventory.get(i).getTitle() + "<br /> <br />";
+						result = result + outputRoomData(username);
+					}
+
+				}
+				if(!hasItem)
+				{
+					result = requirement + " is required";
+				}
+			}
 						
 		}
 		db.insertConsole(result, username);
+		updatePlayer(player, username);
 		return result;
 	}
 	
@@ -209,6 +286,7 @@ public class GameEngine
 		List<String> consoleLog = new ArrayList<String>();
 		consoleLog = db.loadConsole(username);
 		player = db.findPlayerUsingName("otter", username);
+		player.setCurrentRoom(db.findRoomUsingRoomId(player.getRoomId()));
 		for(int i = 1; i < consoleLog.size(); i++)
 		{
 			result += consoleLog.get(i) + "<br />";
@@ -248,11 +326,11 @@ public class GameEngine
 		result = ("You are in " + currentRoom.getTitle() + "<br /><br />" + currentRoom.getDescription());
 		if (itemFound)
 		{
-			result = result + ("<br /><br /> You see the following items on the ground: <br />" + items + "<br />");
+			result = result + ("<br /><br /> You see the following items on the ground: <br />" + items);
 		}
 		if(playerFound)
 		{
-			result = result + "<br /><br /> These actors are in the room: <br />" + players + "<br />";
+			result = result + "<br /><br /> These actors are in the room: <br />" + players;
 		}
 		
 		return result;

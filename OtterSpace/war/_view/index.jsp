@@ -20,16 +20,8 @@
 
   		<div class="Index">
   			<form action="${pageContext.servletContext.contextPath}/gameAjax.html" method="post">
-				<input type="submit" name="startGame" value="Play">
-			</form>
-  			<form action="${pageContext.servletContext.contextPath}/editorRoom" method="get">
-				<input type="submit" name="startGame" value="Create Room">
+				<input type="submit" name="startGame" value="Play" id="submitButton">
 
-			</form>  		
-  			<form action="${pageContext.servletContext.contextPath}/editorItem" method="get">
-				<input type="submit" name="startGame" value="Create Item">
-
-			</form>  
 			<form action="${pageContext.servletContext.contextPath}/players" method="get">
 				<input type="submit" name="players" value="View Players">
 

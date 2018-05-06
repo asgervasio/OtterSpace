@@ -13,8 +13,7 @@ import java.util.Set;
 
 public class Room {
 	int roomId;
-	String title, description;
-	boolean requirement;
+	String title, description, requirement;
 	//               Key     Value
 	private HashMap<String, Integer> connections;
 	
@@ -45,11 +44,11 @@ public class Room {
 		return description;
 	}
 	
-	public void setRequirement(boolean requirement){
+	public void setRequirement(String requirement){
 		this.requirement = requirement;		
 	}
 	
-	public Boolean getRequirement(){
+	public String getRequirement(){
 		return requirement;
 	}
 		

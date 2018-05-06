@@ -28,7 +28,7 @@ public class InitialData {
 				room.setRoomId(roomId++);				
 				room.setTitle(i.next().toLowerCase());
 				room.setDescription(i.next());
-				room.setRequirement(stringToBoolean(i.next()));
+				room.setRequirement(i.next());
 				roomList.add(room);
 			}
 			return roomList;
@@ -135,7 +135,7 @@ public class InitialData {
 				player.setScore(Integer.parseInt(i.next()));
 				player.setAttack(Integer.parseInt(i.next()));
 				player.setDefense(Integer.parseInt(i.next()));
-				player.setRoomLoc(Integer.parseInt(i.next()));
+				player.setRoomId(Integer.parseInt(i.next()));
 				player.setHostility(stringToBoolean(i.next()));
 				playerList.add(player);  
 			}
