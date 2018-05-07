@@ -82,6 +82,16 @@ public class GameEngine
 					db.insertConsole("> " + command + "<br />", username);
 					result = attack(commandSplit, username);
 					break;
+				case "score":
+					db.insertConsole("> " + command + "<br />", username);
+					result = result + player.getScore() + "<br />";
+					db.insertConsole(result, username);
+					break;
+				case "health":
+					db.insertConsole("> " + command + "<br />", username);
+					result = result + player.getHealth() + "<br />";
+					db.insertConsole(result, username);
+					break;
 				default:
 					db.insertConsole("> " + command + "<br />", username);
 					result = invalid(username); 
@@ -98,33 +108,59 @@ public class GameEngine
 		Player enemy = db.findPlayerUsingName(command[1], username);
 		enemy.setCurrentRoom(db.findRoomUsingRoomId(enemy.getRoomId()));
 		String result = "";
-		player.attackEnemy(enemy);
-		enemy.attackEnemy(player);
-		//If enemy is not hostile and is attacked, he becomes hostile
-		if(!enemy.getHostility())
+
+		if(enemy.getCurrentRoom().getRoomId() == player.getCurrentRoom().getRoomId())
 		{
-			enemy.setHostility(true);
+			System.out.println("ENEMY IN THE SAME ROOM");
+			if(enemy.getHealth() > 0)
+			{
+				player.attackEnemy(enemy);
+	
+				//if enemy dies
+				if(enemy.getHealth() <= 0)
+				{
+					result = enemy.getName() + " is dead. You find " + enemy.getGold() + " gold on his body.";
+					player.setGold(player.getGold() + enemy.getGold());
+					player.setScore(player.getScore() + enemy.getScore());
+					enemy.setRoomId(0);
+				}
+				
+				//if enemy is not dead
+				else
+				{
+					result = enemy.getName() + " was hit! " + enemy.getHealth() + "<br />";
+					if(enemy.getHostility())
+					{
+						enemy.attackEnemy(player);
+						result = result + enemy.getName() + " hit you! <br />";
+					}
+				}
+				
+				//If enemy is not hostile and is attacked, he becomes hostile
+				if(!enemy.getHostility())
+				{
+					enemy.setHostility(true);
+					result = result + enemy.getName() + " looks angry. <br />";
+				}
+				
+				//updates the user and the enemy
+				updatePlayer(player, username);
+				updatePlayer(enemy, username);
+			}
+			else
+			{
+				result = enemy.getName() + " is dead";
+			}
 		}
-		
-		//if enemy dies
-		if(enemy.getHealth() <= 0)
-		{
-			result = enemy.getName() + " is dead. You find " + enemy.getGold() + " gold on his body.";
-			player.setScore(player.getScore() + enemy.getGold());
-		}
-		
-		//if enemy is not dead
 		else
 		{
-			result = enemy.getName() + " was hit! " + enemy.getHealth();
+			result = command[1] + " is not here! <br />";
 		}
-		
-		//updates the user and the enemy
-		updatePlayer(player, username);
-		updatePlayer(enemy, username);
 		db.insertConsole(result, username);
 		return result;
 	}
+	
+	/********************DISPLAY INVENTORY*******************************************/
 	public String displayInventory(String username)
 	{
 		String result = "Your inventory contains: <br />";
@@ -161,7 +197,7 @@ public class GameEngine
 				{
 					player.addItem(inspectedItem);
 					result = inspectedItem.getTitle() + " picked up <br />";
-					inspectedItem.setRoomLocat(999);
+					inspectedItem.setRoomLocat(0);
 					db.UpdateItem(inspectedItem, username);
 				}
 			}
@@ -184,7 +220,7 @@ public class GameEngine
 		{
 			result = "Too many arguments";
 		}
-		else if(item[1].equals("around"))
+		else if(item[1].toLowerCase().equals("around") || item[1].toLowerCase().equals("room"))
 		{
 			result = outputRoomData(username);
 		}
@@ -196,7 +232,15 @@ public class GameEngine
 			}
 			else
 			{
-				result = "That item is not here <br />" + inspectedItem.getRoomLocat() + player.getCurrentRoom().getRoomId();
+				Player inspectedPlayer = db.findPlayerUsingName(item[1], username);
+				if(inspectedPlayer.getRoomId() == player.getRoomId())
+				{
+					result = inspectedPlayer.getDescription() + "<br />";
+				}
+				else
+				{
+					result = "That isn't here <br />";
+				}
 			}
 		}
 		db.insertConsole(result, username);
@@ -208,51 +252,52 @@ public class GameEngine
 		
 		Room currentRoom = player.getCurrentRoom();
 		Room destinationRoom;
-		int destinationRoomId = (int)db.findRoomIdFromConnection(direction[1]);
-		System.out.println("destination " + destinationRoomId);
+		//int destinationRoomId = (int)db.findRoomIdFromConnection(direction[1]);
+		//System.out.println("destination " + destinationRoomId);
 		String result = "";
-		Room testRoom;
-		
-		if (destinationRoomId == 0)
-		{
-			result = "Could not find that room";
-		}
-		else
-		{
-			destinationRoom = db.findRoomUsingRoomId(destinationRoomId);
-			if(destinationRoom.getRequirement().equals("none"))
+			if(currentRoom.getTrueConnections().containsKey(direction[1]))
 			{
-				player.setCurrentRoom(destinationRoom);
-				result = outputRoomData(username);
-			}
-			else //Room is locked
-			{
-				String requirement = destinationRoom.getRequirement();
-				List<Item> inventory = new ArrayList<Item>();
-				boolean hasItem = false;
-				inventory = player.getInventory();
+				destinationRoom = db.findRoomUsingRoomId(currentRoom.getTrueConnections().get(direction[1]));
+				//destinationRoom = db.findRoomUsingRoomId(currentRoom.getConnectionID(direction[1]));
+				if(destinationRoom.getRequirement().equals("none"))
+				{
+					player.setCurrentRoom(destinationRoom);
+					result = outputRoomData(username);
+				}
 				
-				//Iterate through player inventory
-				for(int i = 0; i < inventory.size(); i++)
+				else //Room is locked
 				{
-					//if the requirement is in the player's inventory
-					if(inventory.get(i).getTitle().equals(requirement))
+					String requirement = destinationRoom.getRequirement();
+					List<Item> inventory = new ArrayList<Item>();
+					boolean hasItem = false;
+					inventory = player.getInventory();
+					
+					//Iterate through player inventory
+					for(int i = 0; i < inventory.size(); i++)
 					{
-						hasItem = true;
-						player.setCurrentRoom(destinationRoom);
-						result = destinationRoom.getTitle() + " opened with " + inventory.get(i).getTitle() + "<br /> <br />";
-						result = result + outputRoomData(username);
+						//if the requirement is in the player's inventory
+						if(inventory.get(i).getTitle().equals(requirement))
+						{
+							hasItem = true;
+							player.setCurrentRoom(destinationRoom);
+							result = destinationRoom.getTitle() + " opened with " + inventory.get(i).getTitle() + "<br /> <br />";
+							result = result + outputRoomData(username);
+						}
+	
 					}
-
+					if(!hasItem)
+					{
+						result = requirement + " is required";
+					}
 				}
-				if(!hasItem)
-				{
-					result = requirement + " is required";
-				}
+			}
+			else
+			{
+				result = "That direction does not lead anywhere";
 			}
 						
-		}
 		db.insertConsole(result, username);
+		System.out.println("UPDATE " + player.getName());
 		updatePlayer(player, username);
 		return result;
 	}
@@ -268,11 +313,12 @@ public class GameEngine
 	public String initializePlayer(String command, String username)
 	{
 		String result = "";
-		player.setCurrentRoom(db.findRoomUsingRoomId(1));
 		db.dropTables(username);
 		db.createTables(username);
 		db.loadInitialData(username);
-		db.insertConsole("> " + command + "<br />", username);	
+		db.insertConsole("> " + command + "<br />", username);
+		player = db.findPlayerUsingName("otter", username);
+		player.setCurrentRoom(db.findRoomUsingRoomId(1));
 
 		result = outputRoomData(username);
 		db.insertConsole(result, username);
@@ -284,9 +330,10 @@ public class GameEngine
 		//ADD PLAYER INFO LOAD
 		String result = "";
 		List<String> consoleLog = new ArrayList<String>();
+
 		consoleLog = db.loadConsole(username);
-		player = db.findPlayerUsingName("otter", username);
 		player.setCurrentRoom(db.findRoomUsingRoomId(player.getRoomId()));
+
 		for(int i = 1; i < consoleLog.size(); i++)
 		{
 			result += consoleLog.get(i) + "<br />";

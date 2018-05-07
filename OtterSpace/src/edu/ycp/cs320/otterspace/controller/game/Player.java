@@ -81,6 +81,7 @@ public class Player
 	public void setCurrentRoom(Room room)
 	{
 		currentRoom = room;
+		roomId = room.getRoomId();
 	}
 	
 	public Room getCurrentRoom()
@@ -128,6 +129,9 @@ public class Player
 			damage = 0;
 		}
 		player.setHealth(player.getHealth() - damage);
+		System.out.println("ATTACK " + attack);
+		System.out.println("ENEMY DEFENSE " + player.getDefense());
+		System.out.println("DAMAGE "+ damage);
 	}
 	
 	public void dropItems(){
