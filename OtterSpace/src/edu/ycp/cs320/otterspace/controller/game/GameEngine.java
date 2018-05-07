@@ -2,8 +2,11 @@ package edu.ycp.cs320.otterspace.controller.game;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletResponse;
 
@@ -509,6 +512,7 @@ public class GameEngine
 		boolean playerFound = false;
 		List<Item> itemList = db.findItemsUsingLocation(currentRoom.getRoomId(), username);
 		List<Player> playerList = db.findPlayersUsingLocation(currentRoom, username);
+		HashMap<String, Integer> connectionList = currentRoom.getTrueConnections();
 		Player loser = db.findPlayerUsingName("sean", username);
 		System.out.println("ONONWONEWONEOWNEOWNE "+ loser.getName() + "   " + loser.getHostility());
 		for(int i = 0; i < itemList.size(); i++)

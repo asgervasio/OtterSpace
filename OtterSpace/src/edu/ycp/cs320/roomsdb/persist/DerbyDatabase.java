@@ -296,7 +296,7 @@ public class DerbyDatabase implements IDatabase {
 							"	room_id integer primary key " +
 							"		generated always as identity (start with 1, increment by 1), " +									
 							"	title varchar(40)," +
-							"	description varchar(100)," +
+							"	description varchar(500)," +
 							"	requirement varchar(20)" +
 							")"
 						);	
@@ -313,7 +313,7 @@ public class DerbyDatabase implements IDatabase {
 							"   item_id integer primary key " +
 							"		generated always as identity (start with 1, increment by 1), " +
 							"	title varchar(40)," +
-							"	description varchar(100)," +
+							"	description varchar(500)," +
 							"	roomLocat integer,"	+
 							"	statAff varchar(20)," +
 							"	statChangeVal integer" +
@@ -369,7 +369,7 @@ public class DerbyDatabase implements IDatabase {
 							"	player integer primary key "+
 							"		generated always as identity (start with 1, increment by 1), " +
 							"	name varchar(40)," +
-							"	description varchar(40)," +
+							"	description varchar(500)," +
 							"	health integer," +
 							"	gold integer," +
 							"   score integer," +
