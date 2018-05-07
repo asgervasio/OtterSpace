@@ -567,7 +567,7 @@ public class DerbyDatabase implements IDatabase {
 					// execute the query
 					stmt.executeUpdate();
 					
-					System.out.println("UPDATED player!!");
+					System.out.println("UPDATED " + player.getName());
 					
 					return null;
 				} finally {

@@ -22,7 +22,7 @@ public class EditorRoomController {
 		room.setDescription(model.getDescription());
     
 		//room.setRequirement(model.getRequirement());	
-		room.setConnections(model.getConnections());
+		//room.setConnections(model.getConnections());
 
 		return room;
 	}
