@@ -11,7 +11,7 @@ public class Player
 	private Room currentRoom;
 	private List<Item> inventory = new ArrayList<Item>();
 	private int health, gold, score, attack, defense, roomId;
-	private boolean hostility;
+	public boolean hostility;
 	private String name, description;
 	
 	public void setName(String name){
@@ -70,7 +70,9 @@ public class Player
 		return defense;
 	}
 	
-	public void setHostility(boolean hostile){
+	public void setHostility(boolean hostile)
+	{
+		System.out.println("HBOOLEAN GOTTEN: " + name + hostile);
 		this.hostility = hostile;
 	}
 	
@@ -110,6 +112,10 @@ public class Player
 		System.out.println(inventory.size());
 	}
 	
+	public void removeItem(Item item)
+	{
+		inventory.remove(item);
+	}
 	public boolean inventoryContains(Item item)
 	{
 		if(inventory.contains(item))

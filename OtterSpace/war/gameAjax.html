@@ -13,6 +13,7 @@
 	function add()
 	{
 		var output = $('.content');
+		var moves = parseInt($('.moves'));
 		var input = $('input');
 		var cmd = input.val();
 		var element = document.getElementById("screen");
@@ -36,6 +37,8 @@
 				dataType: 'text'
 			});
 			input.val('');
+			moves++;
+			$('.moves').update('Moves: moves');
 			
 	}
 	

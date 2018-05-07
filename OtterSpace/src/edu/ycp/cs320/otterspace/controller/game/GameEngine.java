@@ -20,14 +20,17 @@ public class GameEngine
 	Player player = new Player();
 	//HttpServletResponse resp;
 	IDatabase db = DatabaseProvider.getInstance();
+	boolean dead = false;
+	boolean win = false;
+	boolean getAttacked = false;
 	
 	public String parse(String cmd, String username)
 	{
 		String command = cmd.toLowerCase();
 		String[] commandSplit = command.split(" ");
 		String result = "";
-/*
-		if(player.getHealth() <= 0)
+
+		if(dead)
 		{
 			switch(commandSplit[0])
 			{
@@ -37,12 +40,27 @@ public class GameEngine
 					result = initializePlayer(command, username);
 					break;
 				default:
-					result = "You are dead! type 'r' to restart";
+					result = "You are dead! <br /> Your score was: " + player.getScore() +  "<br />Type 'r' to restart <br />";
 					break;
 			}
 				
 		}
-		*/
+		else if(win)
+		{
+			switch(commandSplit[0])
+			{
+				case "restart":
+				case "start":
+				case "r":
+					result = initializePlayer(command, username);
+					break;
+				default:
+					result = "CONGRATULATIONS, YOU HAVE ESCAPED!<br /> YOUR SCORE WAS: " + player.getScore() +  "<br />TYPE 'r' TO RESTART <br />";
+					break;
+			}
+		}
+		else
+		{
 
 			switch(commandSplit[0])
 			{
@@ -58,11 +76,13 @@ public class GameEngine
 				case "inspect":
 					db.insertConsole("> " + command + "<br />", username);
 					result = inspect(commandSplit, username);
+					getAttacked = true;
 					break;
 				case "take":
 				case "pick":
 					db.insertConsole("> " + command + "<br />", username);
 					result = take(commandSplit, username);
+					getAttacked = true;
 					break;
 				case "inventory":
 				case "i":
@@ -81,6 +101,7 @@ public class GameEngine
 				case "attack":
 					db.insertConsole("> " + command + "<br />", username);
 					result = attack(commandSplit, username);
+					getAttacked = true;
 					break;
 				case "score":
 					db.insertConsole("> " + command + "<br />", username);
@@ -92,15 +113,88 @@ public class GameEngine
 					result = result + player.getHealth() + "<br />";
 					db.insertConsole(result, username);
 					break;
+				case "attackstat":
+					db.insertConsole("> " + command + "<br />", username);
+					result = result + player.getAttack() + "<br />";
+					db.insertConsole(result, username);
+					break;
+				case "defensestat":
+					db.insertConsole("> " + command + "<br />", username);
+					result = result + player.getDefense() + "<br />";
+					db.insertConsole(result, username);
+					break;
+				case "drop":
+					db.insertConsole("> " + command + "<br />", username);
+					result = drop(commandSplit, username);
+					getAttacked = true;
+					break;
+				case "escape":
+					db.insertConsole("> " + command + "<br />", username);
+					result = drop(commandSplit, username);
+					break;
 				default:
 					db.insertConsole("> " + command + "<br />", username);
 					result = invalid(username); 
 					break;
-			}	
-
+			}
+			if(getAttacked)
+			{
+				result = result + "<br /> " + checkAttack(username);
+				getAttacked = false;
+			}
+			checkDead(username);
+		}
 		return result;
+
 			
 			
+	}
+	public String escape(String username)
+	{
+		String result = "";
+		Room currentRoom = player.getCurrentRoom();
+		if(currentRoom.getTitle().equals("Escape Pod"))
+		{
+			win = true;
+			result = "The escape pod disengages from the ship and the boosters fire as you are hurled away through space. <br /> CONGRATULATIONS! YOU HAVE ESCAPED TYPE 'R' to restart";
+		}
+		
+		return result;
+	}
+	public String checkAttack(String username)
+	{
+		boolean enemyFound = false;
+		List<Player> playerList = db.findPlayersUsingLocation(player.getCurrentRoom(), username);
+		List<Player> enemyList = new ArrayList<Player>();
+		String result = "";
+		for(int i = 0; i < playerList.size(); i++)
+		{
+			if (playerList.get(i).getName().equals("otter"))
+			{
+				
+			}
+			else if(playerList.get(i).getHostility())
+			{
+				enemyFound = true;
+				enemyList.add(playerList.get(i));
+			}
+
+		}
+		if(enemyFound)
+		{
+			for(int j = 0; j < enemyList.size(); j++)
+			{
+				Player enemy = db.findPlayerUsingName(enemyList.get(j).getName(), username);
+				enemy.setCurrentRoom(db.findRoomUsingRoomId(enemy.getRoomId()));
+				enemy.attackEnemy(player);
+				System.out.println("");
+				result = result + enemy.getName() + " hit you! <br />";
+				enemyList.remove(j);
+			}
+		}
+		enemyFound = false;
+		updatePlayer(player, username);
+		return result;
 	}
 	
 	public String attack(String[] command, String username)
@@ -111,7 +205,6 @@ public class GameEngine
 
 		if(enemy.getCurrentRoom().getRoomId() == player.getCurrentRoom().getRoomId())
 		{
-			System.out.println("ENEMY IN THE SAME ROOM");
 			if(enemy.getHealth() > 0)
 			{
 				player.attackEnemy(enemy);
@@ -128,20 +221,24 @@ public class GameEngine
 				//if enemy is not dead
 				else
 				{
+					
 					result = enemy.getName() + " was hit! " + enemy.getHealth() + "<br />";
+					/*
 					if(enemy.getHostility())
 					{
 						enemy.attackEnemy(player);
 						result = result + enemy.getName() + " hit you! <br />";
 					}
+					*/
+					if(!enemy.getHostility())
+					{
+						enemy.setHostility(true);
+						result = result + enemy.getName() + " looks angry. <br />";
+					}
 				}
 				
 				//If enemy is not hostile and is attacked, he becomes hostile
-				if(!enemy.getHostility())
-				{
-					enemy.setHostility(true);
-					result = result + enemy.getName() + " looks angry. <br />";
-				}
+
 				
 				//updates the user and the enemy
 				updatePlayer(player, username);
@@ -149,7 +246,7 @@ public class GameEngine
 			}
 			else
 			{
-				result = enemy.getName() + " is dead";
+				result = enemy.getName() + " is dead.";
 			}
 		}
 		else
@@ -197,6 +294,15 @@ public class GameEngine
 				{
 					player.addItem(inspectedItem);
 					result = inspectedItem.getTitle() + " picked up <br />";
+					if(inspectedItem.getStatAffected().toLowerCase().equals("attack"))
+					{
+						System.out.println("ATTACK INCREASED");
+						player.setAttack(player.getAttack() + inspectedItem.getStatChangeVal());
+					}
+					else if(inspectedItem.getStatAffected().toLowerCase().equals("defense"))
+					{
+						player.setDefense(player.getDefense() + inspectedItem.getStatChangeVal());
+					}
 					inspectedItem.setRoomLocat(0);
 					db.UpdateItem(inspectedItem, username);
 				}
@@ -204,6 +310,50 @@ public class GameEngine
 			else
 			{
 				result = "That item is not here <br />";
+			}
+		}
+		db.insertConsole(result, username);
+		updatePlayer(player, username);
+		return result;
+	}
+	
+	public String drop(String[] item, String username)
+	{
+		String result = "";
+		Item dropItem;
+		
+		if(item.length > 2)
+		{
+			result = "Too many arguments";
+		}
+		else
+		{
+			dropItem = db.findItemUsingTitle(item[1], username);
+			if(dropItem.getRoomLocat() == 0)
+			{
+				if(dropItem == null)
+				{
+					result = "Could not find that item";
+				}
+				else
+				{
+					player.removeItem(dropItem);
+					result = dropItem.getTitle() + " dropped <br />";
+					if(dropItem.getStatAffected().toLowerCase().equals("attack"))
+					{
+						player.setAttack(player.getAttack() - dropItem.getStatChangeVal());
+					}
+					else if(dropItem.getStatAffected().toLowerCase().equals("defense"))
+					{
+						player.setDefense(player.getDefense() - dropItem.getStatChangeVal());
+					}
+					dropItem.setRoomLocat(player.getCurrentRoom().getRoomId());
+					db.UpdateItem(dropItem, username);
+				}
+			}
+			else
+			{
+				result = "You do not have that item <br />";
 			}
 		}
 		db.insertConsole(result, username);
@@ -226,7 +376,7 @@ public class GameEngine
 		}
 		else
 		{
-			if(inspectedItem.getRoomLocat() == player.getCurrentRoom().getRoomId() || inspectedItem.getRoomLocat() == 999)
+			if(inspectedItem.getRoomLocat() == player.getCurrentRoom().getRoomId() || inspectedItem.getRoomLocat() == 0)
 			{
 				result = inspectedItem.getDescription() + "<br />";
 			}
@@ -312,10 +462,16 @@ public class GameEngine
 	
 	public String initializePlayer(String command, String username)
 	{
+		dead = false;
+		win = false;
 		String result = "";
 		db.dropTables(username);
 		db.createTables(username);
 		db.loadInitialData(username);
+		Player loser = db.findPlayerUsingName("sean", username);
+		Player loser2 = db.findPlayerUsingName("bill", username);
+		System.out.println("INITAL DATA HOSTILITY:  "+ loser.getName() + "   " + loser.getHostility());
+		System.out.println("INITAL DATA HOSTILITY:  "+ loser2.getName() + "   " + loser2.getHostility());
 		db.insertConsole("> " + command + "<br />", username);
 		player = db.findPlayerUsingName("otter", username);
 		player.setCurrentRoom(db.findRoomUsingRoomId(1));
@@ -351,8 +507,10 @@ public class GameEngine
 		String players = "";
 		boolean itemFound = false;
 		boolean playerFound = false;
-		List<Item> itemList = db.findItemsUsingLocation(currentRoom.getRoomId(), username);	
+		List<Item> itemList = db.findItemsUsingLocation(currentRoom.getRoomId(), username);
 		List<Player> playerList = db.findPlayersUsingLocation(currentRoom, username);
+		Player loser = db.findPlayerUsingName("sean", username);
+		System.out.println("ONONWONEWONEOWNEOWNE "+ loser.getName() + "   " + loser.getHostility());
 		for(int i = 0; i < itemList.size(); i++)
 		{
 			itemFound = true;
@@ -366,7 +524,7 @@ public class GameEngine
 			}
 			else
 			{
-				players = players + playerList.get(j).getName() + "<br />";
+				players = players + playerList.get(j).getName() + playerList.get(j).getHostility() + "<br />";
 				playerFound = true;
 			}
 		}
@@ -379,6 +537,8 @@ public class GameEngine
 		{
 			result = result + "<br /><br /> These actors are in the room: <br />" + players;
 		}
+		itemFound = false;
+		playerFound = false;
 		
 		return result;
 	}
@@ -391,6 +551,13 @@ public class GameEngine
 	public void updateItem(Item item, String username)
 	{
 		db.UpdateItem(item, username);
+	}
+	public void checkDead(String username)
+	{
+		if(player.getHealth() <=0)
+		{
+			dead = true;
+		}
 	}
 
 }
