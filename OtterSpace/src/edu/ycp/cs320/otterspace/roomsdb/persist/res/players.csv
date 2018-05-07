@@ -1,2 +1,7 @@
-otter|A spacebound otter!|50|20|20|40|20|1|false
+otter|A spacebound otter!|100|20|20|40|20|1|false
 sean|Has a funny lastname and a broken hip|50|22|1500|60|15|2|false
+worker|Is about to attack|70|10|20|40|6|true
+commWorker|Seems very fed up with his mediocre job|75|15|15|50|10||true
+engineWorker|A burnt husk that has no humanity left inside|40|20|20|5|60|21|true
+randomCivilian|Can sell you some equipment, but only when he deems you worthy|100|40|20|20|20|24|false
+paranoidWorker|So scared that he will attack anyone|40|20|20|25|25|18|true

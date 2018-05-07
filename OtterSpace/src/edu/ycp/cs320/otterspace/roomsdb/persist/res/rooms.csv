@@ -1,3 +1,25 @@
-Closet|You are standing in a cramped room there is a door to the north|none
-Hallway|This is a long hallway that leads to the right and another door faces in front of you|none
-Bedroom|You see a bed in the corner and a desk littered with personal items. It seems long abandoned|key
+Boarding Zone Alpha|This is where all of the ships arrive in order to load and unload, can move east or north|none
+Boarding Zone Beta|Just another long bay, but no ships to fill it, can move west|none
+Entrance Deck|Where people (or otters) are able to board the actual ship, can move south or north|none
+Closet|You are standing in a cramped room there is a door to the north, can move east|none
+Hallway|This is a long hallway that leads to the right and another door faces in front of you, can move south or east or west or north|none
+Bedroom|You see a bed in the corner and a desk littered with personal items. It seems long abandoned, can move east or west|key
+Deck|The deck of the ship, perhaps a Dad made it, can move south or north|none
+Captain's Quarters|The bedroom of the captain. There are pictures of all the crew mates on the walls, can move west|quarterKey
+Flight Deck Room 1|The first room on the flight deck, it seems quite... too quite, can move south or north|none
+Flight Deck Room 2|Just a because deck, can move south or north|none
+Flight Deck Central|The main hub of the Flight Deck, provides access to rooms going all around the ship, can move west or north or east or south|none
+Flight Deck Room 3|There is some strange humming coming from deeper this way, you should probably investigate it, can move west or east| none
+Flight Deck Room 4|There appears to be a shaft where the humming is getting louder, can move down or east|none
+Engine Room 1|The rattling of the engines surround you, you can't hear a thing, can move north or up|none
+Engine Room 2|It is loud down in the engine area, can move north or south|none
+Engine Control Room|The control Room! I have to make sure that the engine stays stabilized, can move south|engineKey
+Flight Deck Room 5|The lines on the walls and signs say that this is the way to the communications array, can move north or south|none
+Flight Deck Room 6|There are stairs going up to what appears to be the communication array, can move south or up|none
+Communication Array 1|There are quite a few satellite dishes around here, can move west or down|none
+Communication Array 2|Too many control panels for me to even count, but how are they all operated, can move west or east|none
+Communication's Room|Allows you to communicate with the outside world, could be important, can move east|comKey
+Flight Deck Room 7|From what I can tell the escape pods are this way, can move east or west|none
+Flight Deck Room 8|There are the bodies of those who tried to escape from the accident, I hope their deaths were quick, can move east or west|none
+Escape Pod Bay|Some people are still alive, maybe I can save them!, can move inside or escape|none
+Escape Pod|I can save everyone! can move outside or escape|escapePodKey
