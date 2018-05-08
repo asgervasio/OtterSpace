@@ -1,10 +1,10 @@
 stick|Always tells the truth|2|attack|10
 key|Brass key|2|none|0
 sword|Long Sword|1|attack|20
-quarterKey|Gives Access to Captain's Quarters|6|none|0
-engineKey|Gives Access to Engine Control Room|18|none|0
-comKey|Gives Access to Communication Room|16|none|0
-escapePodKey|Gives Access to Escape Pod|21|none|0
+quarterkey|Gives Access to Captain's Quarters|6|none|0
+enginekey|Gives Access to Engine Control Room|18|none|0
+comkey|Gives Access to Communication Room|16|none|0
+escapepodkey|Gives Access to Escape Pod|21|none|0
 phaser|A powerful weapon that can demolish any enemy|8|attack|40
-leatherPad|Provides a basic defense|7|defense|10
-steelJacket|Provides a strong layer of defense|24|defense|30
+leatherpad|Provides a basic defense|7|defense|10
+steeljacket|Provides a strong layer of defense|24|defense|30

@@ -109,15 +109,16 @@ public class DerbyDatabase implements IDatabase {
 		data = resultSet.getString(index++);
 	}
 	
-	private void loadRoom(Room room, ResultSet resultSet, int index) throws SQLException {
+	private void loadRoom(Room room, ResultSet resultSet, ResultSet resultSetCon, int index) throws SQLException {
 		room.setRoomId(resultSet.getInt(index++));
 		room.setTitle(resultSet.getString(index++));
 		room.setDescription(resultSet.getString(index++));
 
 		room.setRequirement(resultSet.getString(index++));
 		room.setConnections();
-		room.setConnections(resultSet.getString(index++), resultSet.getInt(index++));
-
+		while(resultSetCon.next()){
+			room.setConnections(resultSetCon.getString(3), resultSetCon.getInt(4));
+		}
 	}
 	
 	private void loadItem(Item item, ResultSet resultSet, int index) throws SQLException {
@@ -943,7 +944,7 @@ public class DerbyDatabase implements IDatabase {
 						// create new Room object
 						// retrieve attributes from resultSet starting with index 1
 						Room room = new Room();
-						loadRoom(room, resultSet, 1);
+						loadRoom(room, resultSet, resultSetCon, 1);
 						
 						
 						result = room;
@@ -957,7 +958,9 @@ public class DerbyDatabase implements IDatabase {
 					return result;
 				} finally {
 					DBUtil.closeQuietly(resultSet);
+					DBUtil.closeQuietly(resultSetCon);
 					DBUtil.closeQuietly(stmt);
+					DBUtil.closeQuietly(stmt2);
 				}
 			}
 		});
@@ -1026,10 +1029,9 @@ public class DerbyDatabase implements IDatabase {
 				try {
 					// retreive all attributes from rooms table
 					stmt = conn.prepareStatement(
-							"select rooms.*, connections.connectionDirection, connections.roomEnd" +
-							" 	from rooms, connections " +
-							"	where  rooms.room_id = connections.roomStart " +
-							"	and rooms.room_id = ?"
+							"select rooms.* " +
+							"  from rooms " +
+							" where  rooms.room_id = ?"
 					);
 					stmt.setInt(1, roomId);
 					
@@ -1037,7 +1039,17 @@ public class DerbyDatabase implements IDatabase {
 					
 					resultSet = stmt.executeQuery();
 					
-					// for testing that a result was returned
+					stmt2 = conn.prepareStatement(
+							"select connections.* " +
+							"	from connections, rooms " +
+							"	where rooms.room_id = connections.roomStart" +
+							"	and rooms.room_id = ?"
+							);
+					
+					stmt2.setInt(1, roomId);
+					
+					resultSetCon = stmt2.executeQuery();
+					
 					Boolean found = false;
 					
 					while (resultSet.next()) {
@@ -1046,7 +1058,7 @@ public class DerbyDatabase implements IDatabase {
 						// create new Room object
 						// retrieve attributes from resultSet starting with index 1
 						Room room = new Room();
-						loadRoom(room, resultSet, 1);
+						loadRoom(room, resultSet, resultSetCon, 1);
 						
 						
 						result = room;
