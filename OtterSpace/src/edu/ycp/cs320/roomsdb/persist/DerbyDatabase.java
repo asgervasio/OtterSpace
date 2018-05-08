@@ -149,18 +149,7 @@ public class DerbyDatabase implements IDatabase {
 		player.setAttack(resultSet.getInt(index++));	
 		player.setDefense(resultSet.getInt(index++));
 		index++;
-		boolean received = resultSet.getBoolean(index);
-		System.out.println("RECEIVED:  " + received);
 		player.setHostility(resultSet.getBoolean(index));
-		System.out.println("LOADPLAYER HOSTILITY: " + player.getName() + player.getHostility());
-		System.out.println("ENEMY HOSTITTILITY: " + resultSet.getBoolean(index));
-	}
-	
-	private boolean intToBoolean(int val) {
-		if(val == 1)
-			return true;
-		else
-			return false;
 	}
 	
 	public void dropTables(String username) {
@@ -499,7 +488,6 @@ public class DerbyDatabase implements IDatabase {
 						insertPlayer.setInt(6, player.getAttack());
 						insertPlayer.setInt(7, player.getDefense());
 						insertPlayer.setBoolean(8, player.getHostility());
-						System.out.println("LOADDERBYHOSTILITY: " + player.getName() + player.getHostility());
 						insertPlayer.setInt(9, player.getRoomId());
 						insertPlayer.addBatch();
 					}
@@ -515,17 +503,6 @@ public class DerbyDatabase implements IDatabase {
 				}
 			}
 		});
-	}
-	public int boolToInt(boolean val)
-	{
-		if(val)
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
 	}
 
 	
@@ -589,8 +566,8 @@ public class DerbyDatabase implements IDatabase {
 					stmt.setInt(5, player.getScore());
 					stmt.setInt(6, player.getAttack());
 					stmt.setInt(7, player.getDefense());
-					stmt.setInt(8, boolToInt(player.getHostility()));
-					stmt.setInt(9, player.getCurrentRoom().getRoomId());
+					stmt.setBoolean(8, player.getHostility());
+					stmt.setInt(9, player.getRoomId());
 					stmt.setString(10, player.getName());
 
 					// execute the query
@@ -640,7 +617,6 @@ public class DerbyDatabase implements IDatabase {
 						// create new Room object
 						// retrieve attributes from resultSet starting with index 1
 						loadPlayer(result, resultSet, 1);
-						System.out.println("FINDPLAYERHOSTILITY: " + result.getName() + result.getHostility());
 						
 						
 						//result = player;

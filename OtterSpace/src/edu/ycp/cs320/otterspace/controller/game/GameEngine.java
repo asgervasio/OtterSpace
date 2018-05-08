@@ -189,9 +189,11 @@ public class GameEngine
 			{
 				Player enemy = db.findPlayerUsingName(enemyList.get(j).getName(), username);
 				enemy.setCurrentRoom(db.findRoomUsingRoomId(enemy.getRoomId()));
-				enemy.attackEnemy(player);
-				System.out.println("");
-				result = result + enemy.getName() + " hit you! <br />";
+				if(enemy.getHealth() > 0)
+				{
+					enemy.attackEnemy(player);
+					result = result + enemy.getName() + " hit you! <br />";
+				}
 				enemyList.remove(j);
 			}
 		}
@@ -206,7 +208,7 @@ public class GameEngine
 		enemy.setCurrentRoom(db.findRoomUsingRoomId(enemy.getRoomId()));
 		String result = "";
 
-		if(enemy.getCurrentRoom().getRoomId() == player.getCurrentRoom().getRoomId())
+		if(enemy.getRoomId() == player.getRoomId())
 		{
 			if(enemy.getHealth() > 0)
 			{
@@ -226,13 +228,6 @@ public class GameEngine
 				{
 					
 					result = enemy.getName() + " was hit! " + enemy.getHealth() + "<br />";
-					/*
-					if(enemy.getHostility())
-					{
-						enemy.attackEnemy(player);
-						result = result + enemy.getName() + " hit you! <br />";
-					}
-					*/
 					if(!enemy.getHostility())
 					{
 						enemy.setHostility(true);
@@ -528,7 +523,7 @@ public class GameEngine
 			}
 			else
 			{
-				players = players + playerList.get(j).getName() + playerList.get(j).getHostility() + "<br />";
+				players = players + playerList.get(j).getName() + "<br />";
 				playerFound = true;
 			}
 		}
