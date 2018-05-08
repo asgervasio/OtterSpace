@@ -72,6 +72,8 @@ public class GameEngine
 				case "m":
 				case "walk":
 				case "head":
+				case "climb":
+				case "run":
 					db.insertConsole("> " + command + "<br />", username);
 					result = move(commandSplit, username);
 					break;
@@ -159,7 +161,7 @@ public class GameEngine
 		if(currentRoom.getTitle().equals("Escape Pod"))
 		{
 			win = true;
-			result = "The escape pod disengages from the ship and the boosters fire as you are hurled away through space. <br /> CONGRATULATIONS! YOU HAVE ESCAPED TYPE 'R' to restart";
+			result = "The escape pod disengages from the ship and the boosters fire as you are hurled away through space. <br /> CONGRATULATIONS, YOU HAVE ESCAPED! TYPE 'R' to restart";
 		}
 		
 		return result;
@@ -206,6 +208,7 @@ public class GameEngine
 	{
 		Player enemy = db.findPlayerUsingName(command[1], username);
 		enemy.setCurrentRoom(db.findRoomUsingRoomId(enemy.getRoomId()));
+
 		String result = "";
 
 		if(enemy.getRoomId() == player.getRoomId())

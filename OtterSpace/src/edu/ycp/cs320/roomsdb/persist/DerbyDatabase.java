@@ -97,10 +97,6 @@ public class DerbyDatabase implements IDatabase {
 		System.out.println("Loading initial data...");
 		db.loadInitialData("new");
 		
-		Player loser = db.findPlayerUsingName("sean", "new");
-		Player loser2 = db.findPlayerUsingName("bill", "new");
-		System.out.println("INITAL DATA HOSTILITY:  "+ loser.getName() + "   " + loser.getHostility());
-		System.out.println("INITAL DATA HOSTILITY:  "+ loser2.getName() + "   " + loser2.getHostility());
 		
 		System.out.println("Success!");
 	}
@@ -140,7 +136,7 @@ public class DerbyDatabase implements IDatabase {
 	}
 	
 	private void loadPlayer(Player player, ResultSet resultSet, int index) throws SQLException {
-		player.setRoomId(resultSet.getInt(index++));
+		index++;
 		player.setName(resultSet.getString(index++));
 		player.setDescription(resultSet.getString(index++));
 		player.setHealth(resultSet.getInt(index++));		
@@ -148,8 +144,8 @@ public class DerbyDatabase implements IDatabase {
 		player.setScore(resultSet.getInt(index++));	
 		player.setAttack(resultSet.getInt(index++));	
 		player.setDefense(resultSet.getInt(index++));
-		index++;
-		player.setHostility(resultSet.getBoolean(index));
+		player.setRoomId(resultSet.getInt(index++));
+		player.setHostility(resultSet.getBoolean(index++));
 	}
 	
 	public void dropTables(String username) {
