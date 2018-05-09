@@ -21,5 +21,5 @@ Communication Array 2|Too many control panels for me to even count, but how are 
 Communication's Room|Allows you to communicate with the outside world, could be important, can move east|comkey
 Flight Deck Room 7|From what I can tell the escape pods are this way, can move east or west|none
 Flight Deck Room 8|There are the bodies of those who tried to escape from the accident, I hope their deaths were quick, can move east or west|none
-Escape Pod Bay|Some people are still alive, maybe I can save them!, can move inside or escape|none
+Escape Pod Bay|Some people are still alive, maybe I can save them!, can move inside or west|none
 Escape Pod|I can save everyone! can move outside or escape|escapepodkey

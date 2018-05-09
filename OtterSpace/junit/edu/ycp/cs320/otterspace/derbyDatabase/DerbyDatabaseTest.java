@@ -103,7 +103,7 @@ public class DerbyDatabaseTest {
 		roomBlank = database.findRoomUsingRoomId(1);
 		HashMap<String, Integer> connections = roomBlank.getTrueConnections();
 		System.out.println(connections.get("north"));
-		assertEquals("testroom1", roomBlank.getTitle());
+		assertEquals("boarding zone alpha", roomBlank.getTitle());
 	}
 	
 	@Test
