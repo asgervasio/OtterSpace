@@ -65,15 +65,18 @@ public class AccountServlet extends HttpServlet{
 		
 		req.setAttribute("username", session.getAttribute("username"));
 		//emailAddress password firstname lastname Username
-		if(req.getAttribute("password")==req.getAttribute("passconfirm")){
+		if(req.getAttribute("password")==req.getAttribute("passconfirm"))
+		{
 			if(req.getAttribute("password")!=null && !req.getAttribute("password").toString().isEmpty()){
-				model.setPassword(req.getAttribute("password").toString());}}
+				model.setPassword(req.getAttribute("password").toString());}
+			}
 		if(req.getAttribute("emailAddress")!=null && !req.getAttribute("emailAddress").toString().isEmpty()){
 			model.setPassword(req.getAttribute("emailAddress").toString());}
 		if(req.getAttribute("password")!=null && !req.getAttribute("password").toString().isEmpty()){
 			model.setPassword(req.getAttribute("password").toString());}
 		if(req.getAttribute("password")!=null && !req.getAttribute("password").toString().isEmpty()){
 			model.setPassword(req.getAttribute("password").toString());}
+		System.out.println("OLD PASSWORD: " + oldpass + "   NEW PASSWORD: " + model.getPassword());
 		
 		controller.changeUserInfo(model.getEmail(), model.getUsername(), oldpass, model.getPassword());
 		req.setAttribute("sessionid", model);

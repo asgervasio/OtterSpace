@@ -31,7 +31,7 @@ session_start();
 			<div class = "error"> ${errorMessage}</div>
 		</c:if>
 		<form action = "${pageContext.servletContext.contextPath}/login" method = "post">
-		<h1> Welcome to the <br> OtterSpace Odyssey </h1>
+		<h1> Welcome to the <br> Otter Space Odyssey </h1>
 		
 
 		

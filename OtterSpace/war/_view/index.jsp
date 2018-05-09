@@ -21,6 +21,7 @@
   		<div class="Index">
   			<form action="${pageContext.servletContext.contextPath}/gameAjax.html" method="post">
 				<input type="submit" name="startGame" value="Play" id="submitButton">
+			</form>
 
 			<form action="${pageContext.servletContext.contextPath}/players" method="get">
 				<input type="submit" name="players" value="View Players">

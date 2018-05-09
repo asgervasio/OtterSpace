@@ -21,9 +21,12 @@ body
 }
 .account{
   color: #d3d3d3;
+    align-items: center;
 }
 .playerList{
   color: #d3d3d3;
+   align-items: center;
+  
 }
 .Index{
   display: flex;
