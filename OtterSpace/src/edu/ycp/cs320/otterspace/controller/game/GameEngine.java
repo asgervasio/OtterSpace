@@ -348,7 +348,7 @@ public class GameEngine
 					{
 						player.setDefense(player.getDefense() - dropItem.getStatChangeVal());
 					}
-					dropItem.setRoomLocat(player.getCurrentRoom().getRoomId());
+					dropItem.setRoomLocat(player.getRoomId());
 					db.UpdateItem(dropItem, username);
 				}
 			}

@@ -114,7 +114,13 @@ public class Player
 	
 	public void removeItem(Item item)
 	{
-		inventory.remove(item);
+		for(int i = 0; i < inventory.size(); i++)
+		{
+			if(inventory.get(i).getTitle().equals(item.getTitle()))
+			{
+				inventory.remove(i);
+			}
+		}
 	}
 	public boolean inventoryContains(Item item)
 	{
