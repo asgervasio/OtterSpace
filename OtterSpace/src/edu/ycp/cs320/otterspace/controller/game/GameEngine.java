@@ -375,17 +375,20 @@ public class GameEngine
 		{
 			result = outputRoomData(username);
 		}
-		else
+		else if(inspectedItem != null)
 		{
-			if(inspectedItem.getRoomLocat() == player.getCurrentRoom().getRoomId() || inspectedItem.getRoomLocat() == 0)
+			if(inspectedItem.getRoomLocat() == player.getCurrentRoom().getRoomId() || inspectedItem.getRoomLocat() == 0 && inspectedItem.getTitle() != null)
 			{
+				System.out.println("INSPECTING ITEM");
 				result = inspectedItem.getDescription() + "<br />";
 			}
 			else
 			{
+				System.out.println("INSPECTING PLAYER");
 				Player inspectedPlayer = db.findPlayerUsingName(item[1], username);
 				if(inspectedPlayer.getRoomId() == player.getRoomId())
 				{
+					System.out.println(inspectedPlayer.getName() + "    " + inspectedPlayer.getDescription());
 					result = inspectedPlayer.getDescription() + "<br />";
 				}
 				else
@@ -394,6 +397,7 @@ public class GameEngine
 				}
 			}
 		}
+
 		db.insertConsole(result, username);
 		return result;
 	}
